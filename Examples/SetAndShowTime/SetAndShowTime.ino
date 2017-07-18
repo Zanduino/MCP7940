@@ -25,14 +25,13 @@ const uint32_t SERIAL_SPEED = 115200;                                         //
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
-//MCP7940_Class MCP7940;
+MCP7940_Class MCP7940;
 /*******************************************************************************************************************
 ** Method Setup(). This is an Arduino IDE method which is called upon boot or restart. It is only called one time **
 ** and then control goes to the main loop, which loop indefinately.                                               **
 *******************************************************************************************************************/
 void setup() {                                                                // Arduino standard setup method    //
   Serial.begin(SERIAL_SPEED);                                                 // Start serial port at Baud rate   //
-MCP7940_Class MCP7940;
   delay(3000);                                                                // Some Atmel Serials need time     //
   Serial.println(F("Starting SetAndShowTime program"));                       //                                  //
   while (!MCP7940.begin()) {                                                  // Start communication with RTC     //
