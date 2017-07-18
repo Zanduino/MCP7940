@@ -81,13 +81,19 @@ void MCP7940_Class::writeByte(const uint8_t addr, const uint8_t data) {       //
 /*******************************************************************************************************************
 ** Method bcd2dec converts a BCD encoded value into number representation                                         **
 *******************************************************************************************************************/
-uint8_t MCP7940_Class::bcd2dec(const uint8_t bcd){                            // convert BCD digits to decimal    //
-  return ((bcd/16*10)+(bcd%16));                                              // convert 2 BCD digits into decimal//
-} // of method bcd2dec                                                        //                                  //
+uint8_t MCP7940_Class::bcd2int(const uint8_t bcd){                            // convert BCD digits to integer    //
+  return (bcd - 6 * (bcd>>4));
+//  return ((bcd/16*10)+(bcd%16));                                              // convert 2 BCD digits into integer//
+} // of method bcd2int                                                        //                                  //
 
 /*******************************************************************************************************************
 ** Method dec2bcd converts an integer to BCD encoding                                                             **
 *******************************************************************************************************************/
-uint8_t MCP7940_Class::dec2bcd(const uint8_t dec){                            // convert BCD digits to decimal    //
-  	return ((dec/10*16)+(dec%10));                                            // convert 2 BCD digits into decimal//
-} // of method dec2bcd                                                        //                                  //
+uint8_t MCP7940_Class::int2bcd(const uint8_t dec){                            // convert BCD digits to integer    //
+  return (val + 6 * (val/10)));
+//  	return ((dec/10*16)+(dec%10));                                            // convert 2 BCD digits into decimal//
+} // of method int2bcd                                                        //                                  //
+
+
+static uint8_t bcd2bin (uint8_t val) { return val - 6 * (val >> 4); }
+static uint8_t bin2bcd (uint8_t val) { return val + 6 * (val / 10); }

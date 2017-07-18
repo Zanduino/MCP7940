@@ -34,8 +34,8 @@
       MCP7940_Class();                                                        // Class constructor                //
       ~MCP7940_Class();                                                       // Class destructor                 //
       bool     begin();                                                       // Start I2C Comms with device      //
-      uint8_t bcd2dec(const uint8_t bcd);                                     // convert BCD digits to decimal    //
-      uint8_t dec2bcd(const uint8_t dec);                                     // convert int to BCD representation//
+      uint8_t bcd2int(const uint8_t bcd);                                     // convert BCD digits to integer    //
+      uint8_t int2bcd(const uint8_t dec);                                     // convert integer to BCD           //
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       uint16_t readWord(const uint8_t addr);                                  // Read 2 bytes from address on I2C //
