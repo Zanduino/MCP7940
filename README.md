@@ -1,4 +1,4 @@
-# MCP7940 library
+# MCP7940 library  -- Work-In-Progress / Unfinished
 <img src="https://github.com/SV-Zanshin/VCNL4010/blob/master/Images//VCNL4010_square.jpg" width="175" align="right"/> *Arduino* library for using the Microchip MCP7940 real time clock
 
 ## Chapter 1
