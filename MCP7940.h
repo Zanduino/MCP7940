@@ -125,6 +125,7 @@
       void     adjust(const DateTime& dt);                                    // Set the date and time            //
       int8_t   calibrate();                                                   // Reset clock calibration offset   //
       int8_t   calibrate(const DateTime& dt);                                 // Calibrate the clock              //
+      int8_t   getCalibrationTrim();                                          // Get the trim register value      //
       uint8_t  weekdayRead();                                                 // Read weekday from RTC            //
       uint8_t  weekdayWrite(const uint8_t dow);                               // Write weekday to RTC             //
       void     readRAM(const uint8_t address,uint8_t* buf,const uint8_t size);// Read multiple bytes from RAM     //
