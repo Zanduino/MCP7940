@@ -136,9 +136,9 @@
       bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,   // Set an Alarm                     //
                         const DateTime dt );                                  //                                  //
       bool     clearAlarm(const uint8_t alarmNumber);                         // Clear an Alarm                   //
+    private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
-    private:                                                                  // Private methods                  //
       uint8_t  bcd2int(const uint8_t bcd);                                    // convert BCD digits to integer    //
       uint8_t  int2bcd(const uint8_t dec);                                    // convert integer to BCD           //
       uint16_t readWord(const uint8_t addr);                                  // Read 2 bytes from address on I2C //

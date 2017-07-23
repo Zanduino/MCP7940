@@ -58,8 +58,8 @@ void setup() {                                                                //
   Serial.print(F(__TIME__));                                                  //                                  //
   Serial.print(F("\n"));                                                      //                                  //
   while (!MCP7940.begin()) {                                                  // Initialize RTC communications    //
-    Serial.println(F("Unable to find MCP7940M. Checking again in 5s."));      // Show error text                  //
-    delay(1000);                                                              // wait a second                    //
+    Serial.println(F("Unable to find MCP7940M. Checking again in 3s."));      // Show error text                  //
+    delay(3000);                                                              // wait a second                    //
   } // of loop until device is located                                        //                                  //
   Serial.println(F("MCP7940 initialized."));                                  //                                  //
   while (!MCP7940.deviceStatus()) {                                           // Turn oscillator on if necessary  //
