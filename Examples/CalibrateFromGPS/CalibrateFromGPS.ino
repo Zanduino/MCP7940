@@ -55,9 +55,9 @@ void setup() {                                                                //
   Serial.print(F(__TIME__));                                                  //                                  //
   Serial.print(F("\n"));                                                      //                                  //
   GPS.begin(GPS_BAUD_RATE);                                                   // Initialize the GPS at baud       //
-//GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);                               // RMC & GGA including altitude     //
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);                               // RMC & GGA including altitude     //
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);                              // send RMC (recommended minimum)   //
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_100_MILLIHERTZ);                       // Data every 10 seconds            //
+//GPS.sendCommand(PMTK_SET_NMEA_UPDATE_100_MILLIHERTZ);                       // Data every 10 seconds            //
   GPS.sendCommand(PMTK_API_SET_FIX_CTL_100_MILLIHERTZ);                       // Fixes every 10 seconds           //
   Serial.println("\n- Initializing MCP7940");                                 //                                  //
   while (!MCP7940.begin()) {                                                  // Initialize RTC communications    //
@@ -86,7 +86,7 @@ DateTime readGPS() {                                                          //
   while(true) {                                                               // Loop until we have valid fix     //
     // read a single character from GPS communications port. The read routine buffers the data inside the class   //
     char c = GPS.read();                                                      // Read the next character          //
-//    if (c) Serial.print(c); // echo the NMEA data to the output port as it arrives for debugging purposes       //
+    if (c) Serial.print(c); // echo the NMEA data to the output port as it arrives for debugging purposes       //
     if (GPS.newNMEAreceived()) {                                              // If we have a new NMEA sentence   //
       if (GPS.parse(GPS.lastNMEA())) {                                        // and it is parseable/legal        //
         if (GPS.fix) {                                                        // and the GPS has a valid fix      //

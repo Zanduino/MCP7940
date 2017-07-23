@@ -112,6 +112,9 @@
     protected:                                                                //----------------------------------//
       int32_t _seconds;                                                       // internal seconds variable        //
   }; // of class TimeSpan definition                                          //                                  //
+  /*****************************************************************************************************************
+  ** Main MCP7940 class for the Real-Time clock                                                                   **
+  *****************************************************************************************************************/
   class MCP7940_Class {                                                       // Class definition                 //
     public:                                                                   // Publicly visible methods         //
       MCP7940_Class();                                                        // Class constructor                //
