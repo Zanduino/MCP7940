@@ -9,6 +9,6 @@ Apart from performing as a real-time clock, the MCP4790 has 64 Bytes of SRAM ava
 The MCP7940 allows for software trimming and the library has functions which support fine-tuning the RTC.
 
 ## Description
-A detailed library description and further details are available at the GitHub [MCP7940 Wiki](https://github.com/SV-Zanshin/MCP7940/wiki)
+<img src="https://github.com/SV-Zanshin/MCP7940/blob/master/Images/MCP7940_bb.png" width="100px" align="left" /> The detailed library description along with further details are available at the GitHub [MCP7940 Wiki](https://github.com/SV-Zanshin/MCP7940/wiki). This includes wiring information and sample sketches that illustrate the library and it's functionality.
 
 ![Zanshin Logo](https://www.sv-zanshin.com/r/images/site/gif/zanshinkanjitiny.gif) <img src="https://www.sv-zanshin.com/r/images/site/gif/zanshintext.gif" width="75"/>
