@@ -21,7 +21,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
-** 1.0.0  2017-07-23 Arnd@SV-Zanshin.Com Cleanded up code, initial github upload                                  **
+** 1.0.1  2017-07-25 Arnd@SV-Zanshin.Com Added overloaded Calibrate() to manually set the trim factor             **
+** 1.0.0  2017-07-23 Arnd@SV-Zanshin.Com Cleaned up code, initial github upload                                   **
 ** 1.0.2b 2017-07-20 Arnd@SV-Zanshin.Com Added alarm handling                                                     **
 ** 1.0.1b 2017-07-19 Arnd@SV-Zanshin.Com Added methods                                                            **
 ** 1.0.0b 2017-07-17 Arnd@SV-Zanshin.Com Initial coding                                                           **
@@ -127,6 +128,7 @@
       void     adjust();                                                      // Set the date and time to compile //
       void     adjust(const DateTime& dt);                                    // Set the date and time            //
       int8_t   calibrate();                                                   // Reset clock calibration offset   //
+      int8_t   calibrate(const int8_t);                                       // Reset clock calibration offset   //
       int8_t   calibrate(const DateTime& dt);                                 // Calibrate the clock              //
       int8_t   getCalibrationTrim();                                          // Get the trim register value      //
       uint8_t  weekdayRead();                                                 // Read weekday from RTC            //
