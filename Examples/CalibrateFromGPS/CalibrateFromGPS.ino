@@ -93,7 +93,7 @@ DateTime readGPS() {                                                          //
   while(true) {                                                               // Loop until we have valid fix     //
     // read a single character from GPS communications port. The read routine buffers the data inside the class   //
     char c = GPS.read();                                                      // Read the next character          //
-    if (c) Serial.print(c); // echo the NMEA data to the output port as it arrives for debugging purposes       //
+    if (c) Serial.print(c); // echo the NMEA data to the output port as it arrives for debugging purposes         //
     if (GPS.newNMEAreceived()) {                                              // If we have a new NMEA sentence   //
       if (GPS.parse(GPS.lastNMEA())) {                                        // and it is parsable/legal         //
         if (GPS.fix) {                                                        // and the GPS has a valid fix      //
@@ -113,15 +113,27 @@ DateTime readGPS() {                                                          //
 void loop() {                                                                 //                                  //
   static uint32_t alarmMicros;
   static uint32_t gpsMicros;
+  static uint32_t lastDeltaMicros = 0 ;
   static DateTime now;
-  if (digitalRead(MFP_PIN)) {
-    alarmMicros = micros();  
+  if (!digitalRead(MFP_PIN)) {
+    alarmMicros = micros();
     now = MCP7940.now() + TimeSpan(0,0,1,0);                                    // Set datetime for 1 minute ahead  //
     MCP7940.setAlarm(0,7,now);                                                // Set alarm to go off in 1 minute  //
-    Serial.println(alarmMicros-gpsMicros);
+    now = MCP7940.now();
+    sprintf(inputBuffer,"GPS: %04d-%02d-%02d %02d:%02d:%02d ", now.year(), // Use sprintf() to pretty print    //
+    now.month(), now.day(), now.hour(), now.minute(), // date/time with leading zeroes    //
+    now.second());                                                //                                  //
+    Serial.print(inputBuffer);
+    Serial.print(alarmMicros-gpsMicros);
+    Serial.print(" ");
+    Serial.println((alarmMicros-gpsMicros)-lastDeltaMicros);
+    lastDeltaMicros = (alarmMicros-gpsMicros);
+
   } // of if-then the alarm has been raised
-  if (analogRead(PPS_PIN)>600) gpsMicros = micros();
-  
+  if (analogRead(PPS_PIN)>600) {
+    gpsMicros = micros();
+    digitalWrite(LED_PIN,!digitalRead(LED_PIN));                              // Toggle LED                       //
+  }
 /*
   static uint8_t secs;                                                        // store the seconds value          //
   static DateTime RTCTime,GPSTime;                                            // Declare RTC and GPS times        //
