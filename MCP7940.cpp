@@ -398,21 +398,29 @@ uint8_t MCP7940_Class::writeRAM(const uint8_t address,const uint8_t data) {   //
 ** The ppm <> 130 is computed by solving the equation for the maximum TRIM value of 127 and computing the         **
 ** corresponding max and min values for ppm. This allows the trim variable to be one byte rather than a long      **
 *******************************************************************************************************************/
-int8_t MCP7940_Class::calibrate(const DateTime& dt) {                          // Calibrate the RTC               //
-  int32_t SecDeviation = dt.unixtime()-now().unixtime();                       // Get difference in seconds       //
-  int32_t ExpectedSec  = now().unixtime() - _SetUnixTime;                      // Get number of seconds since set //
-  int32_t ppm          = 1000000 * SecDeviation / ExpectedSec;                 // Multiply first to avoid trunc   //
-  if (ppm>130) ppm = 130; else if (ppm<-130) ppm = -130;                       // Force number ppm to be in range //
-  int8_t trim          = readByte(MCP7940_OSCTRIM);                            // Read current trim register value//
-  if (trim>>7) trim = trim *-1;                                                // use negative value if necessary //
-  trim         += ppm * 32768 * 60 / 2000000;                                  // compute the new trim value      //
-  int8_t osctrim      = trim;                                                  // Declare register variable       //
-  if (trim<0) osctrim = B10000000 | (trim*-1);                                 // Set non-excess 128 negative val //
-  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11111011);              // fine trim mode on, to be safe   //
-  writeByte(MCP7940_OSCTRIM,osctrim);                                          // Write value to the trim register//
-  adjust(dt);                                                                  // Set the new date value          //
-  return trim;                                                                 // return the computed trim value  //
-} // of method calibrate()                                                     //                                 //
+int8_t MCP7940_Class::calibrate(const int8_t newTrim) {                       // Calibrate the RTC                //
+  int8_t trim = newTrim;                                                      // Make a local copy                //  
+  if (trim<0) trim = B10000000 | (trim*-1);                                   // Set non-excess 128 negative val  //
+  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11111011);             // fine trim mode on, to be safe    //
+  writeByte(MCP7940_OSCTRIM,trim);                                            // Write value to the trim register //
+  _SetUnixTime = now().unixtime();                                            // Store time of last change        //
+  return trim;                                                                // return the computed trim value   //
+} // of method calibrate()                                                    //                                  //
+int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         // Calibrate the RTC                //
+  int32_t SecDeviation = dt.unixtime()-now().unixtime();                      // Get difference in seconds        //
+  int32_t ExpectedSec  = now().unixtime() - _SetUnixTime;                     // Get number of seconds since set  //
+  int32_t ppm          = 1000000 * SecDeviation / ExpectedSec;                // Multiply first to avoid trunc    //
+  if (ppm>130) ppm = 130; else if (ppm<-130) ppm = -130;                      // Force number ppm to be in range  //
+  int8_t trim          = readByte(MCP7940_OSCTRIM);                           // Read current trim register value //
+  if (trim>>7) trim = trim *-1;                                               // use negative value if necessary  //
+  trim         += ppm * 32768 * 60 / 2000000;                                 // compute the new trim value       //
+  int8_t osctrim      = trim;                                                 // Declare register variable        //
+  if (trim<0) osctrim = B10000000 | (trim*-1);                                // Set non-excess 128 negative val  //
+  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11111011);             // fine trim mode on, to be safe    //
+  writeByte(MCP7940_OSCTRIM,osctrim);                                         // Write value to the trim register //
+  adjust(dt);                                                                 // Set the new date value           //
+  return trim;                                                                // return the computed trim value   //
+} // of method calibrate()                                                    //                                  //
 /*******************************************************************************************************************
 ** Method getCalibrationTrim(). This function returns the TRIMVAL trim values. Since the number in the register   **
 ** can be negative but is not in excess-128 format any negative numbers need to be manipulated before returning   **
@@ -426,10 +434,10 @@ int8_t MCP7940_Class::getCalibrationTrim() {                                  //
 /*******************************************************************************************************************
 ** Method calibrate() when called with no parameters means that the current calibration offset is set back to 0   **
 *******************************************************************************************************************/
-int8_t MCP7940_Class::calibrate() {                                            // Calibrate the RTC               //
-  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11111011);              // fine trim mode on, to be safe   //
-  writeByte(MCP7940_OSCTRIM,(uint8_t)0);                                       // Write zeros to the trim register//
-} // of method calibrate()                                                     //                                 //
+int8_t MCP7940_Class::calibrate() {                                           // Calibrate the RTC                //
+  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11111011);             // fine trim mode on, to be safe    //
+  writeByte(MCP7940_OSCTRIM,(uint8_t)0);                                      // Write zeros to the trim register //
+} // of method calibrate()                                                    //                                  //
 /*******************************************************************************************************************
 ** Method setMFP() will set the MFP (Multifunction Pin) to the requested state and return success if, and only if,**
 ** the Square Wave enable is not turned on and both ALARM 0 and 1 are turned off, other it returns a false        **
