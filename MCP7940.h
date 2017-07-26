@@ -40,7 +40,7 @@
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
   const uint8_t  MCP7940_ADDRESS                 = 0x6F;                      // Device address, fixed value      //
-  const uint8_t  MCP7940_I2C_DELAY               =   50;                      // Microseconds wait time           //
+  const uint8_t  MCP7940_I2C_DELAY               =    0;                      // Microseconds wait time for I2C   //
   const uint8_t  MCP7940_RTCSEC                  = 0x00;                      // Register definitions             //
   const uint8_t  MCP7940_RTCMIN                  = 0x01;                      //                                  //
   const uint8_t  MCP7940_RTCHOUR                 = 0x02;                      //                                  //

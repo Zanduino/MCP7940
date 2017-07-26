@@ -36,6 +36,8 @@ const uint32_t DISPLAY_INTERVAL_MILLIS = 600000;                              //
 const uint8_t  LED_PIN                 =     13;                              // Built in LED                     //
 const uint8_t  MFP_PIN                 =      4;                              // Pin used for the MCP7940 MFP     //
 const uint8_t  PPS_PIN                 =    A15;                              // GPS Pulse-Per-Second             //
+const uint8_t  AL0_INTERVAL_MINUTES    =      1;                              // RTC Alarm 0 interval in minutes  //
+const int8_t   UTC_OFFSET              =      2;                              // Offset from UTC (or GMT)         //
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
@@ -66,22 +68,25 @@ void setup() {                                                                //
     delay(3000);                                                              // wait a second                    //
   } // of loop until device is located                                        //                                  //
   Serial.print("- Current TRIM is ");                                         //                                  //
+  MCP7940.calibrate(15);
   Serial.print(MCP7940.getCalibrationTrim()*2);                               //                                  //
   Serial.println(" clock cycles per minute");                                 //                                  //
   Serial.println("- Getting GPS fix with Date/Time");                         //                                  //
   DateTime GPStime = readGPS();                                               // returns a valid date/time        //
-  Serial.print(F("- Setting MCP7940 using GPS time to "));                    //                                  //
   MCP7940.adjust(GPStime);                                                    //                                  //
-  GPStime = GPStime + TimeSpan(0,0,1,0);                                      // Set datetime for 1 minute ahead  //
+  GPStime = GPStime + TimeSpan(0,0,1,0);
   MCP7940.setAlarm(0,7,GPStime);                                              // Set alarm to go off in 1 minute  //
+  Serial.print(F("- Setting MCP7940 using GPS time to "));                    //                                  //
   sprintf(inputBuffer,"%04d-%02d-%02d %02d:%02d:%02d", GPStime.year(),        // Use sprintf() to pretty print    //
-          GPStime.month(), GPStime.day(), GPStime.hour(), GPStime.minute(),   // date/time with leading zeroes    //
-          GPStime.second());                                                  //                                  //
+  GPStime.month(), GPStime.day(), GPStime.hour(), GPStime.minute(),   // date/time with leading zeros     //
+  GPStime.second());                                                  //                                  //
   Serial.println(inputBuffer);                                                // Display the current date/time    //
   pinMode(MFP_PIN,INPUT);                                                     // MCP7940 Alarm MFP digital pin    //
   pinMode(PPS_PIN,INPUT);                                                     // Pulses to 2.8V every cycle       //
   pinMode(LED_PIN,OUTPUT);                                                    // Green built in LED on Arduino    //
   digitalWrite(LED_PIN,LOW);                                                  // Turn off the LED light           //
+  Serial.println("Rdgs  GPS Date / time    Avg ?s 5 min  ");                  // Display the output header lines  //
+  Serial.println("==== =================== ====== ====== ");                  //                                  //
 } // of method setup()                                                        //                                  //
 /*******************************************************************************************************************
 ** Method to read data from the GPS port and then use the Adafruit library to parse the date and time. The GPS    **
@@ -97,9 +102,8 @@ DateTime readGPS() {                                                          //
     if (GPS.newNMEAreceived()) {                                              // If we have a new NMEA sentence   //
       if (GPS.parse(GPS.lastNMEA())) {                                        // and it is parsable/legal         //
         if (GPS.fix) {                                                        // and the GPS has a valid fix      //
-          delay(1000-GPS.milliseconds);                                       // synchronize to the exact second  //
           gpsTime = DateTime(GPS.year,GPS.month,GPS.day,GPS.hour,GPS.minute,  // Then set a DateTime instance to  //
-                    GPS.seconds) + TimeSpan(0,0,0,1);                         // this value plus one second       //
+                    GPS.seconds);
           break;                                                              // Exit this infinite loop now      //
         } // of if-then we have a valid fix                                   //                                  //
       } // of if-then we could parse the sentence data                        //                                  //
@@ -111,29 +115,39 @@ DateTime readGPS() {                                                          //
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
 void loop() {                                                                 //                                  //
-  static uint32_t alarmMicros;
-  static uint32_t gpsMicros;
-  static uint32_t lastDeltaMicros = 0 ;
-  static DateTime now;
-  if (!digitalRead(MFP_PIN)) {
-    alarmMicros = micros();
-    now = MCP7940.now() + TimeSpan(0,0,1,0);                                    // Set datetime for 1 minute ahead  //
-    MCP7940.setAlarm(0,7,now);                                                // Set alarm to go off in 1 minute  //
-    now = MCP7940.now();
-    sprintf(inputBuffer,"GPS: %04d-%02d-%02d %02d:%02d:%02d ", now.year(), // Use sprintf() to pretty print    //
-    now.month(), now.day(), now.hour(), now.minute(), // date/time with leading zeroes    //
-    now.second());                                                //                                  //
-    Serial.print(inputBuffer);
-    Serial.print(alarmMicros-gpsMicros);
-    Serial.print(" ");
-    Serial.println((alarmMicros-gpsMicros)-lastDeltaMicros);
-    lastDeltaMicros = (alarmMicros-gpsMicros);
+  static uint32_t alarmMicros, gpsMicros;                                     // Alarm and GPS Microseconds       //
+  static uint16_t readings        =          0;                               // Number of readings taken         //
+  static uint64_t totalDelta      =          0;                               // Total of all deltas read         //
+  static uint16_t last5Readings[5];
+  static DateTime now,mcp;
 
+  if (!digitalRead(MFP_PIN)) {                                                // If we have an alarm triggered    //
+    alarmMicros = micros();                                                   // Set microseconds                 //
+    MCP7940.setAlarm(0,7,MCP7940.now()+TimeSpan(0,0,AL0_INTERVAL_MINUTES,0)); // Set alarm to go off in n-minutes //
+    now = MCP7940.now();                                             // Get the current RTC time         //
+    readings++;                                                               // increment the number of readings //
+    totalDelta += alarmMicros-gpsMicros;                                      // Add the last delta to total      //
+    uint16_t average = totalDelta / readings;
+    last5Readings[readings%5]=average;
+    uint16_t Avg5min = 0;
+    for(uint8_t i=0;i<5;i++) Avg5min += last5Readings[i]/5; 
+    sprintf(inputBuffer,"%04d %04d-%02d-%02d %02d:%02d:%02d %06:2d %06:2d ",      // Use sprintf() to pretty print    //
+            readings,now.year(),now.month(),now.day(),now.hour(),now.minute(),// output with leading zeroes       //
+            now.second(), average, Avg5min    );   
+    Serial.print(inputBuffer);                                                 // Output the sprintf buffer       //
+    Serial.print(" ");
+    Serial.print(alarmMicros);
+    Serial.print(" ");
+    Serial.print(gpsMicros);
+    Serial.print(" ");
+    Serial.print(alarmMicros-gpsMicros);
+    Serial.println(" ");
   } // of if-then the alarm has been raised
-  if (analogRead(PPS_PIN)>600) {
-    gpsMicros = micros();
-    digitalWrite(LED_PIN,!digitalRead(LED_PIN));                              // Toggle LED                       //
-  }
+  now = readGPS();
+  if (analogRead(PPS_PIN)>600) {                                              // If the GPS PPS pin is set then   //
+    gpsMicros = micros();                                                     // save the microsecond time        //
+    digitalWrite(LED_PIN,HIGH);                              // Toggle LED                       //
+  } else digitalWrite(LED_PIN,LOW);                              // Toggle LED                       //
 /*
   static uint8_t secs;                                                        // store the seconds value          //
   static DateTime RTCTime,GPSTime;                                            // Declare RTC and GPS times        //
