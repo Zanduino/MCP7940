@@ -11,6 +11,13 @@
 ** use for our I/O. The SoftwareSerial library has trouble with the long NMEA sentences, so this sketch is written**
 ** for Arduino devices that have more than one hardware serial port. This sketch runs on an ATMEGA board.         **
 **                                                                                                                **
+** The program uses the PPS (Pulse-Per-Second) pin which pulses either every second or at the FIX_CTL speed at    **
+** which the GPS is set. This is the accurate time signal and is compared to the time that the RTC returns. The   **
+** difference between the two times is measured in microseconds and once a direction of divergence is determined  **
+** over a number of measurements then the offset is adjusted accordingly. This is repeated until the speed of     **
+** divergence is minimized. This method is a bit more complex then merely comparing the times of the two clocks   **
+** and computing an offset factor when they differ by a second or more - and it is much faster as well            **
+**                                                                                                                **
 ** This program is free software: you can redistribute it and/or modify it under the terms of the GNU General     **
 ** Public License as published by the Free Software Foundation, either version 3 of the License, or (at your      **
 ** option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY     **
@@ -20,6 +27,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.1  2017-07-27 Arnd@SV-Zanshin.Com Continued coding                                                         **
 ** 1.0.0  2017-07-23 Arnd@SV-Zanshin.Com Initial coding                                                           **
 **                                                                                                                **
 *******************************************************************************************************************/
@@ -30,7 +38,7 @@
 ** Declare all program constants                                                                                  **
 *******************************************************************************************************************/
 const uint32_t SERIAL_SPEED            = 115200;                              // Set the baud rate for Serial I/O //
-const uint8_t  SPRINTF_BUFFER_SIZE     =     32;                              // Buffer size for sprintf()        //
+const uint8_t  SPRINTF_BUFFER_SIZE     =     64;                              // Buffer size for sprintf()        //
 const uint16_t GPS_BAUD_RATE           =   9600;                              // GPS Module serial port baud rate //
 const uint32_t DISPLAY_INTERVAL_MILLIS = 600000;                              // milliseconds between outputs     //
 const uint8_t  LED_PIN                 =     13;                              // Built in LED                     //
@@ -44,33 +52,31 @@ const int8_t   UTC_OFFSET              =      2;                              //
 MCP7940_Class MCP7940;                                                        // Create an instance of the MCP7940//
 Adafruit_GPS  GPS(&Serial2);                                                  // Instantiate the GPS on serial 2  //
 char          inputBuffer[SPRINTF_BUFFER_SIZE];                               // Buffer for sprintf()/sscanf()    //
+int8_t        trimSetting;                                                    // Current MCP7940 trim value       //
 /*******************************************************************************************************************
 ** Method Setup(). This is an Arduino IDE method which is called upon boot or restart. It is only called one time **
 ** and then control goes to the main loop, which loop indefinately.                                               **
 *******************************************************************************************************************/
 void setup() {                                                                // Arduino standard setup method    //
   Serial.begin(SERIAL_SPEED);                                                 // Start serial port at Baud rate   //
-  Serial.print(F("\nStarting CalibrateFromGPS program\n"));                   // Show program information         //
-  Serial.print(F("- Compiled with c++ version "));                            //                                  //
-  Serial.print(F(__VERSION__));                                               // Show compiler information        //
-  Serial.print(F("\n- On "));                                                 //                                  //
-  Serial.print(F(__DATE__));                                                  //                                  //
-  Serial.print(F(" at "));                                                    //                                  //
-  Serial.print(F(__TIME__));                                                  //                                  //
-  Serial.print(F("\n"));                                                      //                                  //
+  sprintf(inputBuffer,"Starting CalibrateFromGPS program\n- c++ compiler version %s\n- Compiled on %s at %s\n",
+          __VERSION__,__DATE__,__TIME__);                                     //                                  //
+  Serial.print(inputBuffer);                                                  // Display program and compile date //
   GPS.begin(GPS_BAUD_RATE);                                                   // Initialize the GPS at baud       //
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);                              // send RMC (recommended minimum)   //
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_100_MILLIHERTZ);                       // Data every 10 seconds            //
   GPS.sendCommand(PMTK_API_SET_FIX_CTL_100_MILLIHERTZ);                       // Fixes every 10 seconds           //
-  Serial.println("\n- Initializing MCP7940");                                 //                                  //
+  Serial.print(F("\n- Initializing MCP7940 Real-Time-Clock\n"));              //                                  //
   while (!MCP7940.begin()) {                                                  // Initialize RTC communications    //
-    Serial.println(F("-  Unable to find MCP7940M. Checking again in 3s."));   // Show error text                  //
-    delay(3000);                                                              // wait a second                    //
+    Serial.println(F("-  Unable to find MCP7940M. Waiting 3 seconds."));      // Show error text                  //
+    delay(3000);                                                              // wait three seconds               //
   } // of loop until device is located                                        //                                  //
-  Serial.print("- Current TRIM is ");                                         //                                  //
-  MCP7940.calibrate(15);
-  Serial.print(MCP7940.getCalibrationTrim()*2);                               //                                  //
-  Serial.println(" clock cycles per minute");                                 //                                  //
+  Serial.print(F("- Current TRIM value is "));                                //                                  //
+  trimSetting = MCP7940.getCalibrationTrim();                                 // Retrieve TRIM register setting   //
+  Serial.print(trimSetting);                                                  //                                  //
+  Serial.println(F(" , which is "));                                          //                                  //
+  Serial.print(trimSetting*2);                                                //                                  //
+  Serial.println(F(" clock cycles per minute"));                              //                                  //
   Serial.println("- Getting GPS fix with Date/Time");                         //                                  //
   DateTime GPStime = readGPS();                                               // returns a valid date/time        //
   MCP7940.adjust(GPStime);                                                    //                                  //
@@ -130,10 +136,10 @@ void loop() {                                                                 //
     uint16_t average = totalDelta / readings;
     last5Readings[readings%5]=average;
     uint16_t Avg5min = 0;
-    for(uint8_t i=0;i<5;i++) Avg5min += last5Readings[i]/5; 
+    for(uint8_t i=0;i<5;i++) Avg5min += last5Readings[i]/5;
     sprintf(inputBuffer,"%04d %04d-%02d-%02d %02d:%02d:%02d %06:2d %06:2d ",      // Use sprintf() to pretty print    //
             readings,now.year(),now.month(),now.day(),now.hour(),now.minute(),// output with leading zeroes       //
-            now.second(), average, Avg5min    );   
+            now.second(), average, Avg5min    );
     Serial.print(inputBuffer);                                                 // Output the sprintf buffer       //
     Serial.print(" ");
     Serial.print(alarmMicros);
