@@ -58,10 +58,15 @@ int8_t        trimSetting;                                                    //
 ** and then control goes to the main loop, which loop indefinately.                                               **
 *******************************************************************************************************************/
 void setup() {                                                                // Arduino standard setup method    //
+  #if not (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__))        // This sketch needs to run on an   //
+    #error This program needs to run on an Arduino Mega due to Serial2        // Arduino Mega due to serial ports //
+  #endif                                                                      //                                  //
   Serial.begin(SERIAL_SPEED);                                                 // Start serial port at Baud rate   //
   sprintf(inputBuffer,"Starting CalibrateFromGPS program\n- c++ compiler version %s\n- Compiled on %s at %s\n",
           __VERSION__,__DATE__,__TIME__);                                     //                                  //
   Serial.print(inputBuffer);                                                  // Display program and compile date //
+  sprintf(inputBuffer,"- IDE V%s\n- CPU Frequency %s\n", ARDUINO, F_CPU);     //                                  //
+  Serial.print(inputBuffer);                                                  // Display IDE and speed information//
   GPS.begin(GPS_BAUD_RATE);                                                   // Initialize the GPS at baud       //
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);                              // send RMC (recommended minimum)   //
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_100_MILLIHERTZ);                       // Data every 10 seconds            //
