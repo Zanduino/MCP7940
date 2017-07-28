@@ -37,7 +37,6 @@
 **                                                                                                                **
 *******************************************************************************************************************/
 #include <MCP7940.h>                                                          // Include the MCP7940 RTC library  //
-
 /*******************************************************************************************************************
 ** Declare all program constants                                                                                  **
 *******************************************************************************************************************/
@@ -51,7 +50,6 @@ const uint8_t  MFP_PIN                 =      4;                              //
 const uint8_t  PPS_PIN                 =    A15;                              // GPS Pulse-Per-Second             //
 const uint8_t  AL0_INTERVAL_MINUTES    =      1;                              // RTC Alarm 0 interval in minutes  //
 const int8_t   UTC_OFFSET              =      2;                              // Offset from UTC (or GMT)         //
-
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
@@ -130,7 +128,7 @@ DateTime readGPS() {                                                          //
       gpsBuffer[gpsBufferIndex] = c;
       if (c==10) {
         gpsBuffer[gpsBufferIndex] = 0;
-        uint8_t tokens = sscanf(gpsBuffer,"$GPRMC,%d.%d,%s,%*",&dateval,&msval,&validity);
+        uint8_t tokens = sscanf(gpsBuffer,"$GPRMC,%d.%d,%1s%*",&dateval,&msval,&validity);
         if (tokens==3) {
         Serial.println(gpsBuffer);
           Serial.print("dateval is ");
