@@ -399,7 +399,7 @@ uint8_t MCP7940_Class::writeRAM(const uint8_t address,const uint8_t data) {   //
 ** corresponding max and min values for ppm. This allows the trim variable to be one byte rather than a long      **
 *******************************************************************************************************************/
 int8_t MCP7940_Class::calibrate(const int8_t newTrim) {                       // Calibrate the RTC                //
-  int8_t trim = newTrim;                                                      // Make a local copy                //  
+  int8_t trim = newTrim;                                                      // Make a local copy                //
   if (trim<0) trim = B10000000 | (trim*-1);                                   // Set non-excess 128 negative val  //
   writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11111011);             // fine trim mode on, to be safe    //
   writeByte(MCP7940_OSCTRIM,trim);                                            // Write value to the trim register //
@@ -426,7 +426,7 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
 ** can be negative but is not in excess-128 format any negative numbers need to be manipulated before returning   **
 *******************************************************************************************************************/
 int8_t MCP7940_Class::getCalibrationTrim() {                                  // Get the trim register value      //
-  int8_t trim = readByte(MCP7940_OSCTRIM);                                    // read the register                //  
+  int8_t trim = readByte(MCP7940_OSCTRIM);                                    // read the register                //
   if (trim>>7) trim = (B01111111&trim) * -1;                                  // if negative convert to excess128 //
   return(trim);                                                               // return the trim value            //
 } // of method getCalibrationTrim()                                           //                                  //
@@ -471,7 +471,7 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
                              const DateTime dt ) {                            // Date/Time to set alarm from      //
   bool success = false;                                                       // Assume no success                //
-  if (alarmNumber<1&&alarmType<8&&alarmType!=5&&alarmType!=6&& deviceStart()){// if parameters and oscillator OK  //
+  if (alarmNumber<1&&alarmType<8&&alarmType!=5&&alarmType!=6&&deviceStart()){ // if parameters and oscillator OK  //
     if (alarmNumber==0)                                                       // Turn off either alarm 0 or alarm //
       writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11101111);         // 1 depending on parameter         //
     else                                                                      //                                  //
@@ -495,6 +495,23 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
   } // of if-then alarmNumber and alarmType are valid and device running      //                                  //
   return success;                                                             // return the status                //
 } // of method setAlarm                                                       //                                  //
+/*******************************************************************************************************************
+** Method getAlarm will return the date/time settings for the given alarm and update the alarmType parameter with **
+** the alarm type that was set                                                                                    **
+*******************************************************************************************************************/
+DateTime MCP7940_Class::getAlarm(const uint8_t alarmNumber,                   // Return alarm date/time & type    //
+                                 uint8_t &alarmType) {                        //                                  //
+  uint8_t registerOffset = 0;                                                 // Default to Alarm 0 registers     //
+  if (alarmNumber==1) registerOffset = 6;                                     // Otherwise use Alarm 1 registers  //
+  alarmType = (readByte(MCP7940_ALM0WKDAY       +registerOffset)>>4)|B111;    // get 3 bits for alarmType         //
+  uint8_t ss = bcd2int(readByte(MCP7940_ALM0SEC +registerOffset) & 0x7F);     // Mask high bit in seconds         //
+  uint8_t mm = bcd2int(readByte(MCP7940_ALM0MIN +registerOffset) & 0x7F);     // Mask high bit in minutes         //
+  uint8_t hh = bcd2int(readByte(MCP7940_ALM0HOUR+registerOffset) & 0x7F);     // Mask high bit in hours           //
+  uint8_t d = bcd2int(readByte(MCP7940_ALM0DATE+registerOffset)  & 0x3F);     // Mask 2 high bits for day of month//
+  uint8_t m = bcd2int(readByte(MCP7940_ALM0MTH  +registerOffset) & 0x1F);     // Mask 3 high bits for Month       //
+  uint16_t y = 0;                                                             // Year is not part of the alarms   //
+  return DateTime (y, m, d, hh, mm, ss);                                      // Return class value               //
+} // of method getAlarm()                                                     //                                  //
 /*******************************************************************************************************************
 ** Method clearAlarm will clear a set alarm by re-writing the same contents back to the register                  **
 *******************************************************************************************************************/
