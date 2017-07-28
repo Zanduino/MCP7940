@@ -469,7 +469,8 @@ bool MCP7940_Class::getMFP() {                                                //
 *******************************************************************************************************************/
 bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       // Alarm number 0 or 1              //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
-                             const DateTime dt ) {                            // Date/Time to set alarm from      //
+                             const DateTime dt,                               // Date/Time to set alarm from      //
+                             const bool state = true) {                       
   bool success = false;                                                       // Assume no success                //
   if (alarmNumber<1&&alarmType<8&&alarmType!=5&&alarmType!=6&&deviceStart()){ // if parameters and oscillator OK  //
     if (alarmNumber==0)                                                       // Turn off either alarm 0 or alarm //
@@ -488,10 +489,7 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
     writeByte(MCP7940_ALM0HOUR+registerOffset,int2bcd(dt.hour()));            // Also re-sets the 24Hour clock on //
     writeByte(MCP7940_ALM0DATE+registerOffset,int2bcd(dt.day()));             // Write the day of month           //
     writeByte(MCP7940_ALM0MTH+registerOffset,int2bcd(dt.month()));            // Month, ignore R/O leapyear bit   //
-    if (alarmNumber==0)                                                       // Turn on either alarm 0 or alarm 1//
-      writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)|B00010000);         // depending upon parameter         //
-    else                                                                      //                                  //
-      writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)|B00100000);         //                                  //
+    setAlarmState(alarmNumber,state);                                         // Set the requested alarm to state //
   } // of if-then alarmNumber and alarmType are valid and device running      //                                  //
   return success;                                                             // return the status                //
 } // of method setAlarm                                                       //                                  //
@@ -522,3 +520,18 @@ bool MCP7940_Class::clearAlarm(const uint8_t alarmNumber) {                   //
   writeByte(registerOffset,readByte(registerOffset));                         // Writing to register clears bit   //
   return true;                                                                // return success                   //
 } // of method clearAlarm()                                                   //                                  //
+/*******************************************************************************************************************
+** Method setAlarmState() will turn an alarm on or off without changing the alarm condition                       **
+*******************************************************************************************************************/
+bool MCP7940_Class::setAlarmState(const uint8_t alarmNumber,const bool state){// Set alarm to on or off           //
+  if(alarmNumber>1) return false;                                             // if not alarm 0 or 1 then error   //
+  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)^(state<<(4+alarmNumber)));  // Set appropriate bit in register  //
+  return(true);                                                               // Return success                   //
+} // of setAlarmState()                                                       //                                  //
+/*******************************************************************************************************************
+** Method getAlarmState() will return whether an alarm is turned on or off                                        **
+*******************************************************************************************************************/
+bool MCP7940_Class::getAlarmState(const uint8_t alarmNumber) {                // Set alarm to on or off           //
+  bool state = readByte(MCP7940_CONTROL)>>(4+alarmNumber)&B00000001;          // Get state of alarm               //
+  return (state);                                                             // Return state of alarm            //
+} // of getAlarmState()                                                       //                                  //

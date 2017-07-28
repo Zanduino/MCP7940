@@ -46,7 +46,7 @@ const uint16_t GPS_BAUD_RATE           =   9600;                              //
 const uint16_t GPS_SENTENCE_SIZE       =    132;                              // Buffer size for GPS Sentences    //
 const uint32_t DISPLAY_INTERVAL_MILLIS = 600000;                              // milliseconds between outputs     //
 const uint8_t  LED_PIN                 =     13;                              // Built in LED                     //
-const uint8_t  MFP_PIN                 =      4;                              // Pin used for the MCP7940 MFP     //
+const uint8_t  MFP_PIN                 =      7;                              // Pin used for the MCP7940 MFP     //
 const uint8_t  PPS_PIN                 =    A15;                              // GPS Pulse-Per-Second             //
 const uint8_t  AL0_INTERVAL_MINUTES    =      1;                              // RTC Alarm 0 interval in minutes  //
 const int8_t   UTC_OFFSET              =      2;                              // Offset from UTC (or GMT)         //
@@ -62,7 +62,6 @@ volatile uint32_t GPSMicros,RTCMicros;                                        //
 ** Interrupt Service Routine handler for pin change interrupt PCINT1_vect for pins D8-D13. Sets the global var to **
 ** current microseconds for the RTC. It then sets the RTC alarm to the next value which also resets the interrupt **
 *******************************************************************************************************************/
-/*
 ISR (PCINT0_vect) {                                                           // Interrupt handler for RTC clock  //
   if (micros()-RTCMicros>1500000) {
     RTCMicros = micros();                       // Only set if more then 1.5secs    //
@@ -70,7 +69,6 @@ ISR (PCINT0_vect) {                                                           //
   }    
 } // of interrupt service routine for Interrupt 1                             //                                  //
 
-*/
 
 /*******************************************************************************************************************
 ** Method to read data from the GPS port and then use the Adafruit library to parse the date and time. The GPS    **
@@ -106,6 +104,10 @@ DateTime readGPS() {                                                          //
 ** and then control goes to the main loop, which loop indefinately.                                               **
 *******************************************************************************************************************/
 void setup() {                                                                // Arduino standard setup method    //
+  pinMode(MFP_PIN,INPUT);                                                     // MCP7940 Alarm MFP digital pin    //
+  pinMode(PPS_PIN,INPUT);                                                     // Pulses to 2.8V every cycle       //
+  pinMode(LED_PIN,OUTPUT);                                                    // Green built in LED on Arduino    //
+  digitalWrite(LED_PIN,LOW);                                                  // Turn off the LED light           //
   #if not (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__))        // This sketch needs to run on an   //
     #error This program needs to run on an Arduino Mega due to Serial2        // Arduino Mega due to serial ports //
   #endif                                                                      //                                  //
@@ -148,15 +150,11 @@ GPStime.second());                                                  //          
 Serial.println(inputBuffer);                                                // Display the current date/time    //
 Serial.println(x,BIN);
 
-  pinMode(MFP_PIN,INPUT);                                                     // MCP7940 Alarm MFP digital pin    //
-  pinMode(PPS_PIN,INPUT);                                                     // Pulses to 2.8V every cycle       //
-  pinMode(LED_PIN,OUTPUT);                                                    // Green built in LED on Arduino    //
-  digitalWrite(LED_PIN,LOW);                                                  // Turn off the LED light           //
   Serial.println("Rdgs  GPS Date / time    Avg ?s 5 min  ");                  // Display the output header lines  //
   Serial.println("==== =================== ====== ====== ");                  //                                  //
-//  *digitalPinToPCMSK(MFP_PIN) |= bit (digitalPinToPCMSKbit(MFP_PIN));         // enable pin change int. on pin    //
-//  PCIFR  |= bit (digitalPinToPCICRbit(MFP_PIN));                              // clear any outstanding interrupt  //
-//  PCICR  |= bit (digitalPinToPCICRbit(MFP_PIN));                              // enable interrupt for the group   //
+  *digitalPinToPCMSK(MFP_PIN) |= bit (digitalPinToPCMSKbit(MFP_PIN));         // enable pin change int. on pin    //
+  PCIFR  |= bit (digitalPinToPCICRbit(MFP_PIN));                              // clear any outstanding interrupt  //
+  PCICR  |= bit (digitalPinToPCICRbit(MFP_PIN));                              // enable interrupt for the group   //
 } // of method setup()                                                        //                                  //
 /*******************************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
@@ -165,6 +163,8 @@ void loop() {                                                                 //
   static uint32_t alarmMicros, gpsMicros;                                     // Alarm and GPS Microseconds       //
   static DateTime now,mcp;
 
+//MCP7940.setMFP(false);
+Serial.print("Alarm 0 is ");Serial.println(MCP7940.getAlarmState(0));
 while(1){
  if (alarmMicros!=RTCMicros) {
    alarmMicros=RTCMicros;
@@ -178,6 +178,11 @@ while(1){
  Serial.print(inputBuffer);                                                 // Output the sprintf buffer       //
 delay(1000);
 }  
+
+
+
+
+
 
 
 
