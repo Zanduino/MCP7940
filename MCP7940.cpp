@@ -188,12 +188,12 @@ MCP7940_Class::MCP7940_Class()  {} // of class constructor                    //
 /*******************************************************************************************************************
 ** Class Destructor currently does nothing and is included for compatibility purposes                             **
 *******************************************************************************************************************/
-MCP7940_Class::~MCP7940_Class() {} // of class destructor                    //                                  //
+MCP7940_Class::~MCP7940_Class() {} // of class destructor                     //                                  //
 /*******************************************************************************************************************
 ** Method begin starts I2C communications with the device, using a default address if one is not specified and    **
 ** return true if the device has been detected and false if it was not                                            **
 *******************************************************************************************************************/
-bool MCP7940_Class::begin( ) {                                                // Start I2C Comms with device      //
+bool MCP7940_Class::begin( ) {                                                // Start I2C communications         //
   Wire.begin();                                                               // Start I2C as master device       //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
   delay(MCP7940_I2C_DELAY);                                                   // Give the MCP7940 time to process //
@@ -343,7 +343,7 @@ void MCP7940_Class::readRAM(const uint8_t address, uint8_t* buf,              //
   Wire.requestFrom(MCP7940_ADDRESS, size);                                    // Request data                     //
   while(!Wire.available());                                                   // Wait until the data is ready     //
   for (uint8_t pos=0;pos<size;pos++){buf[pos] = Wire.read();}                 // Loop for each byte to read       //
-} // of method readRAM()
+} // of method readRAM()                                                      //                                  //
 /*******************************************************************************************************************
 ** Method readRAM(). This reads just one byte from RAM and is an interlude function to the multibyte readRAM      **
 *******************************************************************************************************************/
@@ -364,7 +364,7 @@ void MCP7940_Class::writeRAM(const uint8_t address, uint8_t* buf,             //
   delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   for (uint8_t pos=0;pos<size;pos++) {Wire.write(buf[pos]);}                  // Write each byte to RAM           //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-} // of method writeRAM
+} // of method writeRAM                                                       //                                  //
 /*******************************************************************************************************************
 ** Method writeRAM(). This writes just one byte to RAM and is an interlude function to the multibyte writeRAM     **
 *******************************************************************************************************************/
@@ -414,7 +414,6 @@ int8_t MCP7940_Class::getCalibrationTrim() {                                  //
   if (trim>>7) trim = (B01111111&trim) * -1;                                  // if negative convert to excess128 //
   return(trim);                                                               // return the trim value            //
 } // of method getCalibrationTrim()                                           //                                  //
-
 /*******************************************************************************************************************
 ** Method calibrate() when called with no parameters means that the current calibration offset is set back to 0   **
 *******************************************************************************************************************/
@@ -462,7 +461,7 @@ bool MCP7940_Class::getMFP() {                                                //
 bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       // Alarm number 0 or 1              //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
                              const DateTime dt,                               // Date/Time to set alarm from      //
-                             const bool state = true) {
+                             const bool state = true) {                       //                                  //
   bool success = false;                                                       // Assume no success                //
   if (alarmNumber<2&&alarmType<8&&alarmType!=5&&alarmType!=6&&deviceStart()){ // if parameters and oscillator OK  //
     if (alarmNumber==0)                                                       // Turn off either alarm 0 or alarm //
@@ -509,7 +508,7 @@ bool MCP7940_Class::clearAlarm(const uint8_t alarmNumber) {                   //
   uint8_t registerOffset = MCP7940_ALM0WKDAY;                                 // Default to Alarm 0 registers     //
   if (alarmNumber==1) registerOffset += 7;                                    // Otherwise use Alarm 1 registers  //
   writeByte(registerOffset,readByte(registerOffset)&B11110111);               // Writing to register clears bit   //
-return true;                                                                // return success                   //
+  return true;                                                                // return success                   //
 } // of method clearAlarm()                                                   //                                  //
 /*******************************************************************************************************************
 ** Method setAlarmState() will turn an alarm on or off without changing the alarm condition                       **
@@ -536,8 +535,6 @@ bool MCP7940_Class::isAlarm(const uint8_t alarmNumber) {                      //
   bool alarmValue = (readByte(registerNumber)>>3)&B00000001;                  // Return just 3rd bit in register  //
   return alarmValue;                                                          // return whether active or not     //
 } // of method clearAlarm()                                                   //                                  //
-
-
 /*******************************************************************************************************************
 ** Method getSQWSpeed will return the list value for the frequency of the square wave. Values are B00 for 1Hz,    **
 ** B01 for 4.096kHz, B10 for 8.192kHz and B11 for 32.768kHz. If square wave is not turned on then a 0 is returned **
@@ -547,7 +544,6 @@ uint8_t MCP7940_Class::getSQWSpeed() {                                         /
   if (frequency&B01000000) return(frequency&B11);                              // return 2 bits if SQW enabled    //
                       else return(0);                                          // otherwise return 0              //
 } // of method getSQWSpeed()                                                   //                                 //
-
 /*******************************************************************************************************************
 ** Method setSQWSpeed will set the square wave speed to a value. Values are B00 for 1Hz, B01 for 4.096kHz, B10    **
 ** for 8.192kHz and B11 for 32.768kHz. By default the square wave is also turned on, but the optional setState    **
@@ -561,7 +557,6 @@ bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool setState = true) {     /
   writeByte(MCP7940_CONTROL,registerValue);                                    // Write register settings         //
   return(setState);                                                            // Return whether enabled or not   //
 } // of method setSQWState()                                                   //                                 //
-
 /*******************************************************************************************************************
 ** Method setSQWState will turn on the square wave generator bit                                                  **
 *******************************************************************************************************************/
@@ -569,7 +564,6 @@ bool MCP7940_Class::setSQWState(const bool state) {                            /
   writeByte(MCP7940_CONTROL,(readByte(MCP7940_CONTROL)&B10111111)|state<<6);   // set the one bit to state        //
   return(state);                                                               // Return whether enabled or not   //
 } // of method setSQWState                                                     //                                 //
-
 /*******************************************************************************************************************
 ** Method getSQWState will turn on the square wave generator bit                                                  **
 *******************************************************************************************************************/
@@ -577,4 +571,3 @@ bool MCP7940_Class::getSQWState() {                                            /
   bool returnValue = (readByte(MCP7940_CONTROL)>>6)&1;                         // get 6th bit                     //
   return(returnValue);                                                         // return the result               //
 } // of method getSQWState()                                                   //                                 //
-

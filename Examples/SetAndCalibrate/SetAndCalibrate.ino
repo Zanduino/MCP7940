@@ -1,15 +1,13 @@
 /*******************************************************************************************************************
 ** Example program for using the MCP7940 library which allows access to the MCP7940N/M real-time-clock chip. The  **
 ** library as well as the most current version of this program is available at GitHub using the address           **
-** https://github.com/SV-Zanshin/MCP7940 and a more detailed description of this program can be found at          **
-** https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino                                                 **
+** https://github.com/SV-Zanshin/MCP7940 and a more detailed description of this program (and the library) can be **
+** found at https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino                                        **
 **                                                                                                                **
 ** The MCP7940 library uses the standard SPI Wire library for communications with the RTC chip and has also used  **
-** the class definitions of the standard RTClib library from Adafruit/Jeelabs.                                    **
-**                                                                                                                **
-** The data sheet for the MCP7940M is located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf.   **
-** The MCP7940N has extra functionality revolving around battery backup but this library's functionality covers   **
-** that chip as well.                                                                                             **
+** the class definitions of the standard RTClib library from Adafruit/Jeelabs. The data sheet for the MCP7940M is **
+** located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N has extra functionality **
+** revolving around battery backup but this library's functionality covers that chip as well.                     **
 **                                                                                                                **
 ** On-chip digital trimming can be used to adjust for frequency variance caused by crystal tolerance and          **
 ** temperature. Since the chip only output full seconds, a calibration cycle won't be effective until there is at **
@@ -25,6 +23,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.1  2017-07-29 Arnd@SV-Zanshin.Com Cleaned up comments and code                                             **
 ** 1.0.0  2017-07-23 Arnd@SV-Zanshin.Com Initial coding                                                           **
 **                                                                                                                **
 *******************************************************************************************************************/
@@ -70,8 +69,7 @@ void setup() {                                                                //
       delay(1000);                                                            // wait for a second                //
     } // of if-then oscillator didn't start                                   //                                  //
   } // of while the oscillator is off                                         //                                  //
-  MCP7940.adjust();                                                           // When called with no parameters,  //
-                                                                              // the compile date/time is used    //
+  MCP7940.adjust();                                                           // Set to library compile Date/Time //
   Serial.println(F("Enter the following serial commands:"));                  //                                  //
   Serial.println(F("SETDATE yyyy-mm-dd hh:mm:ss"));                           //                                  //
   Serial.println(F("CALDATE yyyy-mm-dd hh:mm:ss"));                           //                                  //
@@ -152,7 +150,7 @@ void readCommand() {                                                          //
       inputBytes = 0; // reset the counter                                    //                                  //
     } // of if-then-else we've received full command                          //                                  //
   } // of if-then there is something in our input buffer                      //                                  //
-} // of method readCommand                                                    //----------------------------------//
+} // of method readCommand                                                    //                                  //
 /*******************************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
@@ -161,7 +159,7 @@ void loop() {                                                                 //
   DateTime now = MCP7940.now();                                               // get the current time             //
   if (secs != now.second()) {                                                 // Output if seconds have changed   //
     sprintf(inputBuffer,"%04d-%02d-%02d %02d:%02d:%02d", now.year(),          // Use sprintf() to pretty print    //
-            now.month(), now.day(), now.hour(), now.minute(), now.second());  // date/time with leading zeroes    //
+            now.month(), now.day(), now.hour(), now.minute(), now.second());  // date/time with leading zeros     //
     Serial.println(inputBuffer);                                              // Display the current date/time    //
     secs = now.second();                                                      // Set the counter variable         //
     digitalWrite(LED_PIN,!digitalRead(LED_PIN));                              // Toggle the LED                   //

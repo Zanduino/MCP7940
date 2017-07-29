@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.3a 2017-07-29 Arnd@SV-Zanshin.Com Cleaned up comments, no code changes                                     **
 ** 1.0.3  2017-07-29 Arnd@SV-Zanshin.Com Added getSQWSpeed(),setSQWSpeed(),setSQWState() and getSQWState()        **
 ** 1.0.2  2017-07-29 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions and added the **
 **                                       optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm **
@@ -73,7 +74,8 @@
   const uint8_t  MCP7940_RTCSEC_SC               =         7;                 // Bit 7 is "ST" in seconds register//
   const uint8_t  MCP7940_RTCWKDAY_OSCRUN         =         5;                 //                                  //
   /*****************************************************************************************************************
-  ** Simple general-purpose date/time class (no TZ / DST / leap second handling). Copied from RTClib.             **
+  ** Simple general-purpose date/time class (no TZ / DST / leap second handling). Copied from RTClib. For further **
+  ** information on this implementation see https://github.com/SV-Zanshin/MCP7940/wiki/DateTimeClass              **
   *****************************************************************************************************************/
   class DateTime {                                                            //                                  //
     public:                                                                   //----------------------------------//
@@ -100,7 +102,8 @@
       uint8_t yOff, m, d, hh, mm, ss;                                         // private variables                //
   }; // of class DateTime definition                                          //                                  //
   /*****************************************************************************************************************
-  ** Timespan class which can represent changes in time with seconds accuracy. Copied from RTClib.                **
+  ** Timespan class which can represent changes in time with seconds accuracy. Copied from RTClib. For further    **
+  ** information see ** https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass                                  **
   *****************************************************************************************************************/
   class TimeSpan {                                                            //                                  //
     public:                                                                   //----------------------------------//
