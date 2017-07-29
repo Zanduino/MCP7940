@@ -220,22 +220,6 @@ uint8_t MCP7940_Class::readByte(const uint8_t addr) {                         //
   return Wire.read();                                                         // read it and return it            //
 } // of method readByte()                                                     //                                  //
 /*******************************************************************************************************************
-** Method readWord reads 2 bytes from the specified address                                                       **
-*******************************************************************************************************************/
-uint16_t MCP7940_Class::readWord(const uint8_t addr) {                        //                                  //
-  uint16_t returnData;                                                        // Store return value               //
-  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
-  Wire.write(addr);                                                           // Send the register address to read//
-  _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
-  Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)2);                              // Request 2 consecutive bytes      //
-  while(!Wire.available());                                                   // Wait until the byte is ready     //
-  returnData  = Wire.read();                                                  // Read the msb                     //
-  returnData  = returnData<<8;                                                // shift the data over              //
-  returnData |= Wire.read();                                                  // Read the lsb                     //
-  return returnData;                                                          // read it and return it            //
-} // of method readWord()                                                     //                                  //
-/*******************************************************************************************************************
 ** Method writeByte write 1 byte to the specified address                                                         **
 *******************************************************************************************************************/
 void MCP7940_Class::writeByte(const uint8_t addr, const uint8_t data) {       //                                  //
@@ -552,3 +536,45 @@ bool MCP7940_Class::isAlarm(const uint8_t alarmNumber) {                      //
   bool alarmValue = (readByte(registerNumber)>>3)&B00000001;                  // Return just 3rd bit in register  //
   return alarmValue;                                                          // return whether active or not     //
 } // of method clearAlarm()                                                   //                                  //
+
+
+/*******************************************************************************************************************
+** Method getSQWSpeed will return the list value for the frequency of the square wave. Values are B00 for 1Hz,    **
+** B01 for 4.096kHz, B10 for 8.192kHz and B11 for 32.768kHz. If square wave is not turned on then a 0 is returned **
+*******************************************************************************************************************/
+uint8_t MCP7940_Class::getSQWSpeed() {                                         // Return the SQW frequency code   //
+  uint8_t frequency = readByte(MCP7940_CONTROL);                               // Read the control register       //
+  if (frequency&B01000000) return(frequency&B11);                              // return 2 bits if SQW enabled    //
+                      else return(0);                                          // otherwise return 0              //
+} // of method getSQWSpeed()                                                   //                                 //
+
+/*******************************************************************************************************************
+** Method setSQWSpeed will set the square wave speed to a value. Values are B00 for 1Hz, B01 for 4.096kHz, B10    **
+** for 8.192kHz and B11 for 32.768kHz. By default the square wave is also turned on, but the optional setState    **
+** parameter changes that initial state. The return value is the state of the SQW after setting                   **
+*******************************************************************************************************************/
+bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool setState = true) {     // Set the SQW frequency code      //
+  uint8_t registerValue = readByte(MCP7940_CONTROL);                           // read the register to a variable //
+  registerValue &= B10111100;                                                  // Mask SQW state and speed bits   //
+  registerValue |= (setState<<6);                                              // setState at bit 6               //
+  registerValue |= (frequency&B11);                                            // only use 2 bits for frequency   //
+  writeByte(MCP7940_CONTROL,registerValue);                                    // Write register settings         //
+  return(setState);                                                            // Return whether enabled or not   //
+} // of method setSQWState()                                                   //                                 //
+
+/*******************************************************************************************************************
+** Method setSQWState will turn on the square wave generator bit                                                  **
+*******************************************************************************************************************/
+bool MCP7940_Class::setSQWState(const bool state) {                            // Set the SQW frequency state     //
+  writeByte(MCP7940_CONTROL,(readByte(MCP7940_CONTROL)&B10111111)|state<<6);   // set the one bit to state        //
+  return(state);                                                               // Return whether enabled or not   //
+} // of method setSQWState                                                     //                                 //
+
+/*******************************************************************************************************************
+** Method getSQWState will turn on the square wave generator bit                                                  **
+*******************************************************************************************************************/
+bool MCP7940_Class::getSQWState() {                                            // Get the SQW frequency state     //
+  bool returnValue = (readByte(MCP7940_CONTROL)>>6)&1;                         // get 6th bit                     //
+  return(returnValue);                                                         // return the result               //
+} // of method getSQWState()                                                   //                                 //
+

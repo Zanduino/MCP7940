@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.3  2017-07-29 Arnd@SV-Zanshin.Com Added getSQWSpeed(),setSQWSpeed(),setSQWState() and getSQWState()        **
 ** 1.0.2  2017-07-29 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions and added the **
 **                                       optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm **
 **                                       1 indexing.                                                              **
@@ -149,12 +150,15 @@
       bool     setAlarmState(const uint8_t alarmNumber, const bool state);    // Return if alarm is on or off     //
       bool     getAlarmState(const uint8_t alarmNumber);                      // Return if alarm is on or off     //
       bool     isAlarm(const uint8_t alarmNumber);                            // Return if alarm is triggered     //
+      uint8_t  getSQWSpeed();                                                 // Return the SQW frequency code    //
+      bool     setSQWSpeed(uint8_t frequency, bool setState = true);          // Set the SQW frequency to code    //
+      bool     setSQWState(const bool state);                                 // Set the SQW MFP on or off        //
+      bool     getSQWState();                                                 // Return if the SQW is active      //
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
       uint8_t  bcd2int(const uint8_t bcd);                                    // convert BCD digits to integer    //
       uint8_t  int2bcd(const uint8_t dec);                                    // convert integer to BCD           //
-      uint16_t readWord(const uint8_t addr);                                  // Read 2 bytes from address on I2C //
       uint8_t  _TransmissionStatus = 0;                                       // Status of I2C transmission       //
       bool     _CrystalStatus      = false;                                   // True if RTC is turned on         //
       bool     _OscillatorStatus   = false;                                   // True if Oscillator on and working//
