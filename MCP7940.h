@@ -21,7 +21,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
-** 1.0.2  2017-07-28 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions               **
+** 1.0.2  2017-07-29 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions and added the **
+**                                       optional setting to setAlarm()
 ** 1.0.1  2017-07-25 Arnd@SV-Zanshin.Com Added overloaded Calibrate() to manually set the trim factor             **
 ** 1.0.0  2017-07-23 Arnd@SV-Zanshin.Com Cleaned up code, initial github upload                                   **
 ** 1.0.2b 2017-07-20 Arnd@SV-Zanshin.Com Added alarm handling                                                     **
@@ -40,35 +41,35 @@
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
-  const uint8_t  MCP7940_ADDRESS                 = 0x6F;                      // Device address, fixed value      //
-  const uint8_t  MCP7940_I2C_DELAY               =    0;                      // Microseconds wait time for I2C   //
-  const uint8_t  MCP7940_RTCSEC                  = 0x00;                      // Register definitions             //
-  const uint8_t  MCP7940_RTCMIN                  = 0x01;                      //                                  //
-  const uint8_t  MCP7940_RTCHOUR                 = 0x02;                      //                                  //
-  const uint8_t  MCP7940_RTCWKDAY                = 0x03;                      //                                  //
-  const uint8_t  MCP7940_RTCDATE                 = 0x04;                      //                                  //
-  const uint8_t  MCP7940_RTCMTH                  = 0x05;                      //                                  //
-  const uint8_t  MCP7940_RTCYEAR                 = 0x06;                      //                                  //
-  const uint8_t  MCP7940_CONTROL                 = 0x07;                      //                                  //
-  const uint8_t  MCP7940_OSCTRIM                 = 0x08;                      //                                  //
-  const uint8_t  MCP7940_ALM0SEC                 = 0x0A;                      //                                  //
-  const uint8_t  MCP7940_ALM0MIN                 = 0x0B;                      //                                  //
-  const uint8_t  MCP7940_ALM0HOUR                = 0x0C;                      //                                  //
-  const uint8_t  MCP7940_ALM0WKDAY               = 0x0D;                      //                                  //
-  const uint8_t  MCP7940_ALM0DATE                = 0x0E;                      //                                  //
-  const uint8_t  MCP7940_ALM0MTH                 = 0x0F;                      //                                  //
-  const uint8_t  MCP7940_ALM1SEC                 = 0x11;                      //                                  //
-  const uint8_t  MCP7940_ALM1MIN                 = 0x12;                      //                                  //
-  const uint8_t  MCP7940_ALM1HOUR                = 0x13;                      //                                  //
-  const uint8_t  MCP7940_ALM1WKDAY               = 0x14;                      //                                  //
-  const uint8_t  MCP7940_ALM1DATE                = 0x15;                      //                                  //
-  const uint8_t  MCP7940_ALM1MTH                 = 0x16;                      //                                  //
-  const uint8_t  MCP7940_RAM_ADDRESS             = 0x20;                      // Start address for SRAM           //
-  const uint32_t SECONDS_PER_DAY                 = 86400;                     // 60 secs * 60 mins * 24 hours     //
+  const uint8_t  MCP7940_ADDRESS                 =      0x6F;                 // Device address, fixed value      //
+  const uint8_t  MCP7940_I2C_DELAY               =         0;                 // Microseconds wait time for I2C   //
+  const uint8_t  MCP7940_RTCSEC                  =      0x00;                 // Register definitions             //
+  const uint8_t  MCP7940_RTCMIN                  =      0x01;                 //                                  //
+  const uint8_t  MCP7940_RTCHOUR                 =      0x02;                 //                                  //
+  const uint8_t  MCP7940_RTCWKDAY                =      0x03;                 //                                  //
+  const uint8_t  MCP7940_RTCDATE                 =      0x04;                 //                                  //
+  const uint8_t  MCP7940_RTCMTH                  =      0x05;                 //                                  //
+  const uint8_t  MCP7940_RTCYEAR                 =      0x06;                 //                                  //
+  const uint8_t  MCP7940_CONTROL                 =      0x07;                 //                                  //
+  const uint8_t  MCP7940_OSCTRIM                 =      0x08;                 //                                  //
+  const uint8_t  MCP7940_ALM0SEC                 =      0x0A;                 //                                  //
+  const uint8_t  MCP7940_ALM0MIN                 =      0x0B;                 //                                  //
+  const uint8_t  MCP7940_ALM0HOUR                =      0x0C;                 //                                  //
+  const uint8_t  MCP7940_ALM0WKDAY               =      0x0D;                 //                                  //
+  const uint8_t  MCP7940_ALM0DATE                =      0x0E;                 //                                  //
+  const uint8_t  MCP7940_ALM0MTH                 =      0x0F;                 //                                  //
+  const uint8_t  MCP7940_ALM1SEC                 =      0x11;                 //                                  //
+  const uint8_t  MCP7940_ALM1MIN                 =      0x12;                 //                                  //
+  const uint8_t  MCP7940_ALM1HOUR                =      0x13;                 //                                  //
+  const uint8_t  MCP7940_ALM1WKDAY               =      0x14;                 //                                  //
+  const uint8_t  MCP7940_ALM1DATE                =      0x15;                 //                                  //
+  const uint8_t  MCP7940_ALM1MTH                 =      0x16;                 //                                  //
+  const uint8_t  MCP7940_RAM_ADDRESS             =      0x20;                 // Start address for SRAM           //
+  const uint32_t SECONDS_PER_DAY                 =     86400;                 // 60 secs * 60 mins * 24 hours     //
   const uint32_t SECONDS_FROM_1970_TO_2000       = 946684800;                 //                                  //
-  const uint8_t  MCP7940_CONTROL_OUT             =    7;                      // Bit 7 is "OUT" in control reg    //
-  const uint8_t  MCP7940_RTCSEC_SC               =    7;                      // Bit 7 is "ST" in seconds register//
-  const uint8_t  MCP7940_RTCWKDAY_OSCRUN         =    5;                      //                                  //
+  const uint8_t  MCP7940_CONTROL_OUT             =         7;                 // Bit 7 is "OUT" in control reg    //
+  const uint8_t  MCP7940_RTCSEC_SC               =         7;                 // Bit 7 is "ST" in seconds register//
+  const uint8_t  MCP7940_RTCWKDAY_OSCRUN         =         5;                 //                                  //
   /*****************************************************************************************************************
   ** Simple general-purpose date/time class (no TZ / DST / leap second handling). Copied from RTClib.             **
   *****************************************************************************************************************/

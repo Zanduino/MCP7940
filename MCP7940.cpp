@@ -450,10 +450,18 @@ bool MCP7940_Class::setMFP(const bool value) {                                //
   return true;                                                                // Return success                   //
 } // of method setMFP()                                                       //                                  //
 /*******************************************************************************************************************
-** Method getMFP() will get the MFP (Multifunction Pin) state. On is true and Off is false                        **
+** Method getMFP() will get the MFP (Multifunction Pin) state. On is true and Off is false. This is read from the **
+** control register if no alarms are enabled, otherwise the two alarm states must be checked.                     **
 *******************************************************************************************************************/
 bool MCP7940_Class::getMFP() {                                                // Get the MFP pin state            //
-  bool registerValue = readByte(MCP7940_CONTROL)>>MCP7940_CONTROL_OUT;        // Get "OUT" bit                    //
+  uint8_t controlRegister = readByte(MCP7940_CONTROL);                        // Get control register contents    //
+  bool registerValue = 0;                                                     // Store return value               //
+  if(controlRegister&B00010000)                                               // If alarm0 is used, check flag    //
+    registerValue = readByte(MCP7940_ALM0WKDAY)&B00001000;                    // Set return value to flag bit     //
+  if(controlRegister&B00100000)                                               // If alarm1 is used, check flag    //
+    registerValue = registerValue | (readByte(MCP7940_ALM1WKDAY)&B00001000);  // Add this flag bit to return value//
+  if(!(controlRegister&B00110000))                                            // If no alarms are set the use the //
+    registerValue = (readByte(MCP7940_CONTROL)>>MCP7940_CONTROL_OUT)&1;       // "OUT" bit of the MFP             //
   return registerValue;                                                       // Return value                     //
 } // of method getMFP()                                                       //                                  //
 /*******************************************************************************************************************
@@ -525,7 +533,7 @@ bool MCP7940_Class::clearAlarm(const uint8_t alarmNumber) {                   //
 *******************************************************************************************************************/
 bool MCP7940_Class::setAlarmState(const uint8_t alarmNumber,const bool state){// Set alarm to on or off           //
   if(alarmNumber>1) return false;                                             // if not alarm 0 or 1 then error   //
-  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)^(state<<(4+alarmNumber)));  // Set appropriate bit in register  //
+  writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)^(state<<(4+alarmNumber)));// Set appropriate bit in register//
   return(true);                                                               // Return success                   //
 } // of setAlarmState()                                                       //                                  //
 /*******************************************************************************************************************

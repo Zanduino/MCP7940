@@ -5,6 +5,8 @@ ehthumbs.db
 # Folder config file
 Desktop.ini
 
+# Work in progress folder
+WorkInProgress/
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
