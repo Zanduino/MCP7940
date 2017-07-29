@@ -478,17 +478,16 @@ bool MCP7940_Class::getMFP() {                                                //
 bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       // Alarm number 0 or 1              //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
                              const DateTime dt,                               // Date/Time to set alarm from      //
-                             const bool state = true) {                       
+                             const bool state = true) {
   bool success = false;                                                       // Assume no success                //
-  if (alarmNumber<1&&alarmType<8&&alarmType!=5&&alarmType!=6&&deviceStart()){ // if parameters and oscillator OK  //
+  if (alarmNumber<2&&alarmType<8&&alarmType!=5&&alarmType!=6&&deviceStart()){ // if parameters and oscillator OK  //
     if (alarmNumber==0)                                                       // Turn off either alarm 0 or alarm //
       writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11101111);         // 1 depending on parameter         //
     else                                                                      //                                  //
-      writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11001111);         //                                  //
+      writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)&B11011111);         //                                  //
     uint8_t registerOffset = 0;                                               // Default to Alarm 0 registers     //
-    if (alarmNumber==1) registerOffset = 6;                                   // Otherwise use Alarm 1 registers  //
-    uint8_t workRegister = readByte(MCP7940_ALM0WKDAY+registerOffset);        // Retrieve register settings       //
-    workRegister &= B00001000;                                                // Clear 3 bits for alarm mask      //
+    if (alarmNumber==1) registerOffset = 7;                                   // Otherwise use Alarm 1 registers  //
+    uint8_t workRegister = readByte(MCP7940_ALM0WKDAY+registerOffset)&B1000;  // Keep alarm interrupt flag bit    //
     workRegister |= alarmType<<4;                                             // Set 3 bits from alarmType        //
     workRegister |= readByte(MCP7940_RTCWKDAY)&B00000111;                     // Set 3 bits for dow from register //
     writeByte(MCP7940_ALM0WKDAY+registerOffset,workRegister);                 // Write alarm mask                 //
@@ -508,7 +507,7 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
 DateTime MCP7940_Class::getAlarm(const uint8_t alarmNumber,                   // Return alarm date/time & type    //
                                  uint8_t &alarmType) {                        //                                  //
   uint8_t registerOffset = 0;                                                 // Default to Alarm 0 registers     //
-  if (alarmNumber==1) registerOffset = 6;                                     // Otherwise use Alarm 1 registers  //
+  if (alarmNumber==1) registerOffset = 7;                                     // Otherwise use Alarm 1 registers  //
   alarmType = (readByte(MCP7940_ALM0WKDAY       +registerOffset)>>4)|B111;    // get 3 bits for alarmType         //
   uint8_t ss = bcd2int(readByte(MCP7940_ALM0SEC +registerOffset) & 0x7F);     // Mask high bit in seconds         //
   uint8_t mm = bcd2int(readByte(MCP7940_ALM0MIN +registerOffset) & 0x7F);     // Mask high bit in minutes         //
@@ -524,9 +523,9 @@ DateTime MCP7940_Class::getAlarm(const uint8_t alarmNumber,                   //
 bool MCP7940_Class::clearAlarm(const uint8_t alarmNumber) {                   // Clear an Alarm                   //
   if (alarmNumber>1) return false;                                            // return an error if bad alarm no. //
   uint8_t registerOffset = MCP7940_ALM0WKDAY;                                 // Default to Alarm 0 registers     //
-  if (alarmNumber==1) registerOffset += 6;                                    // Otherwise use Alarm 1 registers  //
-  writeByte(registerOffset,readByte(registerOffset));                         // Writing to register clears bit   //
-  return true;                                                                // return success                   //
+  if (alarmNumber==1) registerOffset += 7;                                    // Otherwise use Alarm 1 registers  //
+  writeByte(registerOffset,readByte(registerOffset)&B11110111);               // Writing to register clears bit   //
+return true;                                                                // return success                   //
 } // of method clearAlarm()                                                   //                                  //
 /*******************************************************************************************************************
 ** Method setAlarmState() will turn an alarm on or off without changing the alarm condition                       **
@@ -543,3 +542,13 @@ bool MCP7940_Class::getAlarmState(const uint8_t alarmNumber) {                //
   bool state = readByte(MCP7940_CONTROL)>>(4+alarmNumber)&B00000001;          // Get state of alarm               //
   return (state);                                                             // Return state of alarm            //
 } // of getAlarmState()                                                       //                                  //
+/*******************************************************************************************************************
+** Method isAlarm will return whether an alarm is active or not                                                   **
+*******************************************************************************************************************/
+bool MCP7940_Class::isAlarm(const uint8_t alarmNumber) {                      // Return alarm status              //
+  if (alarmNumber>1) return false;                                            // return an error if bad alarm no. //
+  uint8_t registerNumber = MCP7940_ALM0WKDAY;                                 // Default to Alarm 0 registers     //
+  if (alarmNumber==1) registerNumber += 7;                                    // Otherwise use Alarm 1 registers  //
+  bool alarmValue = (readByte(registerNumber)>>3)&B00000001;                  // Return just 3rd bit in register  //
+  return alarmValue;                                                          // return whether active or not     //
+} // of method clearAlarm()                                                   //                                  //

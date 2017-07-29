@@ -153,7 +153,6 @@ void readCommand() {                                                          //
     } // of if-then-else we've received full command                          //                                  //
   } // of if-then there is something in our input buffer                      //                                  //
 } // of method readCommand                                                    //----------------------------------//
-
 /*******************************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
