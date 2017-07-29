@@ -31,6 +31,10 @@ clearAlarm		KEYWORD2
 setAlarmState		KEYWORD2
 getAlarmState		KEYWORD2
 getAlarm		KEYWORD2
+getSQWSpeed		KEYWORD2
+setSQWSpeed		KEYWORD2
+setSQWState		KEYWORD2
+getSQWState		KEYWORD2
 
 ########################
 # Constants (LITERAL1) #
