@@ -571,3 +571,33 @@ bool MCP7940_Class::getSQWState() {                                            /
   bool returnValue = (readByte(MCP7940_CONTROL)>>6)&1;                         // get 6th bit                     //
   return(returnValue);                                                         // return the result               //
 } // of method getSQWState()                                                   //                                 //
+/*******************************************************************************************************************
+** Method setBattery() will enable or disable battery backup for the MCP7940N and have no effect on the MCP7940M  **
+*******************************************************************************************************************/
+bool MCP7940_Class::setBattery(const bool state) {                             // Enable or disable battery backup//
+  writeByte(MCP7940_RTCWKDAY,                                                  // use the 3rd bit                 //
+            (readByte(MCP7940_RTCWKDAY)&B11110111)|(state<<3));                //                                 //
+  return(state);                                                               // return the result               //
+} // of method setBattery()                                                    //                                 //
+/*******************************************************************************************************************
+** Method getBattery() will return true if the battery backup mode is enabled, otherwise return a 0.              //
+*******************************************************************************************************************/
+bool MCP7940_Class::getBattery() {                                             // Return battery backup state     //
+  bool returnValue = (readByte(MCP7940_RTCWKDAY)>>3)&1;                        // use the 3rd bit                 //
+  return(returnValue);                                                         // return the result               //
+} // of method setBattery()                                                    //                                 //
+/*******************************************************************************************************************
+** Method getPowerFail() will return true if a power fail has occurred and the flag hasn't been reset             **
+*******************************************************************************************************************/
+bool MCP7940_Class::getPowerFail() {                                           // Return true on power fail state //
+  bool returnValue = (readByte(MCP7940_RTCWKDAY)>>4)&1;                        // use the 3rd bit                 //
+  return(returnValue);                                                         // return the result               //
+} // of method getPowerFail()                                                  //                                 //
+/*******************************************************************************************************************
+** Method clearPowerFail() will clear the power fail flag                                                         **
+*******************************************************************************************************************/
+bool MCP7940_Class::clearPowerFail() {                                         // Clear the power fail flag       //
+  writeByte(MCP7940_RTCWKDAY,readByte(MCP7940_RTCWKDAY);                       // Write back register to clear    //
+  return(0);                                                                   // return the result               //
+} // of method clearPowerFail()                                                //                                 //
+ 

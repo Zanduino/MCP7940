@@ -21,6 +21,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.4  2017-07-29 Arnd@SV-Zanshin.Com Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery() **
+**                                                                                                                **
 ** 1.0.3a 2017-07-29 Arnd@SV-Zanshin.Com Cleaned up comments, no code changes                                     **
 ** 1.0.3  2017-07-29 Arnd@SV-Zanshin.Com Added getSQWSpeed(),setSQWSpeed(),setSQWState() and getSQWState()        **
 ** 1.0.2  2017-07-29 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions and added the **
@@ -157,6 +159,10 @@
       bool     setSQWSpeed(uint8_t frequency, bool setState = true);          // Set the SQW frequency to code    //
       bool     setSQWState(const bool state);                                 // Set the SQW MFP on or off        //
       bool     getSQWState();                                                 // Return if the SQW is active      //
+      bool     setBattery(const bool state);                                  // Enable or disable battery backup //
+      bool     getBattery();                                                  // Get the battery backup state     //
+      bool     getPowerFail();                                                // Check if power fail has occurred //
+      bool     clearPowerFail();                                              // Clear the power fail flag        //
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
