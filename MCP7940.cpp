@@ -211,12 +211,13 @@ bool MCP7940_Class::begin( ) {                                                //
 ** Method readByte reads 1 byte from the specified address                                                        **
 *******************************************************************************************************************/
 uint8_t MCP7940_Class::readByte(const uint8_t addr) {                         //                                  //
+  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(addr);                                                           // Send the register address to read//
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)1);                              // Request 1 byte of data           //
-  while(!Wire.available());                                                   // Wait until the byte is ready     //
+  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
   return Wire.read();                                                         // read it and return it            //
 } // of method readByte()                                                     //                                  //
 /*******************************************************************************************************************
@@ -271,24 +272,67 @@ bool MCP7940_Class::deviceStop(){                                             //
   return _OscillatorStatus;                                                   // Return state                     //
 } // of method deviceStop                                                     //                                  //
 /*******************************************************************************************************************
-** Method now returns the current date/time                                                                       **
+** Method now() returns the current date/time                                                                     **
+** then the power down time is returned, if the timeType = 2 then the power up time is returned. These options are**
+** not documented as the official calls are "getPowerOffDate" and "getPowerOnDate"                                **
 *******************************************************************************************************************/
 DateTime MCP7940_Class::now(){                                                // Return current date/time         //
+  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                     // set tries before timeout         //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
-  Wire.write(MCP7940_RTCSEC);                                                 // Start at seconds register        //
+  Wire.write(MCP7940_RTCSEC);                                                // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)7);                              // Request 7 bytes of data          //
-  while(!Wire.available());                                                   // Wait until the data is ready     //
-  uint8_t ss = bcd2int(Wire.read() & 0x7F);                                   // Mask high bit in seconds         //
-  uint8_t mm = bcd2int(Wire.read() & 0x7F);                                   // Mask high bit in minutes         //
-  uint8_t hh = bcd2int(Wire.read() & 0x7F);                                   // Mask high bit in hours           //
-  Wire.read();                                                                // Ignore Day-Of-Week register      //
-  uint8_t d = bcd2int(Wire.read()  & 0x3F);                                   // Mask 2 high bits for day of month//
-  uint8_t m = bcd2int(Wire.read()  & 0x1F);                                   // Mask 3 high bits for Month       //
-  uint16_t y = bcd2int(Wire.read()) + 2000;                                   // Add 2000 to internal year        //
-  return DateTime (y, m, d, hh, mm, ss);                                      // Return class value               //
+  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
+  if(Wire.available()) {                                                      // Wait until the data is ready     //
+    _ss = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in seconds         //
+    _mm = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in minutes         //
+    _hh = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in hours           //
+    Wire.read();                                                              // Ignore Day-Of-Week register      //
+    _d = bcd2int(Wire.read()  & 0x3F);                                        // Mask 2 high bits for day of month//
+    _m = bcd2int(Wire.read()  & 0x1F);                                        // Mask 3 high bits for Month       //
+    _y = bcd2int(Wire.read()) + 2000;                                         // Add 2000 to internal year        //
+  } // of if-then there is data to be read                                    //                                  //
+  return DateTime (_y, _m, _d, _hh, _mm, _ss);                                // Return class value               //
 } // of method now                                                            //                                  //
+/*******************************************************************************************************************
+** Methods getPowerDown() and getPowerUp return the date/time that the power went off and went back on. This is   **
+** set back to zero once the power fail flag is reset.                                                            **
+*******************************************************************************************************************/
+DateTime MCP7940_Class::getPowerDown() {                                      // Get the Date when power went off //
+  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
+  uint8_t min,hr,day,mon;                                                     // temporary storage                //
+  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
+  Wire.write(MCP7940_PWR_DOWN);                                               // Start at specified register      //
+  _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
+  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
+  Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
+  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
+  if(Wire.available()) {                                                      // Wait until the data is ready     //
+    min = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in minutes         //
+    hr  = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in hours           //
+    day = bcd2int(Wire.read() & 0x3F);                                        // Mask 2 high bits for day of month//
+    mon = bcd2int(Wire.read() & 0x1F);                                        // Mask 3 high bits for Month       //
+  } // of if-then there is data to be read                                    //                                  //
+  return DateTime (0, mon, day, hr, min, 0);                                  // Return class value               //
+} // of method getPowerDown()                                                 //                                  //
+DateTime MCP7940_Class::getPowerUp() {                                        // Get the Date when power came back//
+  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
+  uint8_t min,hr,day,mon;                                                     // temporary storage                //
+  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
+  Wire.write(MCP7940_PWR_UP);                                                 // Start at specified register      //
+  _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
+  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
+  Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
+  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
+  if(Wire.available()) {                                                      // Wait until the data is ready     //
+    min = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in minutes         //
+    hr  = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in hours           //
+    day = bcd2int(Wire.read() & 0x3F);                                        // Mask 2 high bits for day of month//
+    mon = bcd2int(Wire.read() & 0x1F);                                        // Mask 3 high bits for Month       //
+  } // of if-then there is data to be read                                    //                                  //
+  return DateTime (0, mon, day, hr, min, 0);                                  // Return class value               //
+} // of method getPowerUp()                                                   //                                  //
 /*******************************************************************************************************************
 ** Method adjust set the current date/time. This is an overloaded function, if called with no parameters then the **
 ** RTC is set to the date/time when the program was compiled and uploaded. Otherwise the values are set, but the  **
@@ -450,7 +494,7 @@ bool MCP7940_Class::getMFP() {                                                //
 /*******************************************************************************************************************
 ** Method setAlarm will set one of the 2 alarms.                                                                  **
 **                                                                                                                **
-** In orer to configure the alarm modules, the following steps need to be performed in order:                     **
+** In order to configure the alarm modules, the following steps need to be performed in order:                    **
 ** 1. Load the timekeeping registers and enable the oscillator                                                    **
 ** 2. Configure the ALMxMSK<2:0> bits to select the desired alarm mask                                            **
 ** 3. Set or clear the ALMPOL bit according to the desired output polarity                                        **
@@ -590,14 +634,14 @@ bool MCP7940_Class::getBattery() {                                             /
 ** Method getPowerFail() will return true if a power fail has occurred and the flag hasn't been reset             **
 *******************************************************************************************************************/
 bool MCP7940_Class::getPowerFail() {                                           // Return true on power fail state //
-  bool returnValue = (readByte(MCP7940_RTCWKDAY)>>4)&1;                        // use the 3rd bit                 //
+  bool returnValue = (readByte(MCP7940_RTCWKDAY)>>4)&1;                        // use the 4th bit                 //
   return(returnValue);                                                         // return the result               //
 } // of method getPowerFail()                                                  //                                 //
 /*******************************************************************************************************************
 ** Method clearPowerFail() will clear the power fail flag                                                         **
 *******************************************************************************************************************/
 bool MCP7940_Class::clearPowerFail() {                                         // Clear the power fail flag       //
-  writeByte(MCP7940_RTCWKDAY,readByte(MCP7940_RTCWKDAY);                       // Write back register to clear    //
+  writeByte(MCP7940_RTCWKDAY,readByte(MCP7940_RTCWKDAY));                      // Write back register to clear    //
   return(0);                                                                   // return the result               //
 } // of method clearPowerFail()                                                //                                 //
  
