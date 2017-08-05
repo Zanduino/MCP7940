@@ -21,6 +21,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.3  2017-08-05 Arnd@SV-Zanshin.Com Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery() **
+**                                       added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()     **
 ** 1.0.3a 2017-07-29 Arnd@SV-Zanshin.Com Cleaned up comments, no code changes                                     **
 ** 1.0.3  2017-07-29 Arnd@SV-Zanshin.Com Added getSQWSpeed(),setSQWSpeed(),setSQWState() and getSQWState()        **
 ** 1.0.2  2017-07-29 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions and added the **
@@ -38,12 +40,13 @@
 #ifndef MCP7940_h                                                             // Guard code definition            //
   #define MCP7940_h                                                           // Define the name inside guard code//
   /*****************************************************************************************************************
-  ** Declare clases used in the class                                                                             **
+  ** Declare classes used in the class                                                                            **
   *****************************************************************************************************************/
-  class TimeSpan;
+  class TimeSpan;                                                             //                                  //
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
+  const uint8_t  I2C_READ_ATTEMPTS               =      1000;                 // Attempts to read before timeout  //
   const uint8_t  MCP7940_ADDRESS                 =      0x6F;                 // Device address, fixed value      //
   const uint8_t  MCP7940_I2C_DELAY               =         0;                 // Microseconds wait time for I2C   //
   const uint8_t  MCP7940_RTCSEC                  =      0x00;                 // Register definitions             //
@@ -67,6 +70,8 @@
   const uint8_t  MCP7940_ALM1WKDAY               =      0x14;                 //                                  //
   const uint8_t  MCP7940_ALM1DATE                =      0x15;                 //                                  //
   const uint8_t  MCP7940_ALM1MTH                 =      0x16;                 //                                  //
+  const uint8_t  MCP7940_PWR_DOWN                =      0x18;                 //                                  //
+  const uint8_t  MCP7940_PWR_UP                  =      0x1C;                 //                                  //
   const uint8_t  MCP7940_RAM_ADDRESS             =      0x20;                 // Start address for SRAM           //
   const uint32_t SECONDS_PER_DAY                 =     86400;                 // 60 secs * 60 mins * 24 hours     //
   const uint32_t SECONDS_FROM_1970_TO_2000       = 946684800;                 //                                  //
@@ -131,7 +136,7 @@
       bool     deviceStatus();                                                // return true when MCP7940 is on   //
       bool     deviceStart();                                                 // Start the MCP7940 clock          //
       bool     deviceStop();                                                  // Stop the MCP7940 clock           //
-      DateTime now();                                                         // return the current time          //
+      DateTime now();                                                         // return time                      //
       void     adjust();                                                      // Set the date and time to compile //
       void     adjust(const DateTime& dt);                                    // Set the date and time            //
       int8_t   calibrate();                                                   // Reset clock calibration offset   //
@@ -157,6 +162,12 @@
       bool     setSQWSpeed(uint8_t frequency, bool setState = true);          // Set the SQW frequency to code    //
       bool     setSQWState(const bool state);                                 // Set the SQW MFP on or off        //
       bool     getSQWState();                                                 // Return if the SQW is active      //
+      bool     setBattery(const bool state);                                  // Enable or disable battery backup //
+      bool     getBattery();                                                  // Get the battery backup state     //
+      bool     getPowerFail();                                                // Check if power fail has occurred //
+      bool     clearPowerFail();                                              // Clear the power fail flag        //
+      DateTime getPowerDown();                                                // Return date when power failed    //
+      DateTime getPowerUp();                                                  // Return date when power restored  //
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
@@ -166,5 +177,7 @@
       bool     _CrystalStatus      = false;                                   // True if RTC is turned on         //
       bool     _OscillatorStatus   = false;                                   // True if Oscillator on and working//
       uint32_t _SetUnixTime        = 0;                                       // UNIX time when clock last set    //
+      uint8_t  _ss,_mm,_hh,_d,_m;                                             // Define date components           //
+      uint16_t _y;                                                            // Define date components           //
   }; // of MCP7940 class definition                                           //                                  //
 #endif                                                                        //----------------------------------//
