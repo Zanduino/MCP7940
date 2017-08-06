@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.4a 2017-08-06 Arnd@SV-Zanshin.Com Removed MCP7940_I2C_Delay constant and all references, as unused         **
 ** 1.0.3  2017-08-05 Arnd@SV-Zanshin.Com Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery() **
 **                                       added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()     **
 ** 1.0.3a 2017-07-29 Arnd@SV-Zanshin.Com Cleaned up comments, no code changes                                     **
@@ -48,7 +49,6 @@
   *****************************************************************************************************************/
   const uint8_t  I2C_READ_ATTEMPTS               =      1000;                 // Attempts to read before timeout  //
   const uint8_t  MCP7940_ADDRESS                 =      0x6F;                 // Device address, fixed value      //
-  const uint8_t  MCP7940_I2C_DELAY               =         0;                 // Microseconds wait time for I2C   //
   const uint8_t  MCP7940_RTCSEC                  =      0x00;                 // Register definitions             //
   const uint8_t  MCP7940_RTCMIN                  =      0x01;                 //                                  //
   const uint8_t  MCP7940_RTCHOUR                 =      0x02;                 //                                  //

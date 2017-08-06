@@ -196,7 +196,6 @@ MCP7940_Class::~MCP7940_Class() {} // of class destructor                     //
 bool MCP7940_Class::begin( ) {                                                // Start I2C communications         //
   Wire.begin();                                                               // Start I2C as master device       //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
-  delay(MCP7940_I2C_DELAY);                                                   // Give the MCP7940 time to process //
   uint8_t errorCode = Wire.endTransmission();                                 // See if there's a device present  //
   if (errorCode == 0) {                                                       // If we have a MCP7940M            //
     writeByte(MCP7940_RTCSEC,readByte(MCP7940_RTCHOUR)&B10111111);            // Use 24 hour clock                //
@@ -215,7 +214,6 @@ uint8_t MCP7940_Class::readByte(const uint8_t addr) {                         //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(addr);                                                           // Send the register address to read//
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)1);                              // Request 1 byte of data           //
   while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
   return Wire.read();                                                         // read it and return it            //
@@ -277,11 +275,10 @@ bool MCP7940_Class::deviceStop(){                                             //
 ** not documented as the official calls are "getPowerOffDate" and "getPowerOnDate"                                **
 *******************************************************************************************************************/
 DateTime MCP7940_Class::now(){                                                // Return current date/time         //
-  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                     // set tries before timeout         //
+  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
-  Wire.write(MCP7940_RTCSEC);                                                // Start at specified register      //
+  Wire.write(MCP7940_RTCSEC);                                                 // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)7);                              // Request 7 bytes of data          //
   while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
   if(Wire.available()) {                                                      // Wait until the data is ready     //
@@ -296,8 +293,8 @@ DateTime MCP7940_Class::now(){                                                //
   return DateTime (_y, _m, _d, _hh, _mm, _ss);                                // Return class value               //
 } // of method now                                                            //                                  //
 /*******************************************************************************************************************
-** Methods getPowerDown() and getPowerUp return the date/time that the power went off and went back on. This is   **
-** set back to zero once the power fail flag is reset.                                                            **
+** Method getPowerDown() returns the date/time that the power went off. This is set back to zero once the power   **
+** fail flag is reset.                                                                                            **
 *******************************************************************************************************************/
 DateTime MCP7940_Class::getPowerDown() {                                      // Get the Date when power went off //
   uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
@@ -305,7 +302,6 @@ DateTime MCP7940_Class::getPowerDown() {                                      //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(MCP7940_PWR_DOWN);                                               // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
   while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
   if(Wire.available()) {                                                      // Wait until the data is ready     //
@@ -316,13 +312,16 @@ DateTime MCP7940_Class::getPowerDown() {                                      //
   } // of if-then there is data to be read                                    //                                  //
   return DateTime (0, mon, day, hr, min, 0);                                  // Return class value               //
 } // of method getPowerDown()                                                 //                                  //
+/*******************************************************************************************************************
+** Method getPowerUp() returns the date/time that the power went off. This is set back to zero once the power     **
+** fail flag is reset.                                                                                            **
+*******************************************************************************************************************/
 DateTime MCP7940_Class::getPowerUp() {                                        // Get the Date when power came back//
   uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   uint8_t min,hr,day,mon;                                                     // temporary storage                //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(MCP7940_PWR_UP);                                                 // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
   while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
   if(Wire.available()) {                                                      // Wait until the data is ready     //
@@ -383,7 +382,6 @@ void MCP7940_Class::readRAM(const uint8_t address, uint8_t* buf,              //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(addrByte);                                                       // Start at specified address       //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   Wire.requestFrom(MCP7940_ADDRESS, size);                                    // Request data                     //
   while(!Wire.available());                                                   // Wait until the data is ready     //
   for (uint8_t pos=0;pos<size;pos++){buf[pos] = Wire.read();}                 // Loop for each byte to read       //
@@ -405,7 +403,6 @@ void MCP7940_Class::writeRAM(const uint8_t address, uint8_t* buf,             //
   uint8_t addrByte = MCP7940_RAM_ADDRESS + (address%64);                      // Compute offset, wrap on overflow //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(addrByte);                                                       // Start at given address           //
-  delayMicroseconds(MCP7940_I2C_DELAY);                                       // delay required for sync          //
   for (uint8_t pos=0;pos<size;pos++) {Wire.write(buf[pos]);}                  // Write each byte to RAM           //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
 } // of method writeRAM                                                       //                                  //
