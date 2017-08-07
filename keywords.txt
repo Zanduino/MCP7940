@@ -35,6 +35,12 @@ getSQWSpeed		KEYWORD2
 setSQWSpeed		KEYWORD2
 setSQWState		KEYWORD2
 getSQWState		KEYWORD2
+getPowerFail		KEYWORD2
+clearPowerFail		KEYWORD2
+getBattery		KEYWORD2
+setBattery		KEYWORD2
+getPowerDown		KEYWORD2
+getPowerUp		KEYWORD2
 
 ########################
 # Constants (LITERAL1) #
