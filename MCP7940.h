@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.4b 2017-08-08 Arnd@SV-Zanshin.Com Replaced readRAM and writeRAM with template functions                    **
 ** 1.0.4a 2017-08-06 Arnd@SV-Zanshin.Com Removed MCP7940_I2C_Delay constant and all references, as unused         **
 ** 1.0.3  2017-08-05 Arnd@SV-Zanshin.Com Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery() **
 **                                       added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()     **
@@ -145,10 +146,6 @@
       int8_t   getCalibrationTrim();                                          // Get the trim register value      //
       uint8_t  weekdayRead();                                                 // Read weekday from RTC            //
       uint8_t  weekdayWrite(const uint8_t dow);                               // Write weekday to RTC             //
-      void     readRAM(const uint8_t address,uint8_t* buf,const uint8_t size);// Read multiple bytes from RAM     //
-      uint8_t  readRAM(const uint8_t address);                                // Read single byte from RAM        //
-      void     writeRAM(const uint8_t address,uint8_t* buf,const uint8_t size);// Write multiple bytes to RAM     //
-      uint8_t  writeRAM(const uint8_t address,const uint8_t data);            //                                  //
       bool     setMFP(const bool value);                                      // Set the MFP pin state            //
       bool     getMFP();                                                      // Get the MFP pin state            //
       bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,   // Set an Alarm                     //
@@ -168,6 +165,35 @@
       bool     clearPowerFail();                                              // Clear the power fail flag        //
       DateTime getPowerDown();                                                // Return date when power failed    //
       DateTime getPowerUp();                                                  // Return date when power restored  //
+      /*************************************************************************************************************
+      ** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
+      ** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
+      ** The template functions allow any type of data to be read and written, be it a byte or a character array  **
+      ** or a structure.                                                                                          **
+      *************************************************************************************************************/
+      template< typename T >                                                  // method to read a structure       //
+        uint8_t&  MCP7940_Class::readRAM(const uint8_t addr,T &value) {       //                                  //
+        uint8_t* bytePtr    = (uint8_t*)&value;                               // Pointer to structure beginning   //
+        uint8_t  structSize = sizeof(T);                                      // Number of bytes in structure     //
+        uint8_t  i          = 0;                                              // loop counter                     //
+        uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                              // set tries before timeout         //
+        Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
+        Wire.write((addr%64)+MCP7940_RAM_ADDRESS);                            // Send register address to write   //
+        _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
+        Wire.requestFrom(MCP7940_ADDRESS, structSize);                        // Request the data                 //
+        while(!Wire.available()&&timeoutI2C--!=0);                            // Wait until byte ready or timeout //
+        for (i=0;i<structSize;i++) *bytePtr++ = Wire.read();                  // loop for each byte to be read    //
+        return (i);                                                           // return bytes read                //
+      } // of method readRAM()                                                //                                  //
+      template<typename T>                                                    // method to write any data type to //
+      bool MCP7940_Class::writeRAM(const uint8_t addr, const T &value) {      // the MCP7940 SRAM                 //
+        const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
+        Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
+        Wire.write((addr%64)+MCP7940_RAM_ADDRESS);                            // Send register address to write   //
+        for (uint8_t i=0;i<sizeof(T);i++) Wire.write(*bytePtr++);             // loop for each byte to be written //
+        _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
+        return (!_TransmissionStatus);                                        // return error status              //
+      } // of method writeRAM()                                               //----------------------------------//
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
