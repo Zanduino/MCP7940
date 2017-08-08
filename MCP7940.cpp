@@ -373,46 +373,6 @@ uint8_t MCP7940_Class::weekdayWrite(const uint8_t dow) {                      //
   return dow;                                                                 // return the value                 //
 } // of method weekdayWrite()                                                 //                                  //
 /*******************************************************************************************************************
-** Method readRAM is an overloaded function which will read either one byte or mutiple bytes from the 64 Byte     **
-** SRAM included in the MCP7940. No error, but no data is returned if the address goes outside of 64 byte range   **
-*******************************************************************************************************************/
-void MCP7940_Class::readRAM(const uint8_t address, uint8_t* buf,              //                                  //
-                            const uint8_t size) {                             //                                  //
-  uint8_t addrByte = MCP7940_RAM_ADDRESS + (address%64);                      // Compute offset, wrap on overflow //
-  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
-  Wire.write(addrByte);                                                       // Start at specified address       //
-  _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-  Wire.requestFrom(MCP7940_ADDRESS, size);                                    // Request data                     //
-  while(!Wire.available());                                                   // Wait until the data is ready     //
-  for (uint8_t pos=0;pos<size;pos++){buf[pos] = Wire.read();}                 // Loop for each byte to read       //
-} // of method readRAM()                                                      //                                  //
-/*******************************************************************************************************************
-** Method readRAM(). This reads just one byte from RAM and is an interlude function to the multibyte readRAM      **
-*******************************************************************************************************************/
-uint8_t MCP7940_Class::readRAM(const uint8_t address) {                       //                                  //
-  uint8_t data;                                                               //                                  //
-  readRAM(address, &data, 1);                                                 // Read just one byte at address    //
-  return data;                                                                // return result                    //
-} // of method readRAM()                                                      //                                  //
-/*******************************************************************************************************************
-** Method writeRAM is an overloaded function which will write either one byte or mutiple bytes to the 64 Byte     **
-** SRAM included in the MCP7940. No error, but no data is written to addresses outside of teh 64 Byte range       **
-*******************************************************************************************************************/
-void MCP7940_Class::writeRAM(const uint8_t address, uint8_t* buf,             //                                  //
-                             const uint8_t size) {                            //                                  //
-  uint8_t addrByte = MCP7940_RAM_ADDRESS + (address%64);                      // Compute offset, wrap on overflow //
-  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
-  Wire.write(addrByte);                                                       // Start at given address           //
-  for (uint8_t pos=0;pos<size;pos++) {Wire.write(buf[pos]);}                  // Write each byte to RAM           //
-  _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
-} // of method writeRAM                                                       //                                  //
-/*******************************************************************************************************************
-** Method writeRAM(). This writes just one byte to RAM and is an interlude function to the multibyte writeRAM     **
-*******************************************************************************************************************/
-uint8_t MCP7940_Class::writeRAM(const uint8_t address,const uint8_t data) {   //                                  //
-  writeRAM(address, &data, 1);                                                // Just call writeRAM with 1 byte   //
-} // of method writeRAM                                                       //                                  //
-/*******************************************************************************************************************
 ** Method calibrate(). This function accepts a current date/time value and compares that to the current date/time **
 ** of the RTC and computes a calibration factor depending upon the time difference between the two and how long   **
 ** the timespan between the two is. The longer the period between setting the clock and comparing the difference  **
