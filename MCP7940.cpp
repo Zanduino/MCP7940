@@ -210,12 +210,10 @@ bool MCP7940_Class::begin( ) {                                                //
 ** Method readByte reads 1 byte from the specified address                                                        **
 *******************************************************************************************************************/
 uint8_t MCP7940_Class::readByte(const uint8_t addr) {                         //                                  //
-  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(addr);                                                           // Send the register address to read//
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)1);                              // Request 1 byte of data           //
-  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
   return Wire.read();                                                         // read it and return it            //
 } // of method readByte()                                                     //                                  //
 /*******************************************************************************************************************
@@ -275,13 +273,11 @@ bool MCP7940_Class::deviceStop(){                                             //
 ** not documented as the official calls are "getPowerOffDate" and "getPowerOnDate"                                **
 *******************************************************************************************************************/
 DateTime MCP7940_Class::now(){                                                // Return current date/time         //
-  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(MCP7940_RTCSEC);                                                 // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)7);                              // Request 7 bytes of data          //
-  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
-  if(Wire.available()) {                                                      // Wait until the data is ready     //
+  if(Wire.available()==7) {                                                   // Wait until the data is ready     //
     _ss = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in seconds         //
     _mm = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in minutes         //
     _hh = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in hours           //
@@ -297,14 +293,12 @@ DateTime MCP7940_Class::now(){                                                //
 ** fail flag is reset.                                                                                            **
 *******************************************************************************************************************/
 DateTime MCP7940_Class::getPowerDown() {                                      // Get the Date when power went off //
-  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   uint8_t min,hr,day,mon;                                                     // temporary storage                //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(MCP7940_PWR_DOWN);                                               // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
-  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
-  if(Wire.available()) {                                                      // Wait until the data is ready     //
+  if(Wire.available()==4) {                                                   // Wait until the data is ready     //
     min = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in minutes         //
     hr  = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in hours           //
     day = bcd2int(Wire.read() & 0x3F);                                        // Mask 2 high bits for day of month//
@@ -317,14 +311,12 @@ DateTime MCP7940_Class::getPowerDown() {                                      //
 ** fail flag is reset.                                                                                            **
 *******************************************************************************************************************/
 DateTime MCP7940_Class::getPowerUp() {                                        // Get the Date when power came back//
-  uint16_t timeoutI2C = I2C_READ_ATTEMPTS;                                    // set tries before timeout         //
   uint8_t min,hr,day,mon;                                                     // temporary storage                //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
   Wire.write(MCP7940_PWR_UP);                                                 // Start at specified register      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
-  while(!Wire.available()&&timeoutI2C--!=0);                                  // Wait until byte ready or timeout //
-  if(Wire.available()) {                                                      // Wait until the data is ready     //
+  if(Wire.available()==4) {                                                   // Wait until the data is ready     //
     min = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in minutes         //
     hr  = bcd2int(Wire.read() & 0x7F);                                        // Mask high bit in hours           //
     day = bcd2int(Wire.read() & 0x3F);                                        // Mask 2 high bits for day of month//

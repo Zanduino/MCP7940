@@ -27,6 +27,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer           Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.0.1  2017-08-09 Arnd@SV-Zanshin.Com Cosmetic changes                                                         **
 ** 1.0.0  2017-08-05 Arnd@SV-Zanshin.Com Cloned from SetAndCalibrate                                              **
 **                                                                                                                **
 *******************************************************************************************************************/
@@ -48,9 +49,9 @@ char          inputBuffer[SPRINTF_BUFFER_SIZE];                               //
 *******************************************************************************************************************/
 void setup() {                                                                // Arduino standard setup method    //
   Serial.begin(SERIAL_SPEED);                                                 // Start serial port at Baud rate   //
-  #ifdef  __AVR_ATmega32U4__                                                  // If this is a 32U4 processor, then//
-    delay(3000);                                                              // wait 3 seconds for the serial    //
-  #endif                                                                      // interface to initialize          //
+  #ifdef  __AVR_ATmega32U4__                                                  // If a 32U4 processor, then wait   //
+    delay(3000);                                                              // 3 seconds for the serial port to //
+  #endif                                                                      // initialize, otherwise continue   //
   Serial.print(F("\nStarting TestBatterBackup program\n"));                   // Show program information         //
   Serial.print(F("- Compiled with c++ version "));                            //                                  //
   Serial.print(F(__VERSION__));                                               // Show compiler information        //
@@ -91,13 +92,13 @@ void loop() {                                                                 //
     digitalWrite(LED_PIN,!digitalRead(LED_PIN));                              // Toggle the LED                   //
     Serial.println();                                                         //                                  //
   } // of if the seconds have changed                                         //                                  //
-  readCommand();                                                              // See if serial port had incoming  //
+  readCommand();                                                              // See if there's incoming data     //
   if (MCP7940.getPowerFail()) {                                               // Check for a power failure        //
     Serial.println(F("Battery power failure detected!\nWaiting for power.."));//                                  //
     while(MCP7940.now().second()==secs);                                      // Loop until clock runs again      //
     Serial.print(F("Power failed at   "));                                    //                                  //
     now = MCP7940.getPowerDown();                                             // Read when the power failed       //
-    sprintf(inputBuffer,"????-%02d-%02d %02d:%02d:??",                        // Use sprintf() to pretty print    //
+    sprintf(inputBuffer,"xxxx-%02d-%02d %02d:%02d:xx",                        // Use sprintf() to pretty print    //
             now.month(), now.day(), now.hour(), now.minute());                // date/time with leading zeros     //
     Serial.println(inputBuffer);                                              // Display the current date/time    //
     Serial.print(F("Power restored at "));                                    //                                  //
@@ -105,6 +106,6 @@ void loop() {                                                                 //
     sprintf(inputBuffer,"????-%02d-%02d %02d:%02d:??",                        // Use sprintf() to pretty print    //
             now.month(), now.day(), now.hour(), now.minute());                // date/time with leading zeros     //
     Serial.println(inputBuffer);                                              // Display the current date/time    //
-    MCP7940.clearPowerFail();                                                 // Reset the power fail switch, this//
+    MCP7940.clearPowerFail();                                                 // Reset the power fail switch,     //
   } // of if-then we have detected a power failure                            // also resets the down/up dates    //
 } // of method loop()                                                         //----------------------------------//
