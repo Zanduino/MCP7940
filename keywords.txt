@@ -5,42 +5,42 @@
 ################################
 # Classes/Datatypes (KEYWORD1) #
 ################################
-MCP7940			KEYWORD1
-DateTime		KEYWORD1
-TimeSpan		KEYWORD1
+MCP7940	KEYWORD1
+DateTime	KEYWORD1
+TimeSpan	KEYWORD1
 
 ####################################
 # Methods and Functions (KEYWORD2) #
 ####################################
-begin			KEYWORD2
-deviceStatus		KEYWORD2
-deviceStart		KEYWORD2
-deviceStop		KEYWORD2
-now			KEYWORD2
-adjust			KEYWORD2
-calibrate		KEYWORD2
+begin	KEYWORD2
+deviceStatus	KEYWORD2
+deviceStart	KEYWORD2
+deviceStop	KEYWORD2
+now	KEYWORD2
+adjust	KEYWORD2
+calibrate	KEYWORD2
 getCalibrationTrim	KEYWORD2
-weekdayRead		KEYWORD2
-weekdayWrite		KEYWORD2
-readRAM			KEYWORD2
-writeRAM		KEYWORD2
-setMFP			KEYWORD2
-getMFP			KEYWORD2
-setAlarm		KEYWORD2
-clearAlarm		KEYWORD2
-setAlarmState		KEYWORD2
-getAlarmState		KEYWORD2
-getAlarm		KEYWORD2
-getSQWSpeed		KEYWORD2
-setSQWSpeed		KEYWORD2
-setSQWState		KEYWORD2
-getSQWState		KEYWORD2
-getPowerFail		KEYWORD2
-clearPowerFail		KEYWORD2
-getBattery		KEYWORD2
-setBattery		KEYWORD2
-getPowerDown		KEYWORD2
-getPowerUp		KEYWORD2
+weekdayRead	KEYWORD2
+weekdayWrite	KEYWORD2
+readRAM	KEYWORD2
+writeRAM	KEYWORD2
+setMFP	KEYWORD2
+getMFP	KEYWORD2
+setAlarm	KEYWORD2
+clearAlarm	KEYWORD2
+setAlarmState	KEYWORD2
+getAlarmState	KEYWORD2
+getAlarm	KEYWORD2
+getSQWSpeed	KEYWORD2
+setSQWSpeed	KEYWORD2
+setSQWState	KEYWORD2
+getSQWState	KEYWORD2
+getPowerFail	KEYWORD2
+clearPowerFail	KEYWORD2
+getBattery	KEYWORD2
+setBattery	KEYWORD2
+getPowerDown	KEYWORD2
+getPowerUp	KEYWORD2
 
 ########################
 # Constants (LITERAL1) #
