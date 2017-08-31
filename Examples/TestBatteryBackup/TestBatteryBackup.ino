@@ -52,7 +52,7 @@ void setup() {                                                                //
   #ifdef  __AVR_ATmega32U4__                                                  // If a 32U4 processor, then wait   //
     delay(3000);                                                              // 3 seconds for the serial port to //
   #endif                                                                      // initialize, otherwise continue   //
-  Serial.print(F("\nStarting TestBatterBackup program\n"));                   // Show program information         //
+  Serial.print(F("\nStarting TestBatteryBackup program\n"));                  // Show program information         //
   Serial.print(F("- Compiled with c++ version "));                            //                                  //
   Serial.print(F(__VERSION__));                                               // Show compiler information        //
   Serial.print(F("\n- On "));                                                 //                                  //
