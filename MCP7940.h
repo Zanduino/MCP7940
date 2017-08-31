@@ -19,23 +19,24 @@
 ** GNU General Public License for more details. You should have received a copy of the GNU General Public License **
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.                                          **
 **                                                                                                                **
-** Vers.  Date       Developer           Comments                                                                 **
-** ====== ========== =================== ======================================================================== **
-** 1.0.4c 2017-08-13 Arnd@SV-Zanshin.Com Enhancement #5 to remove extraneous checks after Wire.requestFrom()      **
-** 1.0.4b 2017-08-08 Arnd@SV-Zanshin.Com Replaced readRAM and writeRAM with template functions                    **
-** 1.0.4a 2017-08-06 Arnd@SV-Zanshin.Com Removed MCP7940_I2C_Delay constant and all references, as unused         **
-** 1.0.3  2017-08-05 Arnd@SV-Zanshin.Com Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery() **
-**                                       added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()     **
-** 1.0.3a 2017-07-29 Arnd@SV-Zanshin.Com Cleaned up comments, no code changes                                     **
-** 1.0.3  2017-07-29 Arnd@SV-Zanshin.Com Added getSQWSpeed(),setSQWSpeed(),setSQWState() and getSQWState()        **
-** 1.0.2  2017-07-29 Arnd@SV-Zanshin.Com Added getAlarm(),setAlarmState(),getAlarmState() functions and added the **
-**                                       optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm **
-**                                       1 indexing.                                                              **
-** 1.0.1  2017-07-25 Arnd@SV-Zanshin.Com Added overloaded Calibrate() to manually set the trim factor             **
-** 1.0.0  2017-07-23 Arnd@SV-Zanshin.Com Cleaned up code, initial github upload                                   **
-** 1.0.2b 2017-07-20 Arnd@SV-Zanshin.Com Added alarm handling                                                     **
-** 1.0.1b 2017-07-19 Arnd@SV-Zanshin.Com Added methods                                                            **
-** 1.0.0b 2017-07-17 Arnd@SV-Zanshin.Com Initial coding                                                           **
+** Vers.  Date       Developer                     Comments                                                       **
+** ====== ========== ============================= ============================================================== **
+** 1.0.4c 2017-08-13 https://github.com/SV-Zanshin Enhancement #5 to remove checks after Wire.requestFrom()       **
+** 1.0.4b 2017-08-08 https://github.com/SV-Zanshin Replaced readRAM and writeRAM with template functions          **
+** 1.0.4a 2017-08-06 https://github.com/SV-Zanshin Removed unnecessary MCP7940_I2C_Delay and all references       **
+** 1.0.3  2017-08-05 https://github.com/SV-Zanshin Added calls for MCP7940N. getPowerFail(), clearPowerFail(),    **
+**                                                 setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang,     **
+**                                                 added getPowerUp/Down()                                        **
+** 1.0.3a 2017-07-29 https://github.com/SV-Zanshin Cleaned up comments, no code changes                           **
+** 1.0.3  2017-07-29 https://github.com/SV-Zanshin Added getSQWSpeed(),setSQWSpeed(),setSQWState() & getSQWState()**
+** 1.0.2  2017-07-29 https://github.com/SV-Zanshin Added getAlarm(),setAlarmState(),getAlarmState() functions and **
+**                                                 added the optional setting to setAlarm(). Added isAlarm().     **
+**                                                 Fixed errors with alarm 1 indexing.                            **
+** 1.0.1  2017-07-25 https://github.com/SV-Zanshin Added overloaded Calibrate() to manually set the trim factor   **
+** 1.0.0  2017-07-23 https://github.com/SV-Zanshin Cleaned up code, initial github upload                         **
+** 1.0.2b 2017-07-20 https://github.com/SV-Zanshin Added alarm handling                                           **
+** 1.0.1b 2017-07-19 https://github.com/SV-Zanshin Added methods                                                  **
+** 1.0.0b 2017-07-17 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
 *******************************************************************************************************************/
 #include "Arduino.h"                                                          // Arduino data type definitions    //

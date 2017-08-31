@@ -25,10 +25,10 @@
 ** GNU General Public License for more details. You should have received a copy of the GNU General Public License **
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.                                          **
 **                                                                                                                **
-** Vers.  Date       Developer           Comments                                                                 **
-** ====== ========== =================== ======================================================================== **
-** 1.0.1  2017-08-09 Arnd@SV-Zanshin.Com Cosmetic changes                                                         **
-** 1.0.0  2017-08-05 Arnd@SV-Zanshin.Com Cloned from SetAndCalibrate                                              **
+** Vers.  Date       Developer                     Comments                                                       **
+** ====== ========== ============================= ============================================================== **
+** 1.0.1  2017-08-09 https://github.com/SV-Zanshin Cosmetic changes                                               **
+** 1.0.0  2017-08-05 https://github.com/SV-Zanshin Cloned from SetAndCalibrate                                    **
 **                                                                                                                **
 *******************************************************************************************************************/
 #include <MCP7940.h>                                                          // Include the MCP7940 RTC library  //
