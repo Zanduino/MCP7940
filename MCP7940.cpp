@@ -193,7 +193,7 @@ MCP7940_Class::~MCP7940_Class() {} // of class destructor                     //
 ** Method begin starts I2C communications with the device, using a default address if one is not specified and    **
 ** return true if the device has been detected and false if it was not                                            **
 *******************************************************************************************************************/
-bool MCP7940_Class::begin( ) {                                                // Start I2C communications         //
+bool MCP7940_Class::begin() {                                                 // Start I2C communications         //
   Wire.begin();                                                               // Start I2C as master device       //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
   uint8_t errorCode = Wire.endTransmission();                                 // See if there's a device present  //

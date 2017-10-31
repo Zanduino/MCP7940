@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.5  2017-10-31 https://github.com/SV-Zanshin Bug #6 to remove classification on 2 template functions        **
 ** 1.0.4c 2017-08-13 https://github.com/SV-Zanshin Enhancement #5 to remove checks after Wire.requestFrom()       **
 ** 1.0.4b 2017-08-08 https://github.com/SV-Zanshin Replaced readRAM and writeRAM with template functions          **
 ** 1.0.4a 2017-08-06 https://github.com/SV-Zanshin Removed unnecessary MCP7940_I2C_Delay and all references       **
@@ -173,7 +174,7 @@
       ** or a structure.                                                                                          **
       *************************************************************************************************************/
       template< typename T >                                                  // method to read a structure       //
-        uint8_t&  MCP7940_Class::readRAM(const uint8_t addr,T &value) {       //                                  //
+      uint8_t&  readRAM(const uint8_t addr,T &value) {                        //                                  //
         uint8_t* bytePtr    = (uint8_t*)&value;                               // Pointer to structure beginning   //
         uint8_t  structSize = sizeof(T);                                      // Number of bytes in structure     //
         uint8_t  i          = 0;                                              // loop counter                     //
@@ -187,7 +188,7 @@
         return (i);                                                           // return bytes read                //
       } // of method readRAM()                                                //----------------------------------//
       template<typename T>                                                    // method to write any data type to //
-      bool MCP7940_Class::writeRAM(const uint8_t addr, const T &value) {      // the MCP7940 SRAM                 //
+      bool writeRAM(const uint8_t addr, const T &value) {                     // the MCP7940 SRAM                 //
         const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
         Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
         Wire.write((addr%64)+MCP7940_RAM_ADDRESS);                            // Send register address to write   //
