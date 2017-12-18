@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.5b 2017-12-18 https://github.com/SV-Zanshin Bug #8 - incorrect setting to 24-Hour clock                    **
 ** 1.0.5a 2017-10-31 https://github.com/SV-Zanshin Bug #6 to remove classification on 2 template functions        **
 ** 1.0.4c 2017-08-13 https://github.com/SV-Zanshin Enhancement #5 to remove checks after Wire.requestFrom()       **
 ** 1.0.4b 2017-08-08 https://github.com/SV-Zanshin Replaced readRAM and writeRAM with template functions          **

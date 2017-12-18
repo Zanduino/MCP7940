@@ -198,7 +198,7 @@ bool MCP7940_Class::begin() {                                                 //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
   uint8_t errorCode = Wire.endTransmission();                                 // See if there's a device present  //
   if (errorCode == 0) {                                                       // If we have a MCP7940M            //
-    writeByte(MCP7940_RTCSEC,readByte(MCP7940_RTCHOUR)&B10111111);            // Use 24 hour clock                //
+    writeByte(MCP7940_RTCHOUR,readByte(MCP7940_RTCHOUR)&B10111111);           // Use 24 hour clock                //
     writeByte(MCP7940_CONTROL,readByte(MCP7940_CONTROL)|0x80);                // assert alarm low, default high   //
     _CrystalStatus = readByte(MCP7940_RTCSEC) >> MCP7940_RTCSEC_SC;           // Status bit from register         //
     _OscillatorStatus = readByte(MCP7940_RTCWKDAY)>> MCP7940_RTCWKDAY_OSCRUN; // Oscillator state from register   //
