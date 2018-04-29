@@ -454,7 +454,7 @@ bool MCP7940_Class::getMFP() {                                                //
 bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       // Alarm number 0 or 1              //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
                              const DateTime dt,                               // Date/Time to set alarm from      //
-                             const bool state = true) {                       //                                  //
+                             const bool state) {                              //                                  //
   bool success = false;                                                       // Assume no success                //
   if (alarmNumber<2&&alarmType<8&&alarmType!=5&&alarmType!=6&&deviceStart()){ // if parameters and oscillator OK  //
     if (alarmNumber==0)                                                       // Turn off either alarm 0 or alarm //
@@ -465,7 +465,7 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
     if (alarmNumber==1) registerOffset = 7;                                   // Otherwise use Alarm 1 registers  //
     uint8_t workRegister = readByte(MCP7940_ALM0WKDAY+registerOffset)&B1000;  // Keep alarm interrupt flag bit    //
     workRegister |= alarmType<<4;                                             // Set 3 bits from alarmType        //
-    workRegister |= readByte(MCP7940_RTCWKDAY)&B00000111;                     // Set 3 bits for dow from register //
+    workRegister |= dt.dayOfTheWeek();                                        // Set 3 bits for dow from date     //
     writeByte(MCP7940_ALM0WKDAY+registerOffset,workRegister);                 // Write alarm mask                 //
     writeByte(MCP7940_ALM0SEC+registerOffset,int2bcd(dt.second()));           // Write seconds, keep device off   //
     writeByte(MCP7940_ALM0MIN+registerOffset,int2bcd(dt.minute()));           // Write the minutes value          //
@@ -542,7 +542,7 @@ uint8_t MCP7940_Class::getSQWSpeed() {                                         /
 ** for 8.192kHz and B11 for 32.768kHz. By default the square wave is also turned on, but the optional setState    **
 ** parameter changes that initial state. The return value is the state of the SQW after setting                   **
 *******************************************************************************************************************/
-bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool setState = true) {     // Set the SQW frequency code      //
+bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool setState) {            // Set the SQW frequency code      //
   uint8_t registerValue = readByte(MCP7940_CONTROL);                           // read the register to a variable //
   registerValue &= B10111100;                                                  // Mask SQW state and speed bits   //
   registerValue |= (setState<<6);                                              // setState at bit 6               //

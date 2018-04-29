@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #7  - Moved setting of param defaults to prototypes        **
 ** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #10 - incorrect setting of alarm with WKDAY to future date **
 ** 1.0.5b 2017-12-18 https://github.com/SV-Zanshin Bug #8  - incorrect setting to 24-Hour clock                   **
 ** 1.0.5a 2017-10-31 https://github.com/SV-Zanshin Bug #6  - to remove classification on 2 template functions     **
