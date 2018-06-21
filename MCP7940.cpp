@@ -135,7 +135,7 @@ DateTime::DateTime (const __FlashStringHelper* date,                          //
 *******************************************************************************************************************/
 uint8_t DateTime::dayOfTheWeek() const {                                      // Compute the DOW                  //
   uint16_t day = date2days(yOff, m, d);                                       // compute the number of days       //
-  return (day + 6) % 7;                                                       // Jan 1, 2000 is a Saturday, i.e. 6//
+  return ((day + 6) % 7)+1;                                                   // Jan 1, 2000 is a Saturday, i.e. 7//
 } // of method dayOfTheWeek()                                                 //                                  //
 /*******************************************************************************************************************
 ** Function unixtime() to return the UNIX time, which is seconds since 1970-01-01 00:00:00                        **
