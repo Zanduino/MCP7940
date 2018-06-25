@@ -11,4 +11,6 @@ The MCP7940 allows for software trimming and the library has functions which sup
 ## Description
 <img src="https://github.com/SV-Zanshin/MCP7940/blob/master/Images/MCP7940_bb.png" width="175px" align="left" /> The detailed library description along with further details are available at the GitHub [MCP7940 Wiki](https://github.com/SV-Zanshin/MCP7940/wiki). This includes wiring information and sample sketches that illustrate the library and it's functionality.
 
+[![DOI](https://www.zenodo.org/badge/98077572.svg)](https://www.zenodo.org/badge/latestdoi/98077572)
+
 ![Zanshin Logo](https://www.sv-zanshin.com/r/images/site/gif/zanshinkanjitiny.gif) <img src="https://www.sv-zanshin.com/r/images/site/gif/zanshintext.gif" width="75"/>
