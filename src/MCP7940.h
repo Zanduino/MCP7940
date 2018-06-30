@@ -21,6 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.8  2018-06-30 https://github.com/SV-Zanshin Enh #15 - Added I2C Speed selection                            **
 ** 1.0.7  2018-06-21 https://github.com/SV-Zanshin Bug #13 - DateTime.dayOfTheWeek() is 0-6 instead of 1-7        **
 ** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #7  - Moved setting of param defaults to prototypes        **
 ** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #10 - incorrect setting of alarm with WKDAY to future date **
@@ -55,6 +56,10 @@
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
+  const uint16_t I2C_STANDARD_MODE         =    100000;                       // Default normal I2C comms speed   //
+  const uint16_t I2C_FAST_MODE             =    400000;                       // Fast mode                        //
+  const uint16_t I2C_FAST_MODE_PLUS_MODE   =   1000000;                       // Really fast mode                 //
+  const uint16_t I2C_HIGH_SPEED_MODE       =   3400000;                       // Turbo mode                       //
   const uint8_t  MCP7940_ADDRESS           =      0x6F;                       // Device address, fixed value      //
   const uint8_t  MCP7940_RTCSEC            =      0x00;                       // Register definitions             //
   const uint8_t  MCP7940_RTCMIN            =      0x01;                       //                                  //
@@ -139,7 +144,7 @@
     public:                                                                   // Publicly visible methods         //
       MCP7940_Class();                                                        // Class constructor                //
       ~MCP7940_Class();                                                       // Class destructor                 //
-      bool     begin();                                                       // Start I2C Comms with device      //
+      bool     begin(const uint16_t i2cSpeed = I2C_STANDARD_MODE);            // Start I2C device communications  //
       bool     deviceStatus();                                                // return true when MCP7940 is on   //
       bool     deviceStart();                                                 // Start the MCP7940 clock          //
       bool     deviceStop();                                                  // Stop the MCP7940 clock           //
