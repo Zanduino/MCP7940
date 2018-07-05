@@ -21,9 +21,6 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
-** 1.0.8  2018-07-02 https://github.com/SV-Zanshin Added guard code against multiple I2C constant definitions     **
-** 1.0.8  2018-06-30 https://github.com/SV-Zanshin Enh #15 - Added I2C Speed selection                            **
-** 1.0.7  2018-06-21 https://github.com/SV-Zanshin Bug #13 - DateTime.dayOfTheWeek() is 0-6 instead of 1-7        **
 ** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #7  - Moved setting of param defaults to prototypes        **
 ** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #10 - incorrect setting of alarm with WKDAY to future date **
 ** 1.0.5b 2017-12-18 https://github.com/SV-Zanshin Bug #8  - incorrect setting to 24-Hour clock                   **
@@ -57,11 +54,6 @@
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
-  #ifndef I2C_MODES                                                           // I2C related constants            //
-    #define I2C_MODES                                                         // Guard code to prevent multiple   //
-    const uint16_t I2C_STANDARD_MODE       =    100000;                       // Default normal I2C 100KHz speed  //
-    const uint16_t I2C_FAST_MODE           =    400000;                       // Fast mode                        //
-  #endif                                                                      //----------------------------------//
   const uint8_t  MCP7940_ADDRESS           =      0x6F;                       // Device address, fixed value      //
   const uint8_t  MCP7940_RTCSEC            =      0x00;                       // Register definitions             //
   const uint8_t  MCP7940_RTCMIN            =      0x01;                       //                                  //
@@ -146,7 +138,7 @@
     public:                                                                   // Publicly visible methods         //
       MCP7940_Class();                                                        // Class constructor                //
       ~MCP7940_Class();                                                       // Class destructor                 //
-      bool     begin(const uint16_t i2cSpeed = I2C_STANDARD_MODE);            // Start I2C device communications  //
+      bool     begin();                                                       // Start I2C Comms with device      //
       bool     deviceStatus();                                                // return true when MCP7940 is on   //
       bool     deviceStart();                                                 // Start the MCP7940 clock          //
       bool     deviceStop();                                                  // Stop the MCP7940 clock           //
@@ -162,7 +154,8 @@
       bool     setMFP(const bool value);                                      // Set the MFP pin state            //
       bool     getMFP();                                                      // Get the MFP pin state            //
       bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,   // Set an Alarm                     //
-                        const DateTime dt, const bool state = true );         //                                  //
+                        const DateTime dt, const bool polarity,               //                                  //
+                        const bool state = true );                            //                                  //
       DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);       // Return alarm date/time & type    //
       bool     clearAlarm(const uint8_t alarmNumber);                         // Clear an Alarm                   //
       bool     setAlarmState(const uint8_t alarmNumber, const bool state);    // Return if alarm is on or off     //

@@ -14,3 +14,4 @@ The MCP7940 allows for software trimming and the library has functions which sup
 [![DOI](https://www.zenodo.org/badge/98077572.svg)](https://www.zenodo.org/badge/latestdoi/98077572)
 
 ![Zanshin Logo](https://www.sv-zanshin.com/r/images/site/gif/zanshinkanjitiny.gif) <img src="https://www.sv-zanshin.com/r/images/site/gif/zanshintext.gif" width="75"/>
+
