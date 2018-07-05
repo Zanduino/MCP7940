@@ -506,11 +506,31 @@ bool MCP7940_Class::getMFP() {                                                //
 ** 4. Ensure the ALMxIF flag is cleared                                                                           **
 ** 5. Based on the selected alarm mask, load the alarm match value into the appropriate register(s)               **
 ** 6. Enable the alarm module by setting the ALMxEN bit                                                           **
+**                                                                                                                **
+** Alarm polarity (see also TABLE 5-10 on p.27 of the datasheet).                                                 **
+** Note: the MFP pin is open collector, it needs an external pull-up resistor.                                    **
+**                                                                                                                **
+** If only one alarm is set:                                                                                      **
+** polarity = 0: MFP high when no alarm, low when alarm.                                                          **
+** polarity = 1: MFP low when no alarm, high when alarm.                                                          **
+**                                                                                                                **
+** If both alarms are set:                                                                                        **
+** polarity = 0: MFP high when no alarm or one alarm, low when both alarms go off.                                **
+** polarity = 1: MFP low when no alarm, high when eihter or both alarms go off.                                   **
+**                                                                                                                **
+** In most situations you will want to set polarity to 1 if you have two alarms set, to be able to see when an    **
+** alarm goes off using the MFP pin.                                                                              **
+**                                                                                                                **
+** There are two ALMPOL bits - one in the ALM0WKDAY register, one in the ALM1WKDAY register. Writing one appears  **
+** to automatically set the other. This behaviour is not described at all in the data sheet, which just mentions  **
+** the bit as if there exists just one.                                                                           **
+**                                                                                                                **
 *******************************************************************************************************************/
 bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       // Alarm number 0 or 1              //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
                              const DateTime dt,                               // Date/Time to set alarm from      //
-                             const bool state) {                              // Alarm on (true) or off (false)   //
+                             const bool polarity,                             // The polarity of the alarm        //
+                             const bool state) {                              // Alarm on (true) or off (false)   //                             
   bool success = false;                                                       // Assume no success                //
   if (alarmNumber < 2 &&
       alarmType < 8 &&
@@ -540,12 +560,19 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
     writeByte(MCP7940_ALM0MTH + registerOffset, int2bcd(dt.month()));         // Month, ignore R/O leapyear bit   //
     setAlarmState(alarmNumber, state);                                        // Set the requested alarm to state //
   } // of if-then alarmNumber and alarmType are valid and device running      //                                  //
-  
-  // Set ALMPOL to 1.
-  writeByte(MCP7940_ALM0WKDAY, readByte(MCP7940_ALM0WKDAY) | (1 << 7));
+
+  if (polarity) {
+    writeByte(MCP7940_ALM0WKDAY, readByte(MCP7940_ALM0WKDAY) | (1 << 7));     // Set the ALMPOL bit.              //
+  }
+  else {
+    writeByte(MCP7940_ALM0WKDAY, readByte(MCP7940_ALM0WKDAY) & ~(1 << 7));    // Clear the ALMPOL bit.            //
+  }
   
   return success;                                                             // return the status                //
 } // of method setAlarm                                                       //                                  //
+
+
+
 
 /*******************************************************************************************************************
 ** Method getAlarm will return the date/time settings for the given alarm and update the alarmType parameter with **

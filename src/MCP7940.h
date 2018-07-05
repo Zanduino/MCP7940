@@ -154,7 +154,8 @@
       bool     setMFP(const bool value);                                      // Set the MFP pin state            //
       bool     getMFP();                                                      // Get the MFP pin state            //
       bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,   // Set an Alarm                     //
-                        const DateTime dt, const bool state = true );         //                                  //
+                        const DateTime dt, const bool polarity,               //                                  //
+                        const bool state = true );                            //                                  //
       DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);       // Return alarm date/time & type    //
       bool     clearAlarm(const uint8_t alarmNumber);                         // Clear an Alarm                   //
       bool     setAlarmState(const uint8_t alarmNumber, const bool state);    // Return if alarm is on or off     //
