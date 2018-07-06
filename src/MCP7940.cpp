@@ -9,25 +9,25 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.                                          **
 **                                                                                                                **
 *******************************************************************************************************************/
-
 #include "MCP7940.h"                                                          // Include the header definition    //
-//                                  //
-const uint8_t daysInMonth [] PROGMEM = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; // Numbers of days in each month    //
+                                                                              //                                  //
+const uint8_t daysInMonth [] PROGMEM = {31,28,31,30,31,30,31,31,30,31,30,31}; // Numbers of days in each month    //
 
 /*******************************************************************************************************************
 ** function date2days returns the number of days from a given Y M D value                                         **
 *******************************************************************************************************************/
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {                 //                                  //
-  if (y >= 2000) {
-    y -= 2000;                                                                // Remove year offset               //
-  }
+  if (y >= 2000) {                                                            // Remove year offset               //
+    y -= 2000;                                                                //                                  //
+  } // of if-then year is greater than 2000                                   //                                  //
   uint16_t days = d;                                                          // Store numbers of days            //
-  for (uint8_t i = 1; i < m; ++i) {
-    days += pgm_read_byte(daysInMonth + i - 1);                               // Add number of days for each month//
-  }
-  if (m > 2 && y % 4 == 0) { // FIXME: doesn't deal with centuries (2100 is not a leap year).
-    ++days;                                                                   // Deal with leap years             //
-  }
+  for (uint8_t i = 1; i < m; ++i) {                                           // Add number of days for each month//
+    days += pgm_read_byte(daysInMonth + i - 1);                               //                                  //
+  } // of for-next loop for each month                                        //                                  //
+  //                    FIXME: doesn't deal with centuries (not leap year).   //                                  //
+  if (m > 2 && y % 4 == 0) {                                                  // Deal with leap years             //
+    ++days;                                                                   //                                  //
+  } // of if-then a leap year                                                 //                                  //
   return days + 365 * y + (y + 3) / 4 - 1;                                    // Return computed value            //
 } // of method date2days                                                      //                                  //
 
@@ -45,7 +45,7 @@ static uint8_t conv2d(const char* p) {                                        //
   uint8_t v = 0;                                                              //                                  //
   if ('0' <= *p && *p <= '9') {                                               //                                  //
     v = *p - '0';                                                             //                                  //
-  }
+  } // of if-then character in range                                          //                                  //
   return 10 * v + *++p - '0';                                                 //                                  //
 } // of method conv2d                                                         //                                  //
 
@@ -79,8 +79,7 @@ DateTime::DateTime (uint32_t t) {                                             //
   } // of for-next each month                                                 //                                  //
   d = days + 1;                                                               //                                  //
 } // of method DateTime()                                                     //----------------------------------//
-
-DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour,  //                                  //
+DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour,  // Overloaded Definition            //
                     uint8_t min, uint8_t sec) {                               //                                  //
   if (year >= 2000)                                                           //                                  //
     year -= 2000;                                                             //                                  //
@@ -91,14 +90,13 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour,  //
   mm = min;                                                                   //                                  //
   ss = sec;                                                                   //                                  //
 } // of method DateTime()                                                     //----------------------------------//
-
-DateTime::DateTime (const DateTime& dt):                                      //                                  //
-  yOff(dt.yOff),                                                              //                                  //
-  m(dt.m),                                                                    //                                  //
-  d(dt.d),                                                                    //                                  //
-  hh(dt.hh),                                                                  //                                  //
-  mm(dt.mm),                                                                  //                                  //
-  ss(dt.ss)                                                                   //                                  //
+DateTime::DateTime (const DateTime& copy):                                    // Overloaded Definition            //
+  yOff(copy.yOff),                                                            //                                  //
+  m(copy.m),                                                                  //                                  //
+  d(copy.d),                                                                  //                                  //
+  hh(copy.hh),                                                                //                                  //
+  mm(copy.mm),                                                                //                                  //
+  ss(copy.ss)                                                                 //                                  //
 {} // of method DateTime()                                                    //                                  //
 
 /*******************************************************************************************************************
@@ -456,21 +454,19 @@ int8_t MCP7940_Class::calibrate(const int8_t newTrim) {                       //
   _SetUnixTime = now().unixtime();                                            // Store time of last change        //
   return trim;                                                                // return the computed trim value   //
 } // of method calibrate()                                                    //                                  //
-
-int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         // Calibrate the RTC                //
+int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         // Overloaded calibrate definition  //
   int32_t SecDeviation = dt.unixtime() - now().unixtime();                    // Get difference in seconds        //
   int32_t ExpectedSec  = now().unixtime() - _SetUnixTime;                     // Get number of seconds since set  //
   int32_t ppm          = 1000000 * SecDeviation / ExpectedSec;                // Multiply first to avoid trunc    //
   if (ppm > 130) {                                                            // Force number ppm to be in range  //
-    ppm = 130;
-  }
-  else if (ppm < -130) {
-    ppm = -130;
-  }
+    ppm = 130;                                                                //                                  //
+  } else if (ppm < -130) {                                                    // check for low out-of-bounds too  //
+    ppm = -130;                                                               //                                  //
+  } // of if-then-else ppm out of range                                       //                                  //
   int8_t trim          = readByte(MCP7940_OSCTRIM);                           // Read current trim register value //
-  if (trim >> 7) {
-    trim = trim * -1;                                                         // use negative value if necessary  //
-  }
+  if (trim >> 7) {                                                            // use negative value if necessary  //
+    trim = trim * -1;                                                         //                                  //
+  } // of if-then trim is set                                                 //                                  //
   trim         += ppm * 32768 * 60 / 2000000;                                 // compute the new trim value       //
   return calibrate((const)trim);    
 /*
