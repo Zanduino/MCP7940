@@ -25,7 +25,7 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {                 //
   for (uint8_t i = 1; i < m; ++i) {
     days += pgm_read_byte(daysInMonth + i - 1);                               // Add number of days for each month//
   }
-  if (m > 2 && y % 4 == 0) { // FIXME: doesn't deal with centuries (not leap year).
+  if (m > 2 && y % 4 == 0) { // FIXME: doesn't deal with centuries (2100 is not a leap year).
     ++days;                                                                   // Deal with leap years             //
   }
   return days + 365 * y + (y + 3) / 4 - 1;                                    // Return computed value            //
@@ -92,13 +92,13 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour,  //
   ss = sec;                                                                   //                                  //
 } // of method DateTime()                                                     //----------------------------------//
 
-DateTime::DateTime (const DateTime& copy):                                    //                                  //
-  yOff(copy.yOff),                                                            //                                  //
-  m(copy.m),                                                                  //                                  //
-  d(copy.d),                                                                  //                                  //
-  hh(copy.hh),                                                                //                                  //
-  mm(copy.mm),                                                                //                                  //
-  ss(copy.ss)                                                                 //                                  //
+DateTime::DateTime (const DateTime& dt):                                      //                                  //
+  yOff(dt.yOff),                                                              //                                  //
+  m(dt.m),                                                                    //                                  //
+  d(dt.d),                                                                    //                                  //
+  hh(dt.hh),                                                                  //                                  //
+  mm(dt.mm),                                                                  //                                  //
+  ss(dt.ss)                                                                   //                                  //
 {} // of method DateTime()                                                    //                                  //
 
 /*******************************************************************************************************************
@@ -156,7 +156,11 @@ DateTime::DateTime (const __FlashStringHelper* date,                          //
 *******************************************************************************************************************/
 uint8_t DateTime::dayOfTheWeek() const {                                      // Compute the DOW                  //
   uint16_t day = date2days(yOff, m, d);                                       // compute the number of days       //
-  return ((day + 6) % 7)+1;                                                   // Jan 1, 2000 is a Saturday, i.e. 6//
+  uint8_t dow = ((day + 6) % 7);                                              // Jan 1, 2000 is a Saturday, i.e. 6//
+  if (dow == 0) {                                                             // Correction for Sundays           //
+    dow = 7;
+  }
+  return dow;
 } // of method dayOfTheWeek()                                                 //                                  //
 
 /*******************************************************************************************************************
@@ -315,6 +319,7 @@ bool MCP7940_Class::deviceStart() {                                           //
   for (uint8_t j = 0; j < 255; j++) {                                         // Loop until changed or overflow   //
     _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN);    // Wait for oscillator to start     //
     if (_OscillatorStatus) break;                                             // Exit loop on success             //
+    delay(1);                                                                 // Allow oscillator some time to start //
   } // of for-next oscillator loop                                            //                                  //
   return _OscillatorStatus;                                                   // Return state                     //
 } // of method deviceStart                                                    //                                  //
@@ -326,8 +331,9 @@ bool MCP7940_Class::deviceStop() {                                            //
   clearRegisterBit(MCP7940_RTCSEC, MCP7940_ST);                               // clear the ST bit.                //
   _CrystalStatus = 0;                                                         // set to false for off status      //
   for (uint8_t j = 0; j < 255; j++) {                                         // Loop until changed or overflow   //
-    _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN);    // Wait for oscillator to stop     //
+    _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN);    // Wait for oscillator to stop      //
     if (!_OscillatorStatus) break;                                            // Exit loop on success             //
+    delay(1);                                                                 // Allow oscillator some time to stop //
   } // of for-next oscillator loop                                            //                                  //
   return _OscillatorStatus;                                                   // Return state                     //
 } // of method deviceStop                                                     //                                  //
@@ -413,8 +419,7 @@ void MCP7940_Class::adjust(const DateTime& dt) {                              //
 ** when the day shifts. It is set as part of the adjust() method where Monday is weekday 1                        **
 *******************************************************************************************************************/
 uint8_t MCP7940_Class::weekdayRead() {                                        // Read the DOW from the RTC        //
-  uint8_t dow = readByte(MCP7940_RTCWKDAY) & 0x07;                            // no need to convert, values 1-7   //
-  return dow;                                                                 // return the value                 //
+  return readByte(MCP7940_RTCWKDAY) & 0x07;                                   // no need to convert, values 1-7   //
 } // of method weekdayRead()                                                  //                                  //
 
 /*******************************************************************************************************************
@@ -509,7 +514,7 @@ bool MCP7940_Class::setMFP(const bool value) {                                //
   if (registerValue & 0x70 != 0) {
     return false;                                                             // Error if SQWEN/ALM1EN/ALM0EN set //
   }
-  setRegisterBit(MCP7940_CONTROL, MCP7940_OUT);                               //                                  //
+  writeRegisterBit(MCP7940_CONTROL, MCP7940_OUT, value);                      //                                  //
   return true;                                                                // Return success                   //
 } // of method setMFP()                                                       //                                  //
 
@@ -517,21 +522,21 @@ bool MCP7940_Class::setMFP(const bool value) {                                //
 ** Method getMFP() will get the MFP (Multifunction Pin) state. On is true and Off is false. This is read from the **
 ** control register if no alarms are enabled, otherwise the two alarm states must be checked.                     **
 *******************************************************************************************************************/
-
-// FIXME this won't work correctly without also checking the ALMPOL bit, which together with the
-// alarm states governs the MFP status. On top of that, there's the block wave output option.
-// Suggest removal of this function as it doesn't seem to be useful (the MFP is meant to be checked
-// by an input pin on the MCU, or used as clock pulse output).
-bool MCP7940_Class::getMFP() {                                                // Get the MFP pin state            //
+// Returns:
+// 0 = pin set LOW.
+// 1 = pin set HIGH.
+// 2 = pin controlled by alarms.
+// 3 = pin controlled by square wave output.
+uint8_t MCP7940_Class::getMFP() {                                             // Get the MFP pin state            //
   uint8_t controlRegister = readByte(MCP7940_CONTROL);                        // Get control register contents    //
-  bool registerValue = 0;                                                     // Store return value               //
-  if (controlRegister & B00010000)                                            // If alarm0 is used, check flag    //
-    registerValue = readByte(MCP7940_ALM0WKDAY) & B00001000;                  // Set return value to flag bit     //
-  if (controlRegister & B00100000)                                            // If alarm1 is used, check flag    //
-    registerValue = registerValue | (readByte(MCP7940_ALM1WKDAY) & B00001000); // Add this flag bit to return value//
-  if (!(controlRegister & B00110000))                                         // If no alarms are set the use the //
-    registerValue = (readByte(MCP7940_CONTROL) >> MCP7940_OUT) & 1;           // "OUT" bit of the MFP             //
-  return registerValue;                                                       // Return value                     //
+  if (controlRegister & (1 << MCP7940_SQWEN)) {                               // Square wave output enabled       //
+    return 3;                                                                 // MFP in SQW output mode           //
+  }
+  else if ((controlRegister & (1 << MCP7940_ALM0EN)) |                        // One or both alarms enable, and   //
+      (controlRegister & (1 << MCP7940_ALM1EN))) {                            // no square wave output.           //
+    return 2;                                                                 // MFP in alarm output mode         //
+  }
+  return bitRead(controlRegister, MCP7940_OUT);                               // MFP in manual mode, return value //
 } // of method getMFP()                                                       //                                  //
 
 /*******************************************************************************************************************
@@ -558,18 +563,17 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
       alarmType != 5 &&
       alarmType != 6 &&
       deviceStart()) {                                                        // if parameters and oscillator OK  //
-      
     clearRegisterBit(MCP7940_CONTROL, alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN); // Turn off the alarm       //
-    uint8_t alarmReg = alarmNumber ? MCP7940_ALM1WKDAY : MCP7940_ALM0WKDAY;   // The first of the registers       //
-    uint8_t workRegister = readByte(alarmReg) & (1 << MCP7940_ALM0IF);        // Keep alarm interrupt flag bit    //
-    workRegister |= alarmType << 4;                                           // Set 3 bits from alarmType        //
-    workRegister |= dt.dayOfTheWeek();                                        // Set 3 bits for dow from date     //
-    writeByte(alarmReg, workRegister);                                        // Write alarm mask                 //
-    writeByte(alarmReg, int2bcd(dt.second()));                                // Write seconds, keep device off   //
-    writeByte(alarmReg, int2bcd(dt.minute()));                                // Write the minutes value          //
-    writeByte(alarmReg, int2bcd(dt.hour()));                                  // Also re-sets the 24Hour clock on //
-    writeByte(alarmReg, int2bcd(dt.day()));                                   // Write the day of month           //
-    writeByte(alarmReg, int2bcd(dt.month()));                                 // Month, ignore R/O leapyear bit   //
+    uint8_t offset = 7 * alarmNumber;                                         // Offset to be applied           //
+    uint8_t wkdayRegister = readByte(MCP7940_ALM0WKDAY + offset) & (1 << MCP7940_ALM0IF); // Keep alarm interrupt flag bit //
+    wkdayRegister |= alarmType << 4;                                          // Set 3 bits from alarmType        //
+    wkdayRegister |= dt.dayOfTheWeek();                                       // Set 3 bits for dow from date     //
+    writeByte(MCP7940_ALM0WKDAY + offset, wkdayRegister);                     // Write alarm mask                 //
+    writeByte(MCP7940_ALM0SEC + offset, int2bcd(dt.second()));                // Write seconds, keep device off   //
+    writeByte(MCP7940_ALM0MIN + offset, int2bcd(dt.minute()));                // Write the minutes value          //
+    writeByte(MCP7940_ALM0HOUR + offset, int2bcd(dt.hour()));                 // Also re-sets the 24Hour clock on //
+    writeByte(MCP7940_ALM0DATE + offset, int2bcd(dt.day()));                  // Write the day of month           //
+    writeByte(MCP7940_ALM0MTH + offset, int2bcd(dt.month()));                 // Month, ignore R/O leapyear bit   //
     setAlarmState(alarmNumber, state);                                        // Set the requested alarm to state //
   } // of if-then alarmNumber and alarmType are valid and device running      //                                  //
  
@@ -607,13 +611,13 @@ DateTime MCP7940_Class::getAlarm(const uint8_t alarmNumber,                   //
   if (alarmNumber > 1) {
     return NULL;                                                              // return an error if bad alarm no. //
   }
-  uint8_t alarmReg = alarmNumber ? MCP7940_ALM1WKDAY : MCP7940_ALM0WKDAY;     // The first of the registers       //
-  alarmType = (readByte(alarmReg) >> 4) & B111;                               // get 3 bits for alarmType      //
-  uint8_t ss = bcd2int(readByte(alarmReg) & 0x7F);                            // Clear high bit in seconds        //
-  uint8_t mm = bcd2int(readByte(alarmReg) & 0x7F);                            // Clear high bit in minutes        //
-  uint8_t hh = bcd2int(readByte(alarmReg) & 0x7F);                            // Clear high bit in hours          //
-  uint8_t d  = bcd2int(readByte(alarmReg) & 0x3F);                            // Clear 2 high bits for day of month//
-  uint8_t m  = bcd2int(readByte(alarmReg) & 0x1F);                            // Clear 3 high bits for Month      //
+  uint8_t offset = 7 * alarmNumber;                                           // Offset to be applied             //
+  alarmType = (readByte(MCP7940_ALM0WKDAY + offset) >> 4) & B111;             // get 3 bits for alarmType         //
+  uint8_t ss = bcd2int(readByte(MCP7940_ALM0SEC + offset) & 0x7F);            // Clear high bit in seconds        //
+  uint8_t mm = bcd2int(readByte(MCP7940_ALM0MIN + offset) & 0x7F);            // Clear high bit in minutes        //
+  uint8_t hh = bcd2int(readByte(MCP7940_ALM0HOUR + offset) & 0x7F);           // Clear high bit in hours          //
+  uint8_t d  = bcd2int(readByte(MCP7940_ALM0DATE + offset) & 0x3F);           // Clear 2 high bits for day of month//
+  uint8_t m  = bcd2int(readByte(MCP7940_ALM0MTH + offset) & 0x1F);            // Clear 3 high bits for Month      //
   uint16_t y = 0;                                                             // Year is not part of the alarms   //
   return DateTime (y, m, d, hh, mm, ss);                                      // Return class value               //
 } // of method getAlarm()                                                     //                                  //
@@ -676,14 +680,26 @@ uint8_t MCP7940_Class::getSQWSpeed() {                                        //
 ** Method setSQWSpeed will set the square wave speed to a value. Values are B00 for 1Hz, B01 for 4.096kHz, B10    **
 ** for 8.192kHz and B11 for 32.768kHz. By default the square wave is also turned on, but the optional setState    **
 ** parameter changes that initial state. The return value is the state of the SQW after setting                   **
+0 = 1 Hz
+1 = 4.096 kHz
+2 = 8.192 kHz
+3 = 32.768 kHz
+4 = 64 Hz
 *******************************************************************************************************************/
-bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool setState) {           // Set the SQW frequency code       //
-  uint8_t registerValue = readByte(MCP7940_CONTROL);                          // read the register to a variable  //
-  bitWrite(registerValue, MCP7940_SQWEN, setState);
-  bitWrite(registerValue, MCP7940_SQWFS0, bitRead(frequency, 0));             // only use 2 bits for frequency    //
-  bitWrite(registerValue, MCP7940_SQWFS1, bitRead(frequency, 1));
-  writeByte(MCP7940_CONTROL, registerValue);                                  // Write register settings          //
-  return setState;                                                            // Return whether enabled or not    //
+bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool state) {              // Set the SQW frequency code       //
+  if (frequency < 3) {
+    uint8_t registerValue = readByte(MCP7940_CONTROL);                        // read the register to a variable  //
+    bitWrite(registerValue, MCP7940_SQWEN, state);
+    bitWrite(registerValue, MCP7940_SQWFS0, bitRead(frequency, 0));           // 2 bits are used for frequency    //
+    bitWrite(registerValue, MCP7940_SQWFS1, bitRead(frequency, 1));
+    bitClear(registerValue, MCP7940_CRSTRIM);                                 // CRSTRIM bit must be cleared      //
+    writeByte(MCP7940_CONTROL, registerValue);                                // Write register settings          //
+  }
+  else if (frequency == 4) {
+    setRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // CRSTRIM bit must be set for 64Hz //
+    writeRegisterBit(MCP7940_CONTROL, MCP7940_SQWEN, state);
+  }  
+  return state;                                                               // Return whether enabled or not    //
 } // of method setSQWState()                                                  //                                  //
 
 /*******************************************************************************************************************

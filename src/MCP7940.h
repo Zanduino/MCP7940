@@ -200,17 +200,17 @@
       uint8_t  weekdayRead();                                                 // Read weekday from RTC            //
       uint8_t  weekdayWrite(const uint8_t dow);                               // Write weekday to RTC             //
       bool     setMFP(const bool value);                                      // Set the MFP pin state            //
-      bool     getMFP();                                                      // Get the MFP pin state            //
+      uint8_t  getMFP();                                                      // Get the MFP pin state            //
       bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,   // Set an Alarm                     //
                         const DateTime dt, const bool state = true );         //                                  //
       void     setAlarmPolarity(const bool polarity);                         // Set the polarity of the alarm    //
       DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);       // Return alarm date/time & type    //
       bool     clearAlarm(const uint8_t alarmNumber);                         // Clear an Alarm                   //
-      bool     setAlarmState(const uint8_t alarmNumber, const bool state);    // Return if alarm is on or off     //
-      bool     getAlarmState(const uint8_t alarmNumber);                      // Return if alarm is on or off     //
-      bool     isAlarm(const uint8_t alarmNumber);                            // Return if alarm is triggered     //
+      bool     setAlarmState(const uint8_t alarmNumber, const bool state);    // Return whether alarm is on or off//
+      bool     getAlarmState(const uint8_t alarmNumber);                      // Return whether alarm is on or off//
+      bool     isAlarm(const uint8_t alarmNumber);                            // Return whether alarm is triggered//
       uint8_t  getSQWSpeed();                                                 // Return the SQW frequency code    //
-      bool     setSQWSpeed(uint8_t frequency, bool setState = true);          // Set the SQW frequency to code    //
+      bool     setSQWSpeed(uint8_t frequency, bool state = true);             // Set the SQW frequency to code    //
       bool     setSQWState(const bool state);                                 // Set the SQW MFP on or off        //
       bool     getSQWState();                                                 // Return if the SQW is active      //
       bool     setBattery(const bool state);                                  // Enable or disable battery backup //

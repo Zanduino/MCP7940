@@ -1,0 +1,13 @@
+Updated, tested/corrected setAlarm().
+Updated, tested setAlarmPolarity().
+Updated, tested weekdayRead() & weekdayWrite(const uint8_t dow).
+Fixed bug in dayOfTheWeek() - it was a day off due to incorrect calculation.
+Updated getMFP() to allow for the other options. Returns value 0-3:
+    0 = pin set LOW.
+    1 = pin set HIGH.
+    2 = pin controlled by alarms.
+    3 = pin controlled by square wave output.
+Updated, tested setMFP().
+Updated, tested setSQWSpeed(). Added support for 64 Hz square wave output.
+Updated, tested getPowerFail() & clearPowerFail().
+
