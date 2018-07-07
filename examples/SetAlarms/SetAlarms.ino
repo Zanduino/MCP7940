@@ -27,6 +27,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Changed code for compatability reasons to new library          **
 ** 1.0.0  2017-07-29 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
 *******************************************************************************************************************/
@@ -83,13 +84,13 @@ void setup() {                                                                //
           now.month(), now.day(), now.hour(), now.minute(), now.second());    // date/time with leading zeroes    //
   Serial.println(inputBuffer);                                                // Display the current date/time    //
   Serial.println("Setting alarm 0 for every minute at 0 seconds.");           //                                  //
-  MCP7940.setAlarm(0,matchSeconds,now-TimeSpan(0,0,0,now.second()),false);    // Match once a minute at 0 seconds //
+  MCP7940.setAlarm(0,matchSeconds,now-TimeSpan(0,0,0,now.second()),true);     // Match once a minute at 0 seconds //
   Serial.print("Setting alarm 1 to go off at ");                              //                                  //
   now = now + TimeSpan(0,0,0,ALARM1_INTERVAL);                                // Add interval to current time     //
   sprintf(inputBuffer,"%04d-%02d-%02d %02d:%02d:%02d", now.year(),            // Use sprintf() to pretty print    //
           now.month(), now.day(), now.hour(), now.minute(), now.second());    // date/time with leading zeroes    //
   Serial.println(inputBuffer);                                                // Display the current date/time    //
-  MCP7940.setAlarm(1,matchAll,now,false);                                     // Set alarm to go off then         //
+  MCP7940.setAlarm(1,matchAll,now,true);                                      // Set alarm to go off then         //
   pinMode(LED_PIN,OUTPUT);                                                    // Declare built-in LED as output   //
 } // of method setup()                                                        //                                  //
 /*******************************************************************************************************************
@@ -113,7 +114,7 @@ void loop() {                                                                 //
       sprintf(inputBuffer,"%04d-%02d-%02d %02d:%02d:%02d", now.year(),        // Use sprintf() to pretty print    //
               now.month(), now.day(), now.hour(), now.minute(), now.second());// date/time with leading zeroes    //
       Serial.print(inputBuffer);                                              // Display the current date/time    //
-      MCP7940.setAlarm(1,matchAll,now,false);                                 // Set alarm to go off in 10s again //
+      MCP7940.setAlarm(1,matchAll,now,true);                                  // Set alarm to go off in 10s again //
     } // of if Alarm 0 has been triggered                                     // Alarm is cleared when resetting  //
     Serial.println();                                                         //                                  //
   } // of if the seconds have changed                                         //                                  //

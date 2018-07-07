@@ -570,10 +570,10 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
     writeByte(MCP7940_ALM0DATE + offset, int2bcd(dt.day()));                  // Write the day of month           //
     writeByte(MCP7940_ALM0MTH + offset, int2bcd(dt.month()));                 // Month, ignore R/O leap-year bit  //
     setAlarmState(alarmNumber, state);                                        // Set the requested alarm to state //
+    success = true;                                                           // Set return status to success     //
   } // of if-then alarmNumber and alarmType are valid and device running      //                                  //
   return success;                                                             // return the status                //
 } // of method setAlarm                                                       //                                  //
-
 
 /*******************************************************************************************************************
 ** Alarm polarity (see also TABLE 5-10 on p.27 of the datasheet).                                                 **
@@ -633,7 +633,7 @@ bool MCP7940_Class::clearAlarm(const uint8_t alarmNumber) {                   //
 bool MCP7940_Class::setAlarmState(const uint8_t alarmNumber,const bool state){// Set alarm to on or off           //
   if (alarmNumber > 1) {                                                      // if not alarm 0 or 1 then error   //
     return false;                                                             //                                  //
-} // of if-then a bad alarm number                                            //                                  //
+  } // of if-then a bad alarm number                                          //                                  //
   writeRegisterBit(MCP7940_CONTROL, alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN, state); // Overwrite reg bit   //
   return true;                                                                // Return success                   //
 } // of setAlarmState()                                                       //                                  //
@@ -681,12 +681,12 @@ uint8_t MCP7940_Class::getSQWSpeed() {                                        //
 ** 4 = 64      Hz                                                                                                 **
 *******************************************************************************************************************/
 bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool state) {              // Set the SQW frequency code       //
-  if (frequency < 3) {                                                        // If the frequency is < 64Hz       //
+  if (frequency < 4) {                                                        // If the frequency is < 64Hz       //
     uint8_t registerValue = readByte(MCP7940_CONTROL);                        // read the register to a variable  //
     bitWrite(registerValue, MCP7940_SQWEN, state);                            //                                  //
     bitWrite(registerValue, MCP7940_SQWFS0, bitRead(frequency, 0));           // 2 bits are used for frequency    //
     bitWrite(registerValue, MCP7940_SQWFS1, bitRead(frequency, 1));           //                                  //
-    clearRegisterBit(registerValue, MCP7940_CRSTRIM);                         // CRSTRIM bit must be cleared      //
+    bitClear(registerValue,MCP7940_CRSTRIM);
     writeByte(MCP7940_CONTROL, registerValue);                                // Write register settings          //
   } else if (frequency == 4) {                                                // If the frequency is 64Hz         //
     setRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // CRSTRIM bit must be set for 64Hz //

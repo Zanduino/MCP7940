@@ -17,6 +17,7 @@
 **  4.096kHz                                                                                                      **
 **  8.192kHz                                                                                                      **
 ** 32.768kHz                                                                                                      **
+** 64     Hz                                                                                                      **
 **                                                                                                                **
 ** If the TRIM value is set this affects the square wave output frequency as well.                                **
 **                                                                                                                **
@@ -29,6 +30,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Added support for 64Hz, changed to use interrupts              **
 ** 1.0.0  2017-07-29 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
 *******************************************************************************************************************/
@@ -40,12 +42,21 @@ const uint32_t SERIAL_SPEED        = 115200;                                  //
 const uint8_t  MFP_PIN             =      2;                                  // Pin used for the MCP7940 MFP     //
 const uint8_t  LED_PIN             =     13;                                  // Arduino built-in LED pin number  //
 const uint8_t  SPRINTF_BUFFER_SIZE =     32;                                  // Buffer size for sprintf()        //
-enum SquareWaveTypes { Hz1, Hz4, Hz8, Hz32 };                                 // Enumerate square wave frequencies//
+enum SquareWaveTypes { Hz1, kHz4, kHz8, kHz32, Hz64 };                        // Enumerate square wave frequencies//
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
-MCP7940_Class MCP7940;                                                        // Create instance of the MCP7940M  //
-char          inputBuffer[SPRINTF_BUFFER_SIZE];                               // Buffer for sprintf() / sscanf()  //
+MCP7940_Class     MCP7940;                                                    // Create instance of the MCP7940M  //
+char              inputBuffer[SPRINTF_BUFFER_SIZE];                           // Buffer for sprintf() / sscanf()  //
+volatile uint64_t switches  = 0;                                              // Number of High-Low or Low-High   //
+
+/*******************************************************************************************************************
+** Declare interrupt handler for pin changes to the MFP_PIN                                                       **
+*******************************************************************************************************************/
+ISR (PCINT_vect) {                                                            // Called when pin goes from a low  //
+  switches++;                                                                 // Increment counter                //
+} // of method PCINT_vect                                                     //                                  //
+
 /*******************************************************************************************************************
 ** Method Setup(). This is an Arduino IDE method which is called upon boot or restart. It is only called one time **
 ** and then control goes to the main loop, which loop indefinately.                                               **
@@ -84,17 +95,29 @@ void setup() {                                                                //
           now.month(), now.day(), now.hour(), now.minute(), now.second());    // date/time with leading zeroes    //
   Serial.println(inputBuffer);                                                // Display the current date/time    //
   pinMode(MFP_PIN,INPUT);                                                     // MCP7940 Alarm MFP digital pin    //
+  attachInterrupt(digitalPinToInterrupt(MFP_PIN),PCINT_vect,FALLING);         // Call interrupt when pin changes  //
   pinMode(LED_PIN,OUTPUT);                                                    // Declare built-in LED as output   //
-  Serial.println("Setting SQW to 1Hz and linking to LED");                    //                                  //
-  MCP7940.setSQWSpeed(Hz1);                                                   // Set the square wave pin          //
+  Serial.println("Setting SQW to 64Hz and linking to LED");                   //                                  //
+  MCP7940.setSQWState(true);                                                  // Turn the SQW on                  //
+  MCP7940.setSQWSpeed(Hz64);                                                  // Set the square wave pin          //
 } // of method setup()                                                        //                                  //
 /*******************************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
 void loop() {                                                                 //                                  //
-  digitalWrite(LED_PIN,digitalRead(MFP_PIN));                                 // Echo MFP pin state to LED pin    //
-  if (MCP7940.getSQWState() && millis()>10000) {                              // If 10 seconds have passed and    //
-    Serial.println("Turning off SQW pin...");                                 // the SQW is still enable then turn//
+  static uint32_t startMillis = millis();                                     // Store the starting time          //
+  digitalWrite(LED_PIN,digitalRead(MFP_PIN));                                 // Make LED mirror MFP pin          //
+  if (millis()-startMillis>5000) {                                            // Show results every 10 seconds    //
+    Serial.print("Square Wave changed ");                                     //                                  //
+    Serial.print((uint32_t)(switches));                                       //                                  //
+    Serial.print(" times in 5s = ~");                                         //                                  //
+    Serial.print((uint32_t)(switches/5));                                     // Divide by 10 seconds             //
+    Serial.println("Hz");                                                     //                                  //
+    startMillis = millis();                                                   // Set time to current time         //
+    switches=0;                                                               // reset number of state changes    //
+  } // of if-then 10 seconds have elapsed                                     //                                  //
+  if (MCP7940.getSQWState() && millis()>60000) {                              // If 30 seconds have passed and    //
+    Serial.println("Turning off SQW pin after 1 minute.");                    // the SQW is still enable then turn//
     MCP7940.setSQWState(false);                                               // it off. LED will stop blinking   //
   } // of if-then >10s and pin active                                         //                                  //
 } // of method loop()                                                         //----------------------------------//

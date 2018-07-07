@@ -224,8 +224,8 @@
       ** pointer to roll over to the start of the block.                                                          **
       *************************************************************************************************************/
       template< typename T >                                                  // method to read a structure       //
-      uint8_t&  readRAM(const uint8_t addr, T &value) {                       //                                  //
-        uint8_t* bytePtr    = (uint8_t*)&value;                               // Pointer to structure beginning   //
+      uint8_t&  readRAM(const uint8_t addr,T &value) {                        //                                  //
+        uint8_t* bytePtr   = (uint8_t*)&value;                                // Pointer to structure beginning   //
         uint8_t  structSize = sizeof(T);                                      // Number of bytes in structure     //
         uint8_t  i         = 0;                                               // loop counter                     //
         Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
