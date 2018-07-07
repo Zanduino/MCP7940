@@ -12,6 +12,8 @@
 ** so both my comments and variable names tend to be verbose. The code is written to fit in the first 80 spaces   **
 ** and the comments start after that and go to column 117 - allowing the code to be printed in A4 landscape mode. **
 **                                                                                                                **
+** GNU General Public License v3.0                                                                                **
+** ===============================                                                                                **
 ** This program is free software: you can redistribute it and/or modify it under the terms of the GNU General     **
 ** Public License as published by the Free Software Foundation, either version 3 of the License, or (at your      **
 ** option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY     **
@@ -61,61 +63,61 @@
   *****************************************************************************************************************/
   #ifndef I2C_MODES                                                           // I2C related constants            //
     #define I2C_MODES                                                         // Guard code to prevent multiple   //
-    const uint16_t I2C_STANDARD_MODE      =    100000;                        // Default normal I2C 100KHz speed  //
-    const uint16_t I2C_FAST_MODE          =    400000;                        // Fast mode                        //
+    const uint16_t I2C_STANDARD_MODE      =     100000;                       // Default normal I2C 100KHz speed  //
+    const uint16_t I2C_FAST_MODE          =     400000;                       // Fast mode                        //
   #endif                                                                      //----------------------------------//
-  const uint8_t  MCP7940_ADDRESS          =      0x6F;                        // Device address, fixed value      //
-  const uint8_t  MCP7940_RTCSEC           =      0x00;                        // Section 1: timekeeping           //
-  const uint8_t  MCP7940_RTCMIN           =      0x01;                        //                                  //
-  const uint8_t  MCP7940_RTCHOUR          =      0x02;                        //                                  //
-  const uint8_t  MCP7940_RTCWKDAY         =      0x03;                        //                                  //
-  const uint8_t  MCP7940_RTCDATE          =      0x04;                        //                                  //
-  const uint8_t  MCP7940_RTCMTH           =      0x05;                        //                                  //
-  const uint8_t  MCP7940_RTCYEAR          =      0x06;                        //                                  //
-  const uint8_t  MCP7940_CONTROL          =      0x07;                        //                                  //
-  const uint8_t  MCP7940_OSCTRIM          =      0x08;                        //                                  //
-  const uint8_t  MCP7940_ALM0SEC          =      0x0A;                        // Section 2.0: alarm 0             //
-  const uint8_t  MCP7940_ALM0MIN          =      0x0B;                        //                                  //
-  const uint8_t  MCP7940_ALM0HOUR         =      0x0C;                        //                                  //
-  const uint8_t  MCP7940_ALM0WKDAY        =      0x0D;                        //                                  //
-  const uint8_t  MCP7940_ALM0DATE         =      0x0E;                        //                                  //
-  const uint8_t  MCP7940_ALM0MTH          =      0x0F;                        //                                  //
-  const uint8_t  MCP7940_ALM1SEC          =      0x11;                        // Section 2.1: alarm 1             //
-  const uint8_t  MCP7940_ALM1MIN          =      0x12;                        //                                  //
-  const uint8_t  MCP7940_ALM1HOUR         =      0x13;                        //                                  //
-  const uint8_t  MCP7940_ALM1WKDAY        =      0x14;                        //                                  //
-  const uint8_t  MCP7940_ALM1DATE         =      0x15;                        //                                  //
-  const uint8_t  MCP7940_ALM1MTH          =      0x16;                        //                                  //
-  const uint8_t  MCP7940_PWRDNMIN         =      0x18;                        // Section 3.0: Power-Fail Timestamp//
-  const uint8_t  MCP7940_PWRDNHOUR        =      0x19;                        //                                  //
-  const uint8_t  MCP7940_PWRDNDATE        =      0x1A;                        //                                  //
-  const uint8_t  MCP7940_PWRDNMTH         =      0x1B;                        //                                  //
-  const uint8_t  MCP7940_PWRUPMIN         =      0x1C;                        // Section 3.1: Power-Fail Timestamp//
-  const uint8_t  MCP7940_PWRUPHOUR        =      0x1D;                        //                                  //
-  const uint8_t  MCP7940_PWRUPDATE        =      0x1E;                        //                                  //
-  const uint8_t  MCP7940_PWRUPMTH         =      0x1F;                        //                                  //
-  const uint8_t  MCP7940_RAM_ADDRESS      =      0x20;                        // NVRAM - Start address for SRAM   //
-  const uint8_t  MCP7940_ST               =         7;                        // MCP7940 register bits. RTCSEC reg//
-  const uint8_t  MCP7940_12_24            =         6;                        // RTCHOUR, PWRDNHOUR & PWRUPHOUR   //
-  const uint8_t  MCP7940_AM_PM            =         5;                        // RTCHOUR, PWRDNHOUR & PWRUPHOUR   //
-  const uint8_t  MCP7940_OSCRUN           =         5;                        // RTCWKDAY register                //
-  const uint8_t  MCP7940_PWRFAIL          =         4;                        // RTCWKDAY register                //
-  const uint8_t  MCP7940_VBATEN           =         3;                        // RTCWKDAY register                //
-  const uint8_t  MCP7940_LPYR             =         5;                        // RTCMTH register                  //
-  const uint8_t  MCP7940_OUT              =         7;                        // CONTROL register                 //
-  const uint8_t  MCP7940_SQWEN            =         6;                        // CONTROL register                 //
-  const uint8_t  MCP7940_ALM1EN           =         5;                        // CONTROL register                 //
-  const uint8_t  MCP7940_ALM0EN           =         4;                        // CONTROL register                 //
-  const uint8_t  MCP7940_EXTOSC           =         3;                        // CONTROL register                 //
-  const uint8_t  MCP7940_CRSTRIM          =         2;                        // CONTROL register                 //
-  const uint8_t  MCP7940_SQWFS1           =         1;                        // CONTROL register                 //
-  const uint8_t  MCP7940_SQWFS0           =         0;                        // CONTROL register                 //
-  const uint8_t  MCP7940_SIGN             =         7;                        // OSCTRIM register                 //
-  const uint8_t  MCP7940_ALMPOL           =         7;                        // ALM0WKDAY register               //
-  const uint8_t  MCP7940_ALM0IF           =         3;                        // ALM0WKDAY register               //
-  const uint8_t  MCP7940_ALM1IF           =         3;                        // ALM1WKDAY register               //
+  const uint8_t  MCP7940_ADDRESS          =       0x6F;                       // Device address, fixed value      //
+  const uint8_t  MCP7940_RTCSEC           =       0x00;                       // Section 1: timekeeping           //
+  const uint8_t  MCP7940_RTCMIN           =       0x01;                       //                                  //
+  const uint8_t  MCP7940_RTCHOUR          =       0x02;                       //                                  //
+  const uint8_t  MCP7940_RTCWKDAY         =       0x03;                       //                                  //
+  const uint8_t  MCP7940_RTCDATE          =       0x04;                       //                                  //
+  const uint8_t  MCP7940_RTCMTH           =       0x05;                       //                                  //
+  const uint8_t  MCP7940_RTCYEAR          =       0x06;                       //                                  //
+  const uint8_t  MCP7940_CONTROL          =       0x07;                       //                                  //
+  const uint8_t  MCP7940_OSCTRIM          =       0x08;                       //                                  //
+  const uint8_t  MCP7940_ALM0SEC          =       0x0A;                       // Section 2.0: alarm 0             //
+  const uint8_t  MCP7940_ALM0MIN          =       0x0B;                       //                                  //
+  const uint8_t  MCP7940_ALM0HOUR         =       0x0C;                       //                                  //
+  const uint8_t  MCP7940_ALM0WKDAY        =       0x0D;                       //                                  //
+  const uint8_t  MCP7940_ALM0DATE         =       0x0E;                       //                                  //
+  const uint8_t  MCP7940_ALM0MTH          =       0x0F;                       //                                  //
+  const uint8_t  MCP7940_ALM1SEC          =       0x11;                       // Section 2.1: alarm 1             //
+  const uint8_t  MCP7940_ALM1MIN          =       0x12;                       //                                  //
+  const uint8_t  MCP7940_ALM1HOUR         =       0x13;                       //                                  //
+  const uint8_t  MCP7940_ALM1WKDAY        =       0x14;                       //                                  //
+  const uint8_t  MCP7940_ALM1DATE         =       0x15;                       //                                  //
+  const uint8_t  MCP7940_ALM1MTH          =       0x16;                       //                                  //
+  const uint8_t  MCP7940_PWRDNMIN         =       0x18;                       // Section 3.0: Power-Fail Timestamp//
+  const uint8_t  MCP7940_PWRDNHOUR        =       0x19;                       //                                  //
+  const uint8_t  MCP7940_PWRDNDATE        =       0x1A;                       //                                  //
+  const uint8_t  MCP7940_PWRDNMTH         =       0x1B;                       //                                  //
+  const uint8_t  MCP7940_PWRUPMIN         =       0x1C;                       // Section 3.1: Power-Fail Timestamp//
+  const uint8_t  MCP7940_PWRUPHOUR        =       0x1D;                       //                                  //
+  const uint8_t  MCP7940_PWRUPDATE        =       0x1E;                       //                                  //
+  const uint8_t  MCP7940_PWRUPMTH         =       0x1F;                       //                                  //
+  const uint8_t  MCP7940_RAM_ADDRESS      =       0x20;                       // NVRAM - Start address for SRAM   //
+  const uint8_t  MCP7940_ST               =          7;                       // MCP7940 register bits. RTCSEC reg//
+  const uint8_t  MCP7940_12_24            =          6;                       // RTCHOUR, PWRDNHOUR & PWRUPHOUR   //
+  const uint8_t  MCP7940_AM_PM            =          5;                       // RTCHOUR, PWRDNHOUR & PWRUPHOUR   //
+  const uint8_t  MCP7940_OSCRUN           =          5;                       // RTCWKDAY register                //
+  const uint8_t  MCP7940_PWRFAIL          =          4;                       // RTCWKDAY register                //
+  const uint8_t  MCP7940_VBATEN           =          3;                       // RTCWKDAY register                //
+  const uint8_t  MCP7940_LPYR             =          5;                       // RTCMTH register                  //
+  const uint8_t  MCP7940_OUT              =          7;                       // CONTROL register                 //
+  const uint8_t  MCP7940_SQWEN            =          6;                       // CONTROL register                 //
+  const uint8_t  MCP7940_ALM1EN           =          5;                       // CONTROL register                 //
+  const uint8_t  MCP7940_ALM0EN           =          4;                       // CONTROL register                 //
+  const uint8_t  MCP7940_EXTOSC           =          3;                       // CONTROL register                 //
+  const uint8_t  MCP7940_CRSTRIM          =          2;                       // CONTROL register                 //
+  const uint8_t  MCP7940_SQWFS1           =          1;                       // CONTROL register                 //
+  const uint8_t  MCP7940_SQWFS0           =          0;                       // CONTROL register                 //
+  const uint8_t  MCP7940_SIGN             =          7;                       // OSCTRIM register                 //
+  const uint8_t  MCP7940_ALMPOL           =          7;                       // ALM0WKDAY register               //
+  const uint8_t  MCP7940_ALM0IF           =          3;                       // ALM0WKDAY register               //
+  const uint8_t  MCP7940_ALM1IF           =          3;                       // ALM1WKDAY register               //
                                                                               // Other constants                  //
-  const uint32_t SECONDS_PER_DAY          =     86400;                        // 60 secs * 60 mins * 24 hours     //
+  const uint32_t SECONDS_PER_DAY          =      86400;                       // 60 secs * 60 mins * 24 hours     //
   const uint32_t SECONDS_FROM_1970_TO_2000 = 946684800;                       //                                  //
   /*****************************************************************************************************************
   ** Simple general-purpose date/time class (no TZ / DST / leap second handling). Copied from RTClib. For further **
@@ -218,10 +220,12 @@
         Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
         Wire.write((addr%64)+MCP7940_RAM_ADDRESS);                            // Send register address to write   //
         _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
-        Wire.requestFrom(MCP7940_ADDRESS, structSize);                        // Request the data                 //
-        if(Wire.available()==structSize) {                                    // If number of bytes match         //
-          for (i=0;i<structSize;i++) *bytePtr++ = Wire.read();                // loop for each byte to be read    //
-        } // of if-then bytes received match requested                        //                                  //
+        for (i=0;i<structSize;i++) {                                          // loop for each byte to be read    //
+          if (i%BUFFER_LENGTH==0) {                                           // Read I2C again on buffer boundary//
+            Wire.requestFrom(MCP7940_ADDRESS, structSize);                    // Request a block of data          //
+          } // of if-then we are at a buffer boundary                         //                                  //
+          *bytePtr++ = Wire.read();                                           //                                  //
+        } // of for-next each byte to be read                                 //                                  //
         return (i);                                                           // return bytes read                //
       } // of method readRAM()                                                //----------------------------------//
       template<typename T>                                                    // method to write any data type to //

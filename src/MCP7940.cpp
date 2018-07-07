@@ -1,6 +1,8 @@
 /*******************************************************************************************************************
 ** MCP7940 class method definitions. See the header file for program details and version information              **
 **                                                                                                                **
+** GNU General Public License v3.0                                                                                **
+** ===============================                                                                                **
 ** This program is free software: you can redistribute it and/or modify it under the terms of the GNU General     **
 ** Public License as published by the Free Software Foundation, either version 3 of the License, or (at your      **
 ** option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY     **
@@ -83,14 +85,15 @@ DateTime::DateTime (uint32_t t) {                                             //
 } // of method DateTime()                                                     //----------------------------------//
 DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour,  // Overloaded Definition            //
                     uint8_t min, uint8_t sec) {                               //                                  //
-  if (year >= 2000)                                                           //                                  //
+  if (year >= 2000) {                                                         //                                  //
     year -= 2000;                                                             //                                  //
+  } // of if-then year is greater than 2000 for offset                        //                                  //
   yOff = year;                                                                //                                  //
-  m = month;                                                                  //                                  //
-  d = day;                                                                    //                                  //
-  hh = hour;                                                                  //                                  //
-  mm = min;                                                                   //                                  //
-  ss = sec;                                                                   //                                  //
+  m    = month;                                                               //                                  //
+  d    = day;                                                                 //                                  //
+  hh   = hour;                                                                //                                  //
+  mm   = min;                                                                 //                                  //
+  ss   = sec;                                                                 //                                  //
 } // of method DateTime()                                                     //----------------------------------//
 DateTime::DateTime (const DateTime& copy):                                    // Overloaded Definition            //
   yOff(copy.yOff),                                                            //                                  //
@@ -102,9 +105,8 @@ DateTime::DateTime (const DateTime& copy):                                    //
 {} // of method DateTime()                                                    //                                  //
 
 /*******************************************************************************************************************
-** Constructor for using "the compiler's time": DateTime now (__DATE__, __TIME__); NOTE: using F() would          **
-** further reduce the RAM footprint, see below. The compiler date and time arrive in string format as follows:    **
-** date = "Dec 26 2009", time = "12:34:56". N.B. This only works for English language output.                     **
+** Constructor for DateTime getting a string date and a string time formatted as MMM DD YYYY and HH:NN:_SS        **
+** N.B. This only works for English language output.                                                              **
 *******************************************************************************************************************/
 DateTime::DateTime (const char* date, const char* time) {                     // User compiler time to see RTC    //
   yOff = conv2d(date + 9);                                                    // Compute the year offset          //
@@ -122,14 +124,33 @@ DateTime::DateTime (const char* date, const char* time) {                     //
   hh = conv2d(time);                                                          //                                  //
   mm = conv2d(time + 3);                                                      //                                  //
   ss = conv2d(time + 6);                                                      //                                  //
-} // of method DateTime()                                                     //----------------------------------//
+} // of method DateTime()                                                     //                                  //
+/*******************************************************************************************************************
+** Constructor for using "the compiler's time": DateTime now (__DATE__, __TIME__); The compiler date and time     **
+** arrive in string format as follows: date = "Dec 26 2009", time = "12:34:56". N.B. This only works for English  **
+** language output.                                                                                               **
+*******************************************************************************************************************/
 DateTime::DateTime (const __FlashStringHelper* date,                          // Overloaded function call         //
                     const __FlashStringHelper* time) {                        //                                  //
-  char date_buff[11];                                                         //                                  //
-  memcpy_P(date_buff, date, 11);                                              //                                  //
-  char time_buff[8];                                                          //                                  //
-  memcpy_P(time_buff, time, 8);                                               //                                  //
-  DateTime(date, time);                                                       // Call overloaded function for vals//
+  char buff[11];                                                              //                                  //
+  memcpy_P(buff, date, 11);                                                   //                                  //
+  yOff = conv2d(buff + 9);                                                    //                                  //
+  // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec                          //                                  //
+  switch (buff[0]) {                                                          //                                  //
+    case 'J': m = (buff[1] == 'a') ? 1 : ((buff[2] == 'n') ? 6 : 7); break;   //                                  //
+    case 'F': m = 2; break;                                                   //                                  //
+    case 'A': m = buff[2] == 'r' ? 4 : 8; break;                              //                                  //
+    case 'M': m = buff[2] == 'r' ? 3 : 5; break;                              //                                  //
+    case 'S': m = 9; break;                                                   //                                  //
+    case 'O': m = 10; break;                                                  //                                  //
+    case 'N': m = 11; break;                                                  //                                  //
+    case 'D': m = 12; break;                                                  //                                  //
+  } // of switch for the month                                                //                                  //
+  d = conv2d(buff + 4);                                                       //                                  //
+  memcpy_P(buff, time, 8);                                                    //                                  //
+  hh = conv2d(buff);                                                          //                                  //
+  mm = conv2d(buff + 3);                                                      //                                  //
+  ss = conv2d(buff + 6);                                                      //                                  //
 } // of method DateTime()                                                     //                                  //
 
 /*******************************************************************************************************************
@@ -205,16 +226,17 @@ MCP7940_Class::~MCP7940_Class() {} // of class destructor                     //
 *******************************************************************************************************************/
 bool MCP7940_Class::begin(const uint16_t i2cSpeed) {                          // Start I2C communications         //
   Wire.begin();                                                               // Start I2C as master device       //
-  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
   Wire.setClock(i2cSpeed);                                                    // Set the I2C bus speed            //
+  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
   uint8_t errorCode = Wire.endTransmission();                                 // See if there's a device present  //
   if (errorCode == 0) {                                                       // If we have a MCP7940M            //
     clearRegisterBit(MCP7940_RTCHOUR, MCP7940_12_24);                         // Use 24 hour clock                //
     setRegisterBit(MCP7940_CONTROL, MCP7940_ALMPOL);                          // assert alarm low, default high   //
     _CrystalStatus = readRegisterBit(MCP7940_RTCSEC, MCP7940_ST);             // Status bit from register         //
     _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN);    // Oscillator state from register   //
-  } // of if-then device detected                                             //                                  //
-  else return false;                                                          // return error if no device found  //
+  } else {                                                                    //                                  //
+    return false;                                                             // return error if no device found  //
+  } // of if-then-else device detected                                        //                                  //
   return true;                                                                // return success                   //
 } // of method begin()                                                        //                                  //
 
