@@ -26,6 +26,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Corrected output formatting                                    **
 ** 1.0.0  2017-08-08 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
 *******************************************************************************************************************/
@@ -35,6 +36,7 @@
 *******************************************************************************************************************/
 const uint32_t SERIAL_SPEED        = 115200;                                  // Set the baud rate for Serial I/O //
 const uint8_t  LED_PIN             =     13;                                  // Arduino built-in LED pin number  //
+const uint8_t  MCP7940_MEMORY_SIZE =     64;                                  // Number of bytes in memory        //
 const uint8_t  SPRINTF_BUFFER_SIZE =     32;                                  // Buffer size for sprintf()        //
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
@@ -72,6 +74,7 @@ void setup() {                                                                //
     } // of if-then oscillator didn't start                                   //                                  //
   } // of while the oscillator is off                                         //                                  //
   MCP7940.adjust();                                                           // Set to library compile Date/Time //
+  
   Serial.println(F("Enter any text in the serial monitor and hit send"));     //                                  //
   pinMode(LED_PIN,OUTPUT);                                                    // Declare built-in LED as output   //
 } // of method setup()                                                        //                                  //
@@ -94,14 +97,18 @@ void loop() {                                                                 //
     uint8_t dataByte = Serial.read();                                         // read the byte from serial        //
     if (dataByte==0x0A) {                                                     // If the user hit return/enter     //
       MCP7940.writeRAM(memoryAddress++,0);                                    // Terminate the string             //
-      Serial.print("String \"");                                              //                                  //
-      char dataBuffer[64];                                                    // Maximum data size possible       //
-      uint8_t x = MCP7940.readRAM(0,dataBuffer);                              // Read all 64 bytes                //
+      char dataBuffer[MCP7940_MEMORY_SIZE];                                   // Memory size value                //
+      uint8_t x = MCP7940.readRAM(0,dataBuffer);                              // Read all the memory              //
+      Serial.print( "Retrieved ");                                            //                                  //
+      Serial.print(x);                                                        //                                  //
+      Serial.print(" bytes from memory,\nstring is \"");                      //                                  //
       Serial.print(dataBuffer);                                               // Print stops at character 0x00    //
-      Serial.println("\" was read back from memory.");                        //                                  //
+      Serial.println("\"");                                                   //                                  //
       memoryAddress = 0;                                                      // Start again at beginning         //
     } else {                                                                  //                                  //
-      if (dataByte!=13) MCP7940.writeRAM(memoryAddress++,dataByte);           // Write to memory and increment    //
+      if (dataByte!=13) {                                                     // Write to memory and increment    //
+        MCP7940.writeRAM(memoryAddress++,dataByte);                           // counter if the value is not LF   //
+      } // of if-then we have a valid character to write                      //                                  //
     } // of if-then-else we have a LF                                         //                                  //
   } // of if-then we have something to read from the serial port              //                                  //
 } // of method loop()                                                         //----------------------------------//
