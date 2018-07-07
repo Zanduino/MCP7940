@@ -29,7 +29,7 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {                 //
   if (m > 2 && y % 4 == 0) {                                                  // Deal with leap years             //
     ++days;                                                                   //                                  //
   } // of if-then a leap year                                                 //                                  //
-  if ( ((y % 100) == 0) && ((y % 400) !=0 )) {                                // if year is divisble by 100 but   //
+  if ( ((y % 100) == 0) && ((y % 400) !=0 )) {                                // if year is divisible by 100 but  //
     --days;                                                                   // not by 400 then it is not a l.y. //
   } // of if-then special leap year                                           //                                  //
   return days + 365 * y + (y + 3) / 4 - 1;                                    // Return computed value            //
@@ -136,25 +136,7 @@ DateTime::DateTime (const __FlashStringHelper* date,                          //
   memcpy_P(date_buff, date, 11);                                              //                                  //
   char time_buff[8];                                                          //                                  //
   memcpy_P(time_buff, time, 8);                                               //                                  //
-  DateTime(date, time);
-
-/*
-  yOff = conv2d(buff + 9);                                                    //                                  //
-  switch (buff[0]) {                                                          //                                  //
-    case 'J': m = (buff[1] == 'a') ? 1 : ((buff[2] == 'n') ? 6 : 7); break;   //                                  //
-    case 'F': m = 2; break;                                                   //                                  //
-    case 'A': m = buff[2] == 'r' ? 4 : 8; break;                              //                                  //
-    case 'M': m = buff[2] == 'r' ? 3 : 5; break;                              //                                  //
-    case 'S': m = 9; break;                                                   //                                  //
-    case 'O': m = 10; break;                                                  //                                  //
-    case 'N': m = 11; break;                                                  //                                  //
-    case 'D': m = 12; break;                                                  //                                  //
-  } // of switch for the month                                                //                                  //
-  d = conv2d(buff + 4);                                                       //                                  //
-  hh = conv2d(buff);                                                          //                                  //
-  mm = conv2d(buff + 3);                                                      //                                  //
-  ss = conv2d(buff + 6);                                                      //                                  //
-*/
+  DateTime(date_buff, time_buff);                                             // Call actual DateTime constructor //
 } // of method DateTime()                                                     //                                  //
 
 /*******************************************************************************************************************
@@ -164,9 +146,9 @@ uint8_t DateTime::dayOfTheWeek() const {                                      //
   uint16_t day = date2days(yOff, m, d);                                       // compute the number of days       //
   uint8_t dow = ((day + 6) % 7);                                              // Jan 1, 2000 is a Saturday, i.e. 6//
   if (dow == 0) {                                                             // Correction for Sundays           //
-    dow = 7;
-  }
-  return dow;
+    dow = 7;                                                                  //                                  //
+  } // of if-then day should be Sunday                                        //                                  //
+  return dow;                                                                 //                                  //
 } // of method dayOfTheWeek()                                                 //                                  //
 
 /*******************************************************************************************************************
@@ -263,8 +245,8 @@ uint8_t MCP7940_Class::readByte(const uint8_t addr) {                         //
 *******************************************************************************************************************/
 void MCP7940_Class::writeByte(const uint8_t addr, const uint8_t data) {       //                                  //
   Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the I2C device           //
-  Wire.write(addr);                                                           // Send the register address to write //
-  Wire.write(data);                                                           // Send the data to write to this register //
+  Wire.write(addr);                                                           // Send register address to write   //
+  Wire.write(data);                                                           // Send data to write to register   //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
 } // of method writeByte()                                                    //                                  //
 
@@ -686,7 +668,7 @@ bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool state) {              //
     bitWrite(registerValue, MCP7940_SQWEN, state);                            //                                  //
     bitWrite(registerValue, MCP7940_SQWFS0, bitRead(frequency, 0));           // 2 bits are used for frequency    //
     bitWrite(registerValue, MCP7940_SQWFS1, bitRead(frequency, 1));           //                                  //
-    bitClear(registerValue,MCP7940_CRSTRIM);
+    bitClear(registerValue,MCP7940_CRSTRIM);                                  // Clear the CRSTRIM bit            //
     writeByte(MCP7940_CONTROL, registerValue);                                // Write register settings          //
   } else if (frequency == 4) {                                                // If the frequency is 64Hz         //
     setRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // CRSTRIM bit must be set for 64Hz //
