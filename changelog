@@ -1,8 +1,6 @@
 
-in begin(): it makes more sense ot set the I2C speed first, then start a transmission.
-
+in begin(): it makes more sense to set the I2C speed first, then start a transmission.
 in MCP7940.h: cleaned up formatting of the readRAM() and writeRAM() templates, and added some extra explanation here.
-
 Updated, tested/corrected setAlarm().
 Updated, tested setAlarmPolarity().
 Updated, tested weekdayRead() & weekdayWrite(const uint8_t dow).
