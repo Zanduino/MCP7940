@@ -21,7 +21,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
-** 1.1.1  2018-07-06 https://github.com/wvmarle    Pull #20 - Various changes and enhancements                    **
+** 1.1.1  2018-07-06 https://github.com/wvmarle    Pull #20 - Numerous changes and enhancements                   **
 ** 1.1.0  2018-07-05 https://github.com/wvmarle    Pull #14 - bug fixes to alarm state and cleaned up comments    **
 ** 1.0.8  2018-07-02 https://github.com/SV-Zanshin Added guard code against multiple I2C constant definitions     **
 ** 1.0.8  2018-06-30 https://github.com/SV-Zanshin Enh #15 - Added I2C Speed selection                            **

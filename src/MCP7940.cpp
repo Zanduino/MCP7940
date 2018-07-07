@@ -210,7 +210,7 @@ bool MCP7940_Class::begin(const uint16_t i2cSpeed) {                          //
   uint8_t errorCode = Wire.endTransmission();                                 // See if there's a device present  //
   if (errorCode == 0) {                                                       // If we have a MCP7940M            //
     clearRegisterBit(MCP7940_RTCHOUR, MCP7940_12_24);                         // Use 24 hour clock                //
-    setRegisterBit(MCP7940_CONTROL, MCP7940_ALMPOL);                          // assert alarm low, default high //
+    setRegisterBit(MCP7940_CONTROL, MCP7940_ALMPOL);                          // assert alarm low, default high   //
     _CrystalStatus = readRegisterBit(MCP7940_RTCSEC, MCP7940_ST);             // Status bit from register         //
     _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN);    // Oscillator state from register   //
   } // of if-then device detected                                             //                                  //
@@ -522,7 +522,7 @@ uint8_t MCP7940_Class::getMFP() {                                             //
 bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       // Alarm number 0 or 1              //
                              const uint8_t alarmType,                         // Alarm type 0-7, see above        //
                              const DateTime dt,                               // Date/Time to set alarm from      //
-                             const bool state) {                              // Alarm on (true) or off (false)   //                             
+                             const bool state) {                              // Alarm on (true) or off (false)   //
   bool success = false;                                                       // Assume no success                //
   if (alarmNumber < 2 &&                                                      //                                  //
       alarmType < 8 &&                                                        //                                  //
@@ -564,8 +564,8 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
 *******************************************************************************************************************/
 void MCP7940_Class::setAlarmPolarity(const bool polarity) {                   // Set the polarity of the alarm    //
   writeRegisterBit(MCP7940_ALM0WKDAY, MCP7940_ALMPOL, polarity);              // Write polarity to the ALMPOL bit.//
-  return;
-}
+  return;                                                                     //                                  //
+} // of method setAlarmPolarity()                                             //                                  //
 
 /*******************************************************************************************************************
 ** Method getAlarm will return the date/time settings for the given alarm and update the alarmType parameter with **
