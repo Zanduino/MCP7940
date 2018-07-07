@@ -23,6 +23,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.1.1  2018-07-07 https://github.com/wvmarle    Fixed bugs introduced by 14,20 and 21                          **
+** 1.1.1  2018-07-07 https://github.com/wvmarle    Pull #21 - Additional changes                                  **
 ** 1.1.1  2018-07-06 https://github.com/wvmarle    Pull #20 - Numerous changes and enhancements                   **
 ** 1.1.0  2018-07-05 https://github.com/wvmarle    Pull #14 - bug fixes to alarm state and cleaned up comments    **
 ** 1.0.8  2018-07-02 https://github.com/SV-Zanshin Added guard code against multiple I2C constant definitions     **
@@ -58,7 +60,6 @@
   ** Declare classes used in within the class                                                                     **
   *****************************************************************************************************************/
   class TimeSpan;                                                             //                                  //
-  
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
@@ -148,7 +149,6 @@
     protected:                                                                //----------------------------------//
       uint8_t yOff, m, d, hh, mm, ss;                                         // private variables                //
   }; // of class DateTime definition                                          //                                  //
-  
   /*****************************************************************************************************************
   ** Timespan class which can represent changes in time with seconds accuracy. Copied from RTClib. For further    **
   ** information see ** https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass                                  **
@@ -168,7 +168,6 @@
     protected:                                                                //----------------------------------//
       int32_t _seconds;                                                       // internal seconds variable        //
   }; // of class TimeSpan definition                                          //                                  //
-  
   /*****************************************************************************************************************
   ** Main MCP7940 class for the Real-Time clock                                                                   **
   *****************************************************************************************************************/
@@ -211,7 +210,6 @@
       DateTime getPowerUp();                                                  // Return date when power restored  //
       bool     SRAMread(uint8_t address, uint8_t *data, uint8_t n);           // Read data from SRAM              //
       bool     SRAMwrite(uint8_t address, uint8_t *data, uint8_t n);          // Write data to SRAM               //
-
       /*************************************************************************************************************
       ** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
       ** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
@@ -239,7 +237,6 @@
         } // of for-next each byte to be read                                 //                                  //
         return (i);                                                           // return bytes read                //
       } // of method readRAM()                                                //----------------------------------//
-      
       template<typename T>                                                    // method to write any data type to //
       bool writeRAM(const uint8_t addr, const T &value) {                     // the MCP7940 SRAM                 //
         const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
@@ -251,7 +248,6 @@
         _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
         return (!_TransmissionStatus);                                        // return error status              //
       } // of method writeRAM()                                               //----------------------------------//
-      
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
