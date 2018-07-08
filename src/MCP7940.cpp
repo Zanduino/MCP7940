@@ -340,7 +340,7 @@ DateTime MCP7940_Class::now() {                                               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)7);                              // Request 7 bytes of data          //
   _ss = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in seconds        //
   _mm = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in minutes        //
-  _hh = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in hours          //
+  _hh = bcd2int(Wire.read() & 0x3F);                                          // Keep only 6 LSB bits             //
   Wire.read();                                                                // Ignore Day-Of-Week register      //
   _d = bcd2int(Wire.read()  & 0x3F);                                          // Clear 2 high bits for day-o-month//
   _m = bcd2int(Wire.read()  & 0x1F);                                          // Clear 3 high bits for Month      //
@@ -359,7 +359,7 @@ DateTime MCP7940_Class::getPowerDown() {                                      //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
   min = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in minutes        //
-  hr  = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in hours          //
+  hr  = bcd2int(Wire.read() & 0x3F);                                          // Clear all but 6 LSBs             //
   day = bcd2int(Wire.read() & 0x3F);                                          // Clear 2 high bits for day-o-month//
   mon = bcd2int(Wire.read() & 0x1F);                                          // Clear 3 high bits for Month      //
   return DateTime (0, mon, day, hr, min, 0);                                  // Return class value               //
@@ -376,7 +376,7 @@ DateTime MCP7940_Class::getPowerUp() {                                        //
   _TransmissionStatus = Wire.endTransmission();                               // Close transmission               //
   Wire.requestFrom(MCP7940_ADDRESS, (uint8_t)4);                              // Request 4 bytes of data          //
   min = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in minutes        //
-  hr  = bcd2int(Wire.read() & 0x7F);                                          // Clear high bit in hours          //
+  hr  = bcd2int(Wire.read() & 0x3F);                                          // Clear 2  high bits               //
   day = bcd2int(Wire.read() & 0x3F);                                          // Clear 2 high bits for day-o-month//
   mon = bcd2int(Wire.read() & 0x1F);                                          // Clear 3 high bits for Month      //
   return DateTime (0, mon, day, hr, min, 0);                                  // Return class value               //
@@ -536,10 +536,10 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
                              const bool state) {                              // Alarm on (true) or off (false)   //
   bool success = false;                                                       // Assume no success                //
   if (alarmNumber < 2 &&                                                      //                                  //
-      alarmType < 8 &&                                                        //                                  //
-      alarmType != 5 &&                                                       //                                  //
-      alarmType != 6 &&                                                       //                                  //
-      deviceStart()) {                                                        // if parameters and oscillator OK  //
+      alarmType   < 8 &&                                                      //                                  //
+      alarmType  != 5 &&                                                      //                                  //
+      alarmType  != 6 &&                                                      //                                  //
+      deviceStart()      ) {                                                  // if parameters and oscillator OK  //
     clearRegisterBit(MCP7940_CONTROL, alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN); // Turn off the alarm       //
     uint8_t offset = 7 * alarmNumber;                                         // Offset to be applied             //
     uint8_t wkdayRegister = readByte(MCP7940_ALM0WKDAY + offset) & (1 << MCP7940_ALM0IF); // Keep alm int flag bit//
@@ -591,7 +591,7 @@ DateTime MCP7940_Class::getAlarm(const uint8_t alarmNumber,                   //
   alarmType = (readByte(MCP7940_ALM0WKDAY + offset) >> 4) & B111;             // get 3 bits for alarmType         //
   uint8_t ss = bcd2int(readByte(MCP7940_ALM0SEC + offset) & 0x7F);            // Clear high bit in seconds        //
   uint8_t mm = bcd2int(readByte(MCP7940_ALM0MIN + offset) & 0x7F);            // Clear high bit in minutes        //
-  uint8_t hh = bcd2int(readByte(MCP7940_ALM0HOUR + offset) & 0x7F);           // Clear high bit in hours          //
+  uint8_t hh = bcd2int(readByte(MCP7940_ALM0HOUR + offset) & 0x3F);           // Clear high bits in hours         //
   uint8_t d  = bcd2int(readByte(MCP7940_ALM0DATE + offset) & 0x3F);           // Clear 2 high bits for day-o-month//
   uint8_t m  = bcd2int(readByte(MCP7940_ALM0MTH + offset) & 0x1F);            // Clear 3 high bits for Month      //
   uint16_t y = 0;                                                             // Year is not part of the alarms   //

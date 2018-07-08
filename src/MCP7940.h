@@ -23,7 +23,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
-** 1.1.1  2018-07-07 https://github.com/wvmarle    Fixed bugs introduced by 14,20 and 21                          **
+** 1.1.2  2018-07-08 https://github.com/logicaprogrammabile Fixed issue #26 regarding hour bitmasks               **
+** 1.1.1  2018-07-07 https://github.com/SV-Zanshin Fixed bugs introduced by 14,20 and 21                          **
 ** 1.1.1  2018-07-07 https://github.com/wvmarle    Pull #21 - Additional changes                                  **
 ** 1.1.1  2018-07-06 https://github.com/wvmarle    Pull #20 - Numerous changes and enhancements                   **
 ** 1.1.0  2018-07-05 https://github.com/wvmarle    Pull #14 - bug fixes to alarm state and cleaned up comments    **
