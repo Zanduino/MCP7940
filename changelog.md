@@ -15,10 +15,9 @@ File contains a list of changes made to artefacts in the MCP7940 Arduino library
   </tr>
     </tr>
     <td>2018-07-10</td>
-    <td>@SV-Zanshin</td>
+    <td>@vwmerle</td>
     <td>1.0.0</td>
     <td>
-
 in begin(): it makes more sense to set the I2C speed first, then start a transmission.
 in MCP7940.h: cleaned up formatting of the readRAM() and writeRAM() templates, and added some extra explanation here.
 Updated, tested/corrected setAlarm().
@@ -33,28 +32,6 @@ Updated getMFP() to allow for the other options. Returns value 0-3:
 Updated, tested setMFP().
 Updated, tested setSQWSpeed(). Added support for 64 Hz square wave output.
 Updated, tested getPowerFail() & clearPowerFail().
-
-
-
-
-
-
-
-
-
-
-
-
-
 </td>
   </tr>
 </table>
-
-
-
-
-
-
-## [1.0.0] - 2017-06-20  
-### Added  
-
