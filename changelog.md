@@ -15,7 +15,7 @@ File contains a list of changes made to artefacts in the MCP7940 Arduino library
   </tr>
     </tr>
     <td>2018-07-10</td>
-    <td>@vwmerle</td>
+    <td> @vwmerle </td>
     <td>1.0.0</td>
     <td>
 in begin(): it makes more sense to set the I2C speed first, then start a transmission.
