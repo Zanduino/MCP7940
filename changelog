@@ -1,5 +1,17 @@
 # Changelog for MCP7940 library and example programs  
-File contains a list of changes made to the artefacts in the MCP7940 Arduino library and example programs, most recent changes are listed first.
+File contains a list of changes made to artefacts in the MCP7940 Arduino library and example programs, most recent changes are listed first.
+
+<table>
+  <th>Date</th>
+  <th>Who</th>
+  <th>Changes</th>
+  <tr>
+  </tr>
+    <td>2018-07-10</td>
+    <td>@SV-Zanshin</td>
+    <td>Reformatted this file</td>
+  </tr>
+</table>
 
 ## [1.0.0] - 2017-06-20  
 ### Added  
