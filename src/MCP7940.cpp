@@ -468,7 +468,7 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
     trim = trim * -1;                                                         //                                  //
   } // of if-then trim is set                                                 //                                  //
   trim         += ppm * 32768 * 60 / 2000000;                                 // compute the new trim value       //
-  return calibrate((const)trim);    
+  return calibrate((const int8_t)trim);    
 /*
   int8_t osctrim      = trim;                                                 // Declare register variable        //
   if (trim < 0) {
