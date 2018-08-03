@@ -29,7 +29,7 @@ getMFP	KEYWORD2
 setAlarm	KEYWORD2
 clearAlarm	KEYWORD2
 setAlarmState	KEYWORD2
-setAlarmPolarity  KEYWORD2
+setAlarmPolarity	KEYWORD2
 getAlarmState	KEYWORD2
 getAlarm	KEYWORD2
 getSQWSpeed	KEYWORD2
