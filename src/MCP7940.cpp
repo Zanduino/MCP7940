@@ -468,11 +468,11 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
 ** can be negative but is not in excess-128 format any negative numbers need to be manipulated before returning   **
 *******************************************************************************************************************/
 int8_t MCP7940_Class::getCalibrationTrim() {                                  // Get the trim register value      //
-  int8_t trim = readByte(MCP7940_OSCTRIM);                                    // read the register                //
+  uint8_t trim = readByte(MCP7940_OSCTRIM);                                   // read the register                //
   if (trim >> 7) {                                                            // If trim is negative, the convert //
     trim = (0x7F & trim) * -1;                                                // convert to excess128 value       //
   } // of if-then less than zero trim                                         //                                  //
-  return (trim);                                                              // return the trim value            //
+  return ((int8_t)trim);                                                              // return the trim value            //
 } // of method getCalibrationTrim()                                           //                                  //
 
 /*******************************************************************************************************************

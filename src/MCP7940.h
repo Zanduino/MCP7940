@@ -216,7 +216,7 @@
       ** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
       ** The template functions allow any type of data to be read and written, be it a byte or a character array  **
       ** or a structure.                                                                                          **
-      **
+      **                                                                                                          **
       ** The MCP7940 supports 64 bytes of general purpose SRAM memory, which can be used to store data. For more  **
       ** details, see datasheet p.36.                                                                             **
       ** The data is stored in a block of 64 bytes, reading beyond the end of the block causes the address        **

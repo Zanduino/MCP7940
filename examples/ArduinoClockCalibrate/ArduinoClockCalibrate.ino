@@ -1,7 +1,8 @@
 /*******************************************************************************************************************
-** Example program for using the MCP7940 library and the Square Wave output on the MFP pin. The library as well   **
-** as the current version of this program is on GitHub at the URL https://github.com/SV-Zanshin/MCP7940 and a     **
-** detailed description of this program can be found at https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino **
+** Example program for using the MCP7940 library and the Square Wave output on the MFP pin in order to set the    **
+** calibration bits on the MCP7940. The library as well as the current version of this program is on GitHub at    **
+** the URL https://github.com/SV-Zanshin/MCP7940 and a detailed description of this program can be found at       **
+** https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino                                                      **
 **                                                                                                                **
 ** The MCP7940 library uses the standard SPI Wire library for communications with the RTC chip and has also used  **
 ** the class definitions of the standard RTClib library from Adafruit/Jeelabs.                                    **
@@ -11,15 +12,12 @@
 ** that chip as well.                                                                                             **
 **                                                                                                                **
 ** The MCP7940 allows the Multifunction Pin (MFP) to output a square wave based on the 32KHz crystal oscillator.  **
-** The square wave signal can have the following frequencies:                                                     **
+** The square wave signal can be set to different frequencies, but the maximum speed 32KHz does not get adjusted  **
+** by the TRIM function, so the next highest setting of 8.192kHz is used for the calibration process. The TRIM    **
+** adjustment is set only once a minute, so a calibration cycle must be at least 60 seconds long. Any TRIM        **
+** value is reset prior to the calibration process.                                                               **
 **                                                                                                                **
-**  1     Hz                                                                                                      **
-**  4.096kHz                                                                                                      **
-**  8.192kHz                                                                                                      **
-** 32.768kHz                                                                                                      **
-** 64     Hz                                                                                                      **
 **                                                                                                                **
-** If the TRIM value is set this affects the square wave output frequency as well.                                **
 **                                                                                                                **
 ** This program is free software: you can redistribute it and/or modify it under the terms of the GNU General     **
 ** Public License as published by the Free Software Foundation, either version 3 of the License, or (at your      **
@@ -30,8 +28,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
-** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Added support for 64Hz, changed to use interrupts              **
-** 1.0.0  2017-07-29 https://github.com/SV-Zanshin Initial coding                                                 **
+** 1.0.0  2018-07-28 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
 *******************************************************************************************************************/
 #include <MCP7940.h>                                                          // Include the MCP7940 RTC library  //
@@ -43,18 +40,19 @@ const uint8_t  MFP_PIN             =      2;                                  //
 const uint8_t  LED_PIN             =     13;                                  // Arduino built-in LED pin number  //
 const uint8_t  SPRINTF_BUFFER_SIZE =     32;                                  // Buffer size for sprintf()        //
 enum SquareWaveTypes { Hz1, kHz4, kHz8, kHz32, Hz64 };                        // Enumerate square wave frequencies//
+const int32_t MEASUREMENT_SECONDS  =    90;                                   // Number of seconds to measure     //
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
 MCP7940_Class     MCP7940;                                                    // Create instance of the MCP7940M  //
 char              inputBuffer[SPRINTF_BUFFER_SIZE];                           // Buffer for sprintf() / sscanf()  //
-volatile uint64_t switches  = 0;                                              // Number of High-Low or Low-High   //
+volatile uint64_t ticks = 0;                                                  // Number of High-Low or Low-High   //
 
 /*******************************************************************************************************************
 ** Declare interrupt handler for pin changes to the MFP_PIN                                                       **
 *******************************************************************************************************************/
 ISR (PCINT_vect) {                                                            // Called when pin goes from a low  //
-  switches++;                                                                 // Increment counter                //
+  ticks++;                                                                    // Increment counter                //
 } // of method PCINT_vect                                                     //                                  //
 
 /*******************************************************************************************************************
@@ -66,7 +64,7 @@ void setup() {                                                                //
   #ifdef  __AVR_ATmega32U4__                                                  // If this is a 32U4 processor, then//
     delay(3000);                                                              // wait 3 seconds for the serial    //
   #endif                                                                      // interface to initialize          //
-  Serial.print(F("\nStarting SetAlarms program\n"));                          // Show program information         //
+  Serial.print(F("\nStarting Arduino Clock Calibrate program\n"));            // Show program information         //
   Serial.print(F("- Compiled with c++ version "));                            //                                  //
   Serial.print(F(__VERSION__));                                               // Show compiler information        //
   Serial.print(F("\n- On "));                                                 //                                  //
@@ -78,46 +76,96 @@ void setup() {                                                                //
     Serial.println(F("Unable to find MCP7940. Checking again in 3s."));       // Show error text                  //
     delay(3000);                                                              // wait a second                    //
   } // of loop until device is located                                        //                                  //
-  Serial.println(F("MCP7940 initialized."));                                  //                                  //
+  Serial.println(F("- MCP7940 initialized."));                                //                                  //
   while (!MCP7940.deviceStatus()) {                                           // Turn oscillator on if necessary  //
-    Serial.println(F("Oscillator is off, turning it on."));                   //                                  //
+    Serial.println(F("-  Oscillator is off, turning it on."));                //                                  //
     bool deviceStatus = MCP7940.deviceStart();                                // Start oscillator and return state//
     if (!deviceStatus) {                                                      // If it didn't start               //
-      Serial.println(F("Oscillator did not start, trying again."));           // Show error and                   //
+      Serial.println(F("-  Oscillator did not start, trying again."));        // Show error and                   //
       delay(1000);                                                            // wait for a second                //
     } // of if-then oscillator didn't start                                   //                                  //
   } // of while the oscillator is off                                         //                                  //
-  Serial.println("Setting MCP7940M to date/time of library compile");         //                                  //
+  Serial.println("- Setting MCP7940 to date/time of library compile");        //                                  //
   MCP7940.adjust();                                                           // Use compile date/time for clock  //
-  Serial.print("Date/Time set to ");                                          //                                  //
+  Serial.print("- Date/Time set to ");                                        //                                  //
   DateTime now = MCP7940.now();                                               // get the current time             //
   sprintf(inputBuffer,"%04d-%02d-%02d %02d:%02d:%02d", now.year(),            // Use sprintf() to pretty print    //
           now.month(), now.day(), now.hour(), now.minute(), now.second());    // date/time with leading zeros     //
   Serial.println(inputBuffer);                                                // Display the current date/time    //
+  Serial.print(F("- Resetting TRIM value from "));                            //                                  //
+  Serial.print(MCP7940.getCalibrationTrim());                                 //                                  //
+  Serial.println(F(" to 0."));                                                //                                  //
+  MCP7940.calibrate(0);                                                       // Reset the TRIM value to 0        //
   pinMode(MFP_PIN,INPUT);                                                     // MCP7940 Alarm MFP digital pin    //
   attachInterrupt(digitalPinToInterrupt(MFP_PIN),PCINT_vect,FALLING);         // Call interrupt when pin changes  //
   pinMode(LED_PIN,OUTPUT);                                                    // Declare built-in LED as output   //
-  Serial.println("Setting SQW to 64Hz and linking to LED");                   //                                  //
+  Serial.print("- SQW Output (Arduino pin ");                                 //                                  //
+  Serial.print(MFP_PIN);                                                      //                                  //
+  Serial.println(") to 8KHz");                                                //                                  //
+  MCP7940.setSQWSpeed(kHz8);                                                  // Set the square wave pin          //
   MCP7940.setSQWState(true);                                                  // Turn the SQW on                  //
-  MCP7940.setSQWSpeed(kHz32);                                                  // Set the square wave pin          //
+  digitalWrite(LED_PIN,!digitalRead(LED_PIN));                                // Toggle LED pin                   //
+  Serial.print(F("- "));                                                      //                                  //
+  Serial.print(MEASUREMENT_SECONDS);                                          //                                  //
+  Serial.println(F(" seconds for measurements...\n\n"));                      //                                  //
+  noInterrupts();                                                             // Freeze interrupts to copy data   //
+  ticks = 0;                                                                  // reset number of state changes    //
+  interrupts();                                                               // re-enable interrupts             //
 } // of method setup()                                                        //                                  //
 /*******************************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
 void loop() {                                                                 //                                  //
+  static uint8_t  iterations = 0;
   static uint32_t startMillis = millis();                                     // Store the starting time          //
-  digitalWrite(LED_PIN,digitalRead(MFP_PIN));                                 // Make LED mirror MFP pin          //
-  if (millis()-startMillis>10000) {                                           // Show results every 10 seconds    //
-    Serial.print("Square Wave changed ");                                     //                                  //
-    Serial.print((uint32_t)(switches));                                       //                                  //
-    Serial.print(" times in 10s = ~");                                        //                                  //
-    Serial.print((uint32_t)(switches/10));                                    // Divide by 10 seconds             //
-    Serial.println("Hz");                                                     //                                  //
+  static uint64_t localTicks = 0;                                             // Local copy of the number of ticks//
+  if ((millis()-startMillis)>(MEASUREMENT_SECONDS*1000)) {                    // Show results every 10 seconds    //
+    noInterrupts();                                                           // Freeze interrupts to copy data   //
+    localTicks = ticks;                                                       // make a local copy                //
+    interrupts();                                                             // re-enable interrupts             //
+    iterations++;
+    int32_t SQWSpeed = MCP7940.getSQWSpeed();                                 // read the current SQW Speed code  //
+    switch (SQWSpeed) {                                                       // set variable to real SQW speed   //
+      case 0: SQWSpeed =     1;
+              break;
+      case 1: SQWSpeed =  4096;
+              break;
+      case 2: SQWSpeed =  8192;
+              break;
+      case 3: SQWSpeed = 32768;
+              break;
+      case 4: SQWSpeed =    64;
+    } // of switch SQWSpeed value                                             //                                  //
+    float actualHz = (float)localTicks/(float)MEASUREMENT_SECONDS;
+
+  DateTime now = MCP7940.now();                                               // get the current time             //
+  sprintf(inputBuffer,"%02d:%02d:%02d ", now.hour(), now.minute(), now.second());    // date/time with leading zeros     //
+  Serial.print(inputBuffer);                                                // Display the current date/time    //
+
+    Serial.print(actualHz,4);
+    Serial.print("Hz, difference of ");
+    int16_t diffTicks = ((uint32_t)SQWSpeed*MEASUREMENT_SECONDS)-localTicks;
+//    int16_t diffTicks = localTicks-((uint32_t)SQWSpeed*MEASUREMENT_SECONDS);
+    Serial.print(diffTicks);
+    Serial.println(" ticks.");
+    if (iterations%1==0) {
+      Serial.print("Adjusting trim from ");                         //                                  //
+      int8_t calibrationValue = MCP7940.getCalibrationTrim();                   // Retrieve the trimmed value       //
+      Serial.print(calibrationValue);
+      Serial.print(" by ");
+      actualHz = ((float)SQWSpeed-(float)actualHz);
+      if(diffTicks<0) diffTicks=-1; else diffTicks=1;
+      diffTicks *= actualHz * (32768.0/(float)SQWSpeed) * 60.0 / 2.0;
+      diffTicks = diffTicks / 6;
+      Serial.print(diffTicks);
+      Serial.print(" to ");
+      calibrationValue += diffTicks;                                            // Apply the offset                 //
+      MCP7940.calibrate(calibrationValue);                                      // And write it back to the MCP7940 //
+      Serial.println(calibrationValue);
+    } // of if every 5th loop      
+    noInterrupts();                                                           // Freeze interrupts to copy data   //
     startMillis = millis();                                                   // Set time to current time         //
-    switches=0;                                                               // reset number of state changes    //
+    ticks       = 0;                                                          // reset number of state changes    //
+    interrupts();                                                             // re-enable interrupts             //
   } // of if-then 10 seconds have elapsed                                     //                                  //
-  if (MCP7940.getSQWState() && millis()>60000) {                              // If 60 seconds have passed and    //
-    Serial.println("Turning off SQW pin after 1 minute.");                    // SQW is still enabled then turn   //
-    MCP7940.setSQWState(false);                                               // it off. LED will stop blinking   //
-  } // of if-then >10s and pin active                                         //                                  //
 } // of method loop()                                                         //----------------------------------//
