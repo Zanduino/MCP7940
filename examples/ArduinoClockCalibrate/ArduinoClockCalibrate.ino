@@ -40,13 +40,14 @@ const uint8_t  MFP_PIN             =      2;                                  //
 const uint8_t  LED_PIN             =     13;                                  // Arduino built-in LED pin number  //
 const uint8_t  SPRINTF_BUFFER_SIZE =     32;                                  // Buffer size for sprintf()        //
 enum SquareWaveTypes { Hz1, kHz4, kHz8, kHz32, Hz64 };                        // Enumerate square wave frequencies//
-const int32_t MEASUREMENT_SECONDS  =    90;                                   // Number of seconds to measure     //
+const int32_t MEASUREMENT_SECONDS  =    60;                                   // Number of seconds to measure     //
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
 MCP7940_Class     MCP7940;                                                    // Create instance of the MCP7940M  //
 char              inputBuffer[SPRINTF_BUFFER_SIZE];                           // Buffer for sprintf() / sscanf()  //
-volatile uint64_t ticks = 0;                                                  // Number of High-Low or Low-High   //
+volatile uint64_t ticks    = 0;                                               // Number of High-Low or Low-High   //
+int32_t           SQWSpeed = 0;                                               // Stores the current SQW Hertz Freq//
 
 /*******************************************************************************************************************
 ** Declare interrupt handler for pin changes to the MFP_PIN                                                       **
@@ -95,7 +96,7 @@ void setup() {                                                                //
   Serial.print(F("- Resetting TRIM value from "));                            //                                  //
   Serial.print(MCP7940.getCalibrationTrim());                                 //                                  //
   Serial.println(F(" to 0."));                                                //                                  //
-  MCP7940.calibrate(0);                                                       // Reset the TRIM value to 0        //
+  MCP7940.calibrate((int8_t)0);                                               // Reset the TRIM value to 0        //
   pinMode(MFP_PIN,INPUT);                                                     // MCP7940 Alarm MFP digital pin    //
   attachInterrupt(digitalPinToInterrupt(MFP_PIN),PCINT_vect,FALLING);         // Call interrupt when pin changes  //
   pinMode(LED_PIN,OUTPUT);                                                    // Declare built-in LED as output   //
@@ -104,6 +105,18 @@ void setup() {                                                                //
   Serial.println(") to 8KHz");                                                //                                  //
   MCP7940.setSQWSpeed(kHz8);                                                  // Set the square wave pin          //
   MCP7940.setSQWState(true);                                                  // Turn the SQW on                  //
+  SQWSpeed = MCP7940.getSQWSpeed();                                           // Get SQW Speed code               //
+  switch (SQWSpeed) {                                                         // set variable to real SQW speed   //
+    case 0: SQWSpeed =     1;                                                 //                                  //
+            break;                                                            //                                  //
+    case 1: SQWSpeed =  4096;                                                 //                                  //
+            break;                                                            //                                  //
+    case 2: SQWSpeed =  8192;                                                 //                                  //
+            break;                                                            //                                  //
+    case 3: SQWSpeed = 32768;                                                 //                                  //
+            break;                                                            //                                  //
+    case 4: SQWSpeed =    64;                                                 //                                  //
+  } // of switch SQWSpeed value                                               //                                  //
   digitalWrite(LED_PIN,!digitalRead(LED_PIN));                                // Toggle LED pin                   //
   Serial.print(F("- "));                                                      //                                  //
   Serial.print(MEASUREMENT_SECONDS);                                          //                                  //
@@ -116,52 +129,37 @@ void setup() {                                                                //
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
 void loop() {                                                                 //                                  //
-  static uint8_t  iterations = 0;
+  static uint8_t  iterations  = 0;                                            // Main loop iteration counter      //
   static uint32_t startMillis = millis();                                     // Store the starting time          //
-  static uint64_t localTicks = 0;                                             // Local copy of the number of ticks//
+  static uint64_t localTicks  = 0;                                            // Local copy of the number of ticks//
+  static float    avgHertz    = 0; 
   if ((millis()-startMillis)>(MEASUREMENT_SECONDS*1000)) {                    // Show results every 10 seconds    //
     noInterrupts();                                                           // Freeze interrupts to copy data   //
     localTicks = ticks;                                                       // make a local copy                //
     interrupts();                                                             // re-enable interrupts             //
-    iterations++;
-    int32_t SQWSpeed = MCP7940.getSQWSpeed();                                 // read the current SQW Speed code  //
-    switch (SQWSpeed) {                                                       // set variable to real SQW speed   //
-      case 0: SQWSpeed =     1;
-              break;
-      case 1: SQWSpeed =  4096;
-              break;
-      case 2: SQWSpeed =  8192;
-              break;
-      case 3: SQWSpeed = 32768;
-              break;
-      case 4: SQWSpeed =    64;
-    } // of switch SQWSpeed value                                             //                                  //
-    float actualHz = (float)localTicks/(float)MEASUREMENT_SECONDS;
-
-  DateTime now = MCP7940.now();                                               // get the current time             //
-  sprintf(inputBuffer,"%02d:%02d:%02d ", now.hour(), now.minute(), now.second());    // date/time with leading zeros     //
-  Serial.print(inputBuffer);                                                // Display the current date/time    //
-
+    iterations++;                                                             // Increment the loop counter       //
+    float    actualHz = (float)localTicks/(float)MEASUREMENT_SECONDS;         // Compute the measured Hz rate     //
+    avgHertz         += actualHz;                                             // Add to average                   //
+    DateTime now      = MCP7940.now();                                        // get the current time             //
+    sprintf(inputBuffer,"%02d:%02d:%02d ",now.hour(),now.minute(),now.second());// time with leading zeros        //
+    Serial.print(inputBuffer);                                                // Display the current date/time    //
     Serial.print(actualHz,4);
-    Serial.print("Hz, difference of ");
-    int16_t diffTicks = ((uint32_t)SQWSpeed*MEASUREMENT_SECONDS)-localTicks;
-//    int16_t diffTicks = localTicks-((uint32_t)SQWSpeed*MEASUREMENT_SECONDS);
-    Serial.print(diffTicks);
+    Serial.print("Hz, diff ");
+    int64_t diffTicks = localTicks-(SQWSpeed*MEASUREMENT_SECONDS);
+    Serial.print((float)diffTicks);
     Serial.println(" ticks.");
-    if (iterations%1==0) {
+    if (iterations%5==0) {
+      Serial.print("Average Hertz over ");
+      Serial.print(MEASUREMENT_SECONDS*5);
+      Serial.print(" seconds is ");
+      Serial.println((float)(avgHertz/5.0));
       Serial.print("Adjusting trim from ");                         //                                  //
       int8_t calibrationValue = MCP7940.getCalibrationTrim();                   // Retrieve the trimmed value       //
       Serial.print(calibrationValue);
-      Serial.print(" by ");
-      actualHz = ((float)SQWSpeed-(float)actualHz);
-      if(diffTicks<0) diffTicks=-1; else diffTicks=1;
-      diffTicks *= actualHz * (32768.0/(float)SQWSpeed) * 60.0 / 2.0;
-      diffTicks = diffTicks / 6;
-      Serial.print(diffTicks);
+      calibrationValue = MCP7940.calibrate((float)(avgHertz/5.0));
       Serial.print(" to ");
-      calibrationValue += diffTicks;                                            // Apply the offset                 //
-      MCP7940.calibrate(calibrationValue);                                      // And write it back to the MCP7940 //
       Serial.println(calibrationValue);
+      avgHertz = 0;
     } // of if every 5th loop      
     noInterrupts();                                                           // Freeze interrupts to copy data   //
     startMillis = millis();                                                   // Set time to current time         //

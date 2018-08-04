@@ -23,6 +23,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.1.2  2018-08-04 https://github.com/SV-Zanshin Issue #28 - added new calibrate() overload for frequency cal.  **
 ** 1.1.2  2018-07-08 https://github.com/logicaprogrammabile Fixed issue #26 regarding hour bitmasks               **
 ** 1.1.1  2018-07-07 https://github.com/SV-Zanshin Fixed bugs introduced by 14,20 and 21                          **
 ** 1.1.1  2018-07-07 https://github.com/wvmarle    Pull #21 - Additional changes                                  **
@@ -189,6 +190,7 @@
       int8_t   calibrate();                                                   // Reset clock calibration offset   //
       int8_t   calibrate(const int8_t);                                       // Reset clock calibration offset   //
       int8_t   calibrate(const DateTime& dt);                                 // Calibrate the clock              //
+      int8_t   calibrate(const float MeasuredFrequency);                      // Calibrate according to frequency //
       int8_t   getCalibrationTrim();                                          // Get the trim register value      //
       uint8_t  weekdayRead();                                                 // Read weekday from RTC            //
       uint8_t  weekdayWrite(const uint8_t dow);                               // Write weekday to RTC             //

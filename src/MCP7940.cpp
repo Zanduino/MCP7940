@@ -426,16 +426,32 @@ uint8_t MCP7940_Class::weekdayWrite(const uint8_t dow) {                      //
 } // of method weekdayWrite()                                                 //                                  //
 
 /*******************************************************************************************************************
-** Method calibrate(). This function accepts a current date/time value and compares that to the current date/time **
-** of the RTC and computes a calibration factor depending upon the time difference between the two and how long   **
-** the timespan between the two is. The longer the period between setting the clock and comparing the difference  **
-** between real time and indicated time the better the resulting calibration accuracy will be.                    **
-** The datasheet explains the calibration formula on page 28. First, the error in parts-per-million is computed   **
-** using PPM = (SecDeviation/ExpectedSeconds)*10000000.  Then the trim register is computed using the formula     **
-** TRIMVAL = (PPM*32768*60)/(1000000*2). The code below is designed for easy reading, not for performance         **
-** The ppm <> 130 is computed by solving the equation for the maximum TRIM value of 127 and computing the         **
-** corresponding max and min values for ppm. This allows the trim variable to be one byte rather than a long      **
+** Method calibrate(). This is an overloaded definition whose functionality differs between the different call    **
+** types.                                                                                                         **
+**                                                                                                                **
+** 1. calibrate();                                                                                                **
+**    Reset the fine trim calibration offset to 0                                                                 **
+** 2. calibrate(newTrim);                                                                                         **
+**    Set the trim value to the fine-trim offset specified in the parameter                                       **
+** 3. calibrate(DateTime);                                                                                        **
+**    Accepts a current date/time value and compares that to the current date/time of the RTC and computes a cal- **
+**    ibration factor depending upon the time difference between the two and how long the timespan between the two**
+**    is. The longer the period between setting the clock and comparing the difference between real time and ind- **
+**    icated time the better the resulting calibration accuracy will be. The datasheet explains the calibration   **
+**    formula on page 28. First, the error in parts-per-million is computed using PPM = (SecDev/ExpectedSeconds)* **
+**    10000000.  Then the trim register is computed using the formula TRIMVAL = (PPM*32768*60)/(1000000*2). The   **
+**    code below is designed for easy reading, not for performance. The ppm <> 130 is computed by solving the     **
+**    equation for the maximum TRIM value of 127 and computing the corresponding max and min values for ppm. This **
+**    allows the trim variable to be one byte rather than a long integer.                                         **
+** 4. calibrate(Frequency);                                                                                       **
+**    The last calibration method is to measure the square wave output and compute the trim value according to the**
+**    difference between the actual frequency and the expected frequency.                                         **
 *******************************************************************************************************************/
+int8_t MCP7940_Class::calibrate() {                                           // Calibrate the RTC                //
+  clearRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // fine trim mode on, to be safe    //
+  writeByte(MCP7940_OSCTRIM, (uint8_t)0);                                     // Write zeros to the trim register //
+  return(0);                                                                  // Return new calibration value     //
+} // of method calibrate()                                                    //----------------------------------//
 int8_t MCP7940_Class::calibrate(const int8_t newTrim) {                       // Calibrate the RTC                //
   int8_t trim = newTrim;                                                      // Make a local copy                //
   if (trim < 0) {                                                             // if the trim is less than 0, then //
@@ -444,8 +460,8 @@ int8_t MCP7940_Class::calibrate(const int8_t newTrim) {                       //
   clearRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // fine trim mode on, to be safe    //
   writeByte(MCP7940_OSCTRIM, trim);                                           // Write value to the trim register //
   _SetUnixTime = now().unixtime();                                            // Store time of last change        //
-  return trim;                                                                // return the computed trim value   //
-} // of method calibrate()                                                    //                                  //
+  return newTrim;                                                             // return the computed trim value   //
+} // of method calibrate()                                                    //----------------------------------//
 int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         // Overloaded calibrate definition  //
   int32_t SecDeviation = dt.unixtime() - now().unixtime();                    // Get difference in seconds        //
   int32_t ExpectedSec  = now().unixtime() - _SetUnixTime;                     // Get number of seconds since set  //
@@ -461,7 +477,31 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
   } // of if-then trim is set                                                 //                                  //
   trim         += ppm * 32768 * 60 / 2000000;                                 // compute the new trim value       //
   return calibrate((const int8_t)trim);                                       //                                  //
-} // of method calibrate()                                                    //                                  //
+} // of method calibrate()                                                    //----------------------------------//
+int8_t MCP7940_Class::calibrate(const float fMeas) {                          // Calibrate according to frequency //
+  int8_t   trim   = getCalibrationTrim();                                     // Get the current trim             //
+  uint32_t fIdeal = getSQWSpeed();                                            // read the current SQW Speed code  //
+  switch (fIdeal) {                                                           // set variable to real SQW speed   //
+    case 0: fIdeal =     1;                                                   //                                  //
+            break;                                                            //                                  //
+    case 1: fIdeal =  4096;                                                   //                                  //
+            break;                                                            //                                  //
+    case 2: fIdeal =  8192;                                                   //                                  //
+            break;                                                            //                                  //
+    case 3: fIdeal = 32768;                                                   //                                  //
+            trim   =     0;                                                   // Trim is ignored on 32KHz signal  //
+            break;                                                            //                                  //
+    case 4: fIdeal =    64;                                                   //                                  //
+    } // of switch SQWSpeed value                                             //                                  //
+  trim += ((fMeas-(float)fIdeal) * (32768.0/fIdeal) * 60.0) / 2.0;            // Use formula from datasheet       //
+  if (trim > 130) {                                                           // Force number ppm to be in range  //
+    trim = 130;                                                               //                                  //
+    } else if (trim < -130) {                                                 // check for low out-of-bounds too  //
+    trim = -130;                                                              //                                  //
+  } // of if-then-else trim out of range                                      //                                  //
+  trim = calibrate(trim);                                                     // Set the new trim value           //
+  return(trim);                                                               //                                  //
+} // of method calibrate()                                                    //----------------------------------//
 
 /*******************************************************************************************************************
 ** Method getCalibrationTrim(). This function returns the TRIMVAL trim values. Since the number in the register   **
@@ -472,16 +512,8 @@ int8_t MCP7940_Class::getCalibrationTrim() {                                  //
   if (trim >> 7) {                                                            // If trim is negative, the convert //
     trim = (0x7F & trim) * -1;                                                // convert to excess128 value       //
   } // of if-then less than zero trim                                         //                                  //
-  return ((int8_t)trim);                                                              // return the trim value            //
+  return ((int8_t)trim);                                                      // return the trim value            //
 } // of method getCalibrationTrim()                                           //                                  //
-
-/*******************************************************************************************************************
-** Method calibrate() when called with no parameters means that the current calibration offset is set back to 0   **
-*******************************************************************************************************************/
-int8_t MCP7940_Class::calibrate() {                                           // Calibrate the RTC                //
-  clearRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // fine trim mode on, to be safe    //
-  writeByte(MCP7940_OSCTRIM, (uint8_t)0);                                     // Write zeros to the trim register //
-} // of method calibrate()                                                    //                                  //
 
 /*******************************************************************************************************************
 ** Method setMFP() will set the MFP (Multifunction Pin) to the requested state and return success if, and only if,**
