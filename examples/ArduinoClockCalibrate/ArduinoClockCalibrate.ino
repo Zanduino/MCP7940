@@ -89,6 +89,7 @@ void setup() {                                                                //
   } // of while the oscillator is off                                         //                                  //
   Serial.println("- Setting MCP7940 to date/time of library compile");        //                                  //
   MCP7940.adjust();                                                           // Use compile date/time for clock  //
+
   Serial.print("- Date/Time set to ");                                        //                                  //
   DateTime now = MCP7940.now();                                               // get the current time             //
   sprintf(inputBuffer,"%04d-%02d-%02d %02d:%02d:%02d", now.year(),            // Use sprintf() to pretty print    //
@@ -104,7 +105,7 @@ void setup() {                                                                //
   Serial.print("- SQW Output (Arduino pin ");                                 //                                  //
   Serial.print(MFP_PIN);                                                      //                                  //
   Serial.println(") to 8KHz");                                                //                                  //
-  MCP7940.setSQWSpeed(kHz32);                                                  // Set the square wave pin          //
+  MCP7940.setSQWSpeed(kHz8);                                                  // Set the square wave pin          //
   MCP7940.setSQWState(true);                                                  // Turn the SQW on                  //
   SQWSpeed = MCP7940.getSQWSpeed();                                           // Get SQW Speed code               //
   switch (SQWSpeed) {                                                         // set variable to real SQW speed   //
@@ -130,41 +131,5 @@ void setup() {                                                                //
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **
 *******************************************************************************************************************/
 void loop() {                                                                 //                                  //
-  static uint8_t  iterations  = 0;                                            // Main loop iteration counter      //
-  static uint32_t startMillis = millis();                                     // Store the starting time          //
-  static uint64_t localTicks  = 0;                                            // Local copy of the number of ticks//
-  static float    avgHertz    = 0;                                            //                                  //
-  if ((millis()-startMillis)>(MEASUREMENT_SECONDS*1000)) {                    // Show results every n-seconds     //
-    noInterrupts();                                                           // Freeze interrupts to copy data   //
-    localTicks = ticks;                                                       // make a local copy                //
-    interrupts();                                                             // re-enable interrupts             //
-    iterations++;                                                             // Increment the loop counter       //
-    float    actualHz = (float)localTicks/(float)MEASUREMENT_SECONDS;         // Compute the measured Hz rate     //
-    avgHertz         += actualHz;                                             // Add to average                   //
-    DateTime now      = MCP7940.now();                                        // get the current time             //
-    sprintf(inputBuffer,"%02d:%02d:%02d ",now.hour(),now.minute(),now.second());// time with leading zeros        //
-    Serial.print(inputBuffer);                                                // Display the current date/time    //
-    Serial.print(actualHz,4);
-    Serial.print("Hz, diff ");
-    int64_t diffTicks = localTicks-(SQWSpeed*MEASUREMENT_SECONDS);
-    Serial.print((float)diffTicks);
-    Serial.println(" ticks.");
-    if (iterations%AVERAGING==0) {
-      Serial.print("Average Hertz over ");
-      Serial.print(MEASUREMENT_SECONDS*AVERAGING);
-      Serial.print(" seconds is ");
-      Serial.println((float)(avgHertz/AVERAGING));
-      Serial.print("Adjusting trim from ");                         //                                  //
-      int8_t calibrationValue = MCP7940.getCalibrationTrim();                   // Retrieve the trimmed value       //
-      Serial.print(calibrationValue);
-      calibrationValue = MCP7940.calibrate((float)(avgHertz/AVERAGING));
-      Serial.print(" to ");
-      Serial.println(calibrationValue);
-      avgHertz = 0;
-    } // of if every n-th loop      
-    noInterrupts();                                                           // Freeze interrupts to copy data   //
-    startMillis = millis();                                                   // Set time to current time         //
-    ticks       = 0;                                                          // reset number of state changes    //
-    interrupts();                                                             // re-enable interrupts             //
-  } // of if-then 10 seconds have elapsed                                     //                                  //
+
 } // of method loop()                                                         //----------------------------------//

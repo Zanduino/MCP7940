@@ -120,8 +120,8 @@ DateTime::DateTime (const char* date, const char* time) {                     //
     case 'N': m = 11; break;                                                  //                                  //
     case 'D': m = 12; break;                                                  //                                  //
   } // of switch for the month                                                //                                  //
-  d = conv2d(date + 4);                                                       // Compute the day                  //
-  hh = conv2d(time);                                                          //                                  //
+  d  = conv2d(date + 4);                                                      // Compute the day                  //
+  hh = conv2d(time    );                                                      //                                  //
   mm = conv2d(time + 3);                                                      //                                  //
   ss = conv2d(time + 6);                                                      //                                  //
 } // of method DateTime()                                                     //                                  //
@@ -132,11 +132,26 @@ DateTime::DateTime (const char* date, const char* time) {                     //
 *******************************************************************************************************************/
 DateTime::DateTime (const __FlashStringHelper* date,                          // Overloaded function call         //
                     const __FlashStringHelper* time) {                        //                                  //
-  char date_buff[11];                                                         //                                  //
-  memcpy_P(date_buff, date, 11);                                              //                                  //
+  char date_buff[12];                                                         //                                  //
+  memcpy_P(date_buff, date, 12);                                              //                                  //
   char time_buff[8];                                                          //                                  //
   memcpy_P(time_buff, time, 8);                                               //                                  //
   DateTime(date_buff, time_buff);                                             // Call actual DateTime constructor //
+  yOff = conv2d(date_buff + 9);                                               // Compute the year offset          //
+  switch (date_buff[0]) {                                                     // Switch for month detection       //
+    case 'J': m =(date_buff[1]=='a')?1:((date_buff[2]=='n')?6:7); break;      // Jan Feb Mar Apr May Jun Jul Aug  //
+    case 'F': m = 2; break;                                                   // Sep Oct Nov Dec                  //
+    case 'A': m = date_buff[2] == 'r' ? 4 : 8; break;                         //                                  //
+    case 'M': m = date_buff[2] == 'r' ? 3 : 5; break;                         //                                  //
+    case 'S': m = 9; break;                                                   //                                  //
+    case 'O': m = 10; break;                                                  //                                  //
+    case 'N': m = 11; break;                                                  //                                  //
+    case 'D': m = 12; break;                                                  //                                  //
+  } // of switch for the month                                                //                                  //
+  d  = conv2d(date_buff + 4);                                                 // Compute the day                  //
+  hh = conv2d(time_buff    );                                                 //                                  //
+  mm = conv2d(time_buff + 3);                                                 //                                  //
+  ss = conv2d(time_buff + 6);                                                 //                                  //
 } // of method DateTime()                                                     //                                  //
 
 /*******************************************************************************************************************
@@ -390,16 +405,15 @@ DateTime MCP7940_Class::getPowerUp() {                                        //
 void MCP7940_Class::adjust() {                                                // Set the RTC date and Time        //
   adjust(DateTime(F(__DATE__), F(__TIME__)));                                 // Set to compile time              //
 } // of method adjust                                                         /-----------------------------------//
-
 void MCP7940_Class::adjust(const DateTime& dt) {                              // Set the RTC date and Time        //
   deviceStop();                                                               // Stop the oscillator              //
-  writeByte(MCP7940_RTCSEC, int2bcd(dt.second()));                            // Write seconds, keep device off   //
-  writeByte(MCP7940_RTCMIN, int2bcd(dt.minute()));                            // Write the minutes value          //
-  writeByte(MCP7940_RTCHOUR, int2bcd(dt.hour()));                             // Also re-sets the 24Hour clock on //
+  writeByte(MCP7940_RTCSEC,   int2bcd(dt.second()));                          // Write seconds, keep device off   //
+  writeByte(MCP7940_RTCMIN,   int2bcd(dt.minute()));                          // Write the minutes value          //
+  writeByte(MCP7940_RTCHOUR,  int2bcd(dt.hour()));                            // Also re-sets the 24Hour clock on //
   writeByte(MCP7940_RTCWKDAY, dt.dayOfTheWeek());                             // Update the weekday               //
-  writeByte(MCP7940_RTCDATE, int2bcd(dt.day()));                              // Write the day of month           //
-  writeByte(MCP7940_RTCMTH, int2bcd(dt.month()));                             // Month, ignore R/O leapyear bit   //
-  writeByte(MCP7940_RTCYEAR, int2bcd(dt.year() - 2000));                      // Write the year                   //
+  writeByte(MCP7940_RTCDATE,  int2bcd(dt.day()));                             // Write the day of month           //
+  writeByte(MCP7940_RTCMTH,   int2bcd(dt.month()));                           // Month, ignore R/O leapyear bit   //
+  writeByte(MCP7940_RTCYEAR,  int2bcd(dt.year() - 2000));                     // Write the year                   //
   deviceStart();                                                              // Restart the oscillator           //
   _SetUnixTime = now().unixtime();                                            // Store time of last change        //
 } // of method adjust                                                         //                                  //
