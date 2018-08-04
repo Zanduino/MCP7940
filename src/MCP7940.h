@@ -61,6 +61,7 @@
   ** Declare classes used in within the class                                                                     **
   *****************************************************************************************************************/
   class TimeSpan;                                                             //                                  //
+  
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
@@ -150,6 +151,7 @@
     protected:                                                                //----------------------------------//
       uint8_t yOff, m, d, hh, mm, ss;                                         // private variables                //
   }; // of class DateTime definition                                          //                                  //
+  
   /*****************************************************************************************************************
   ** Timespan class which can represent changes in time with seconds accuracy. Copied from RTClib. For further    **
   ** information see ** https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass                                  **
@@ -169,6 +171,7 @@
     protected:                                                                //----------------------------------//
       int32_t _seconds;                                                       // internal seconds variable        //
   }; // of class TimeSpan definition                                          //                                  //
+  
   /*****************************************************************************************************************
   ** Main MCP7940 class for the Real-Time clock                                                                   **
   *****************************************************************************************************************/
@@ -211,6 +214,7 @@
       DateTime getPowerUp();                                                  // Return date when power restored  //
       bool     SRAMread(uint8_t address, uint8_t *data, uint8_t n);           // Read data from SRAM              //
       bool     SRAMwrite(uint8_t address, uint8_t *data, uint8_t n);          // Write data to SRAM               //
+
       /*************************************************************************************************************
       ** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
       ** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
@@ -223,8 +227,8 @@
       ** pointer to roll over to the start of the block.                                                          **
       *************************************************************************************************************/
       template< typename T >                                                  // method to read a structure       //
-      uint8_t&  readRAM(const uint8_t addr,T &value) {                        //                                  //
-        uint8_t* bytePtr   = (uint8_t*)&value;                                // Pointer to structure beginning   //
+      uint8_t&  readRAM(const uint8_t addr, T &value) {                       //                                  //
+        uint8_t* bytePtr    = (uint8_t*)&value;                               // Pointer to structure beginning   //
         uint8_t  structSize = sizeof(T);                                      // Number of bytes in structure     //
         uint8_t  i         = 0;                                               // loop counter                     //
         Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
@@ -238,6 +242,7 @@
         } // of for-next each byte to be read                                 //                                  //
         return (i);                                                           // return bytes read                //
       } // of method readRAM()                                                //----------------------------------//
+      
       template<typename T>                                                    // method to write any data type to //
       bool writeRAM(const uint8_t addr, const T &value) {                     // the MCP7940 SRAM                 //
         const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
@@ -249,6 +254,7 @@
         _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
         return (!_TransmissionStatus);                                        // return error status              //
       } // of method writeRAM()                                               //----------------------------------//
+      
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //

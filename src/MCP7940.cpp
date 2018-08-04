@@ -460,7 +460,7 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
     trim = trim * -1;                                                         //                                  //
   } // of if-then trim is set                                                 //                                  //
   trim         += ppm * 32768 * 60 / 2000000;                                 // compute the new trim value       //
-  return calibrate((const)trim);                                              // call overloaded to set value     //
+  return calibrate((const int8_t)trim);                                       //                                  //
 } // of method calibrate()                                                    //                                  //
 
 /*******************************************************************************************************************
@@ -668,7 +668,7 @@ bool MCP7940_Class::setSQWSpeed(uint8_t frequency, bool state) {              //
     bitWrite(registerValue, MCP7940_SQWEN, state);                            //                                  //
     bitWrite(registerValue, MCP7940_SQWFS0, bitRead(frequency, 0));           // 2 bits are used for frequency    //
     bitWrite(registerValue, MCP7940_SQWFS1, bitRead(frequency, 1));           //                                  //
-    bitClear(registerValue,MCP7940_CRSTRIM);                                  // Clear the CRSTRIM bit            //
+    clearRegisterBit(registerValue, MCP7940_CRSTRIM);                         // CRSTRIM bit must be cleared      //
     writeByte(MCP7940_CONTROL, registerValue);                                // Write register settings          //
   } else if (frequency == 4) {                                                // If the frequency is 64Hz         //
     setRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // CRSTRIM bit must be set for 64Hz //
