@@ -40,7 +40,8 @@ const uint8_t  MFP_PIN             =      2;                                  //
 const uint8_t  LED_PIN             =     13;                                  // Arduino built-in LED pin number  //
 const uint8_t  SPRINTF_BUFFER_SIZE =     32;                                  // Buffer size for sprintf()        //
 enum SquareWaveTypes { Hz1, kHz4, kHz8, kHz32, Hz64 };                        // Enumerate square wave frequencies//
-const int32_t MEASUREMENT_SECONDS  =    60;                                   // Number of seconds to measure     //
+const int32_t  MEASUREMENT_SECONDS  =    60;                                  // Number of seconds to measure     //
+const uint8_t  AVERAGING            =    10;                                  // Number of averages to take       //
 /*******************************************************************************************************************
 ** Declare global variables and instantiate classes                                                               **
 *******************************************************************************************************************/
@@ -103,7 +104,7 @@ void setup() {                                                                //
   Serial.print("- SQW Output (Arduino pin ");                                 //                                  //
   Serial.print(MFP_PIN);                                                      //                                  //
   Serial.println(") to 8KHz");                                                //                                  //
-  MCP7940.setSQWSpeed(kHz8);                                                  // Set the square wave pin          //
+  MCP7940.setSQWSpeed(kHz32);                                                  // Set the square wave pin          //
   MCP7940.setSQWState(true);                                                  // Turn the SQW on                  //
   SQWSpeed = MCP7940.getSQWSpeed();                                           // Get SQW Speed code               //
   switch (SQWSpeed) {                                                         // set variable to real SQW speed   //
@@ -132,8 +133,8 @@ void loop() {                                                                 //
   static uint8_t  iterations  = 0;                                            // Main loop iteration counter      //
   static uint32_t startMillis = millis();                                     // Store the starting time          //
   static uint64_t localTicks  = 0;                                            // Local copy of the number of ticks//
-  static float    avgHertz    = 0; 
-  if ((millis()-startMillis)>(MEASUREMENT_SECONDS*1000)) {                    // Show results every 10 seconds    //
+  static float    avgHertz    = 0;                                            //                                  //
+  if ((millis()-startMillis)>(MEASUREMENT_SECONDS*1000)) {                    // Show results every n-seconds     //
     noInterrupts();                                                           // Freeze interrupts to copy data   //
     localTicks = ticks;                                                       // make a local copy                //
     interrupts();                                                             // re-enable interrupts             //
@@ -148,19 +149,19 @@ void loop() {                                                                 //
     int64_t diffTicks = localTicks-(SQWSpeed*MEASUREMENT_SECONDS);
     Serial.print((float)diffTicks);
     Serial.println(" ticks.");
-    if (iterations%5==0) {
+    if (iterations%AVERAGING==0) {
       Serial.print("Average Hertz over ");
-      Serial.print(MEASUREMENT_SECONDS*5);
+      Serial.print(MEASUREMENT_SECONDS*AVERAGING);
       Serial.print(" seconds is ");
-      Serial.println((float)(avgHertz/5.0));
+      Serial.println((float)(avgHertz/AVERAGING));
       Serial.print("Adjusting trim from ");                         //                                  //
       int8_t calibrationValue = MCP7940.getCalibrationTrim();                   // Retrieve the trimmed value       //
       Serial.print(calibrationValue);
-      calibrationValue = MCP7940.calibrate((float)(avgHertz/5.0));
+      calibrationValue = MCP7940.calibrate((float)(avgHertz/AVERAGING));
       Serial.print(" to ");
       Serial.println(calibrationValue);
       avgHertz = 0;
-    } // of if every 5th loop      
+    } // of if every n-th loop      
     noInterrupts();                                                           // Freeze interrupts to copy data   //
     startMillis = millis();                                                   // Set time to current time         //
     ticks       = 0;                                                          // reset number of state changes    //
