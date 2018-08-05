@@ -467,9 +467,9 @@ int8_t MCP7940_Class::calibrate() {                                           //
   return(0);                                                                  // Return new calibration value     //
 } // of method calibrate()                                                    //----------------------------------//
 int8_t MCP7940_Class::calibrate(const int8_t newTrim) {                       // Calibrate the RTC                //
-  int8_t trim = newTrim;                                                      // Make a local copy                //
-  if (trim < 0) {                                                             // if the trim is less than 0, then //
-    trim = 0x80 | (trim * -1);                                                // set non-excess 128 negative val  //
+  int8_t trim = abs(newTrim);                                                 // Make a local copy of absolute val//
+  if (newTrim < 0) {                                                          // if the trim is less than 0, then //
+    trim = 0x80 | trim;                                                       // set non-excess 128 negative val  //
   } // of if-then value of trim is less than 0                                //                                  //
   clearRegisterBit(MCP7940_CONTROL, MCP7940_CRSTRIM);                         // fine trim mode on, to be safe    //
   writeByte(MCP7940_OSCTRIM, trim);                                           // Write value to the trim register //
@@ -485,11 +485,11 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
   } else if (ppm < -130) {                                                    // check for low out-of-bounds too  //
     ppm = -130;                                                               //                                  //
   } // of if-then-else ppm out of range                                       //                                  //
-  int8_t trim          = readByte(MCP7940_OSCTRIM);                           // Read current trim register value //
+  int8_t trim = readByte(MCP7940_OSCTRIM);                                    // Read current trim register value //
   if (trim >> 7) {                                                            // use negative value if necessary  //
-    trim = trim * -1;                                                         //                                  //
+    trim = (~0x80 & trim) * -1;                                               //                                  //
   } // of if-then trim is set                                                 //                                  //
-  trim         += ppm * 32768 * 60 / 2000000;                                 // compute the new trim value       //
+  trim += ppm * 32768 * 60 / 2000000;                                         // compute the new trim value       //
   return calibrate((const int8_t)trim);                                       //                                  //
 } // of method calibrate()                                                    //----------------------------------//
 int8_t MCP7940_Class::calibrate(const float fMeas) {                          // Calibrate according to frequency //

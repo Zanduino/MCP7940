@@ -23,6 +23,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.1.3  2018-08-05 https://github.com/HannesJo0139 Issue #31 - incorrect calibration trim on negative numbers   **
 ** 1.1.2  2018-08-04 https://github.com/SV-Zanshin Issue #28 - added new calibrate() overload for frequency cal.  **
 ** 1.1.2  2018-07-08 https://github.com/logicaprogrammabile Fixed issue #26 regarding hour bitmasks               **
 ** 1.1.1  2018-07-07 https://github.com/SV-Zanshin Fixed bugs introduced by 14,20 and 21                          **
