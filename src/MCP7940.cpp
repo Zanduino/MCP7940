@@ -535,7 +535,7 @@ int8_t MCP7940_Class::getCalibrationTrim() {                                  //
 *******************************************************************************************************************/
 bool MCP7940_Class::setMFP(const bool value) {                                // Set the MFP pin state            //
   uint8_t registerValue = readByte(MCP7940_CONTROL);                          // Get Control register             //
-  if (registerValue & 0x70 != 0) {                                            // Error if SQWEN/ALM1EN/ALM0EN set //
+  if ((registerValue & 0x70) != 0) {                                          // Error if SQWEN/ALM1EN/ALM0EN set //
     return false;                                                             //                                  //
   } // of if-then an invalid value                                            //                                  //
   writeRegisterBit(MCP7940_CONTROL, MCP7940_OUT, value);                      //                                  //

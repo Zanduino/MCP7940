@@ -21,38 +21,39 @@
 ** GNU General Public License for more details. You should have received a copy of the GNU General Public License **
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.                                          **
 **                                                                                                                **
-** Vers.  Date       Developer                     Comments                                                       **
-** ====== ========== ============================= ============================================================== **
-** 1.1.3  2018-08-05 https://github.com/HannesJo0139 Issue #31 - incorrect calibration trim on negative numbers   **
-** 1.1.2  2018-08-04 https://github.com/SV-Zanshin Issue #28 - added new calibrate() overload for frequency cal.  **
-** 1.1.2  2018-07-08 https://github.com/logicaprogrammabile Fixed issue #26 regarding hour bitmasks               **
-** 1.1.1  2018-07-07 https://github.com/SV-Zanshin Fixed bugs introduced by 14,20 and 21                          **
-** 1.1.1  2018-07-07 https://github.com/wvmarle    Pull #21 - Additional changes                                  **
-** 1.1.1  2018-07-06 https://github.com/wvmarle    Pull #20 - Numerous changes and enhancements                   **
-** 1.1.0  2018-07-05 https://github.com/wvmarle    Pull #14 - bug fixes to alarm state and cleaned up comments    **
-** 1.0.8  2018-07-02 https://github.com/SV-Zanshin Added guard code against multiple I2C constant definitions     **
-** 1.0.8  2018-06-30 https://github.com/SV-Zanshin Enh #15 - Added I2C Speed selection                            **
-** 1.0.7  2018-06-21 https://github.com/SV-Zanshin Bug #13 - DateTime.dayOfTheWeek() is 0-6 instead of 1-7        **
-** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #7  - Moved setting of param defaults to prototypes        **
-** 1.0.6  2018-04-29 https://github.com/SV-Zanshin Bug #10 - incorrect setting of alarm with WKDAY to future date **
-** 1.0.5b 2017-12-18 https://github.com/SV-Zanshin Bug #8  - incorrect setting to 24-Hour clock                   **
-** 1.0.5a 2017-10-31 https://github.com/SV-Zanshin Bug #6  - to remove classification on 2 template functions     **
-** 1.0.4c 2017-08-13 https://github.com/SV-Zanshin Enhancement #5 to remove checks after Wire.requestFrom()       **
-** 1.0.4b 2017-08-08 https://github.com/SV-Zanshin Replaced readRAM and writeRAM with template functions          **
-** 1.0.4a 2017-08-06 https://github.com/SV-Zanshin Removed unnecessary MCP7940_I2C_Delay and all references       **
-** 1.0.3  2017-08-05 https://github.com/SV-Zanshin Added calls for MCP7940N. getPowerFail(), clearPowerFail(),    **
-**                                                 setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang,     **
-**                                                 added getPowerUp/Down()                                        **
-** 1.0.3a 2017-07-29 https://github.com/SV-Zanshin Cleaned up comments, no code changes                           **
-** 1.0.3  2017-07-29 https://github.com/SV-Zanshin Added getSQWSpeed(),setSQWSpeed(),setSQWState() & getSQWState()**
-** 1.0.2  2017-07-29 https://github.com/SV-Zanshin Added getAlarm(),setAlarmState(),getAlarmState() functions and **
-**                                                 added the optional setting to setAlarm(). Added isAlarm().     **
-**                                                 Fixed errors with alarm 1 indexing.                            **
-** 1.0.1  2017-07-25 https://github.com/SV-Zanshin Added overloaded Calibrate() to manually set the trim factor   **
-** 1.0.0  2017-07-23 https://github.com/SV-Zanshin Cleaned up code, initial github upload                         **
-** 1.0.2b 2017-07-20 https://github.com/SV-Zanshin Added alarm handling                                           **
-** 1.0.1b 2017-07-19 https://github.com/SV-Zanshin Added methods                                                  **
-** 1.0.0b 2017-07-17 https://github.com/SV-Zanshin Initial coding                                                 **
+**                                                                                                                **
+** Vers.  Date       Developer Github ID Comments                                                                 **
+** ====== ========== =================== ======================================================================== **
+** 1.1.3  2018-08-08 amgrays              Issue #32 - invalid return on SetMFP corrected                          **
+** 1.1.3  2018-08-05 HannesJo0139         Issue #31 - incorrect calibration trim on negative numbers              **
+** 1.1.2  2018-08-04 SV-Zanshin           Issue #28 - added new calibrate() overload for frequency calibration    **
+** 1.1.2  2018-07-08 logicaprogrammabile  Issue #26 - regarding hour bitmasks                                     **
+** 1.1.1  2018-07-07 SV-Zanshin           Fixed bugs introduced by 14,20 and 21                                   **
+** 1.1.1  2018-07-07 wvmarle              Pull #21  - Additional changes                                          **
+** 1.1.1  2018-07-06 wvmarle              Pull #20  - Numerous changes and enhancements                           **
+** 1.1.0  2018-07-05 wvmarle              Pull #14  - bug fixes to alarm state and cleaned up comments            **
+** 1.0.8  2018-07-02 SV-Zanshin           Added guard code against multiple I2C constant definitions              **
+** 1.0.8  2018-06-30 SV-Zanshin           Enh #15   - Added I2C Speed selection                                   **
+** 1.0.7  2018-06-21 SV-Zanshin           Bug #13   - DateTime.dayOfTheWeek() is 0-6 instead of 1-7               **
+** 1.0.6  2018-04-29 SV-Zanshin           Issue #7  - Moved setting of param defaults to prototypes               **
+** 1.0.6  2018-04-29 SV-Zanshin           Issue #10 - incorrect setting of alarm with WKDAY to future date        **
+** 1.0.5b 2017-12-18 SV-Zanshin           Issue #8  - incorrect setting to 24-Hour clock                          **
+** 1.0.5a 2017-10-31 SV-Zanshin           Issue #6  - to remove classification on 2 template functions            **
+** 1.0.4c 2017-08-13 SV-Zanshin           Enhancement #5 to remove checks after Wire.requestFrom()                **
+** 1.0.4b 2017-08-08 SV-Zanshin           Replaced readRAM and writeRAM with template functions                   **
+** 1.0.4a 2017-08-06 SV-Zanshin           Removed unnecessary MCP7940_I2C_Delay and all references                **
+** 1.0.3  2017-08-05 SV-Zanshin           Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery()**
+**                                        Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()    **
+** 1.0.3a 2017-07-29 SV-Zanshin           Cleaned up comments, no code changes                                    **
+** 1.0.3  2017-07-29 SV-Zanshin           Added getSQWSpeed(),setSQWSpeed(),setSQWState() & getSQWState()         **
+** 1.0.2  2017-07-29 SV-Zanshin           Added getAlarm(),setAlarmState(),getAlarmState() functions and added the**
+**                                        optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm**
+**                                        1 indexing.                                                             **
+** 1.0.1  2017-07-25 SV-Zanshin           Added overloaded Calibrate() to manually set the trim factor            **
+** 1.0.0  2017-07-23 SV-Zanshin           Cleaned up code, initial github upload                                  **
+** 1.0.2b 2017-07-20 SV-Zanshin           Added alarm handling                                                    **
+** 1.0.1b 2017-07-19 SV-Zanshin           Added methods                                                           **
+** 1.0.0b 2017-07-17 SV-Zanshin           Initial coding                                                          **
 **                                                                                                                **
 *******************************************************************************************************************/
 #include "Arduino.h"                                                          // Arduino data type definitions    //
@@ -63,7 +64,6 @@
   ** Declare classes used in within the class                                                                     **
   *****************************************************************************************************************/
   class TimeSpan;                                                             //                                  //
-  
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
@@ -153,7 +153,6 @@
     protected:                                                                //----------------------------------//
       uint8_t yOff, m, d, hh, mm, ss;                                         // private variables                //
   }; // of class DateTime definition                                          //                                  //
-  
   /*****************************************************************************************************************
   ** Timespan class which can represent changes in time with seconds accuracy. Copied from RTClib. For further    **
   ** information see ** https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass                                  **
@@ -173,7 +172,6 @@
     protected:                                                                //----------------------------------//
       int32_t _seconds;                                                       // internal seconds variable        //
   }; // of class TimeSpan definition                                          //                                  //
-  
   /*****************************************************************************************************************
   ** Main MCP7940 class for the Real-Time clock                                                                   **
   *****************************************************************************************************************/
@@ -217,7 +215,6 @@
       DateTime getPowerUp();                                                  // Return date when power restored  //
       bool     SRAMread(uint8_t address, uint8_t *data, uint8_t n);           // Read data from SRAM              //
       bool     SRAMwrite(uint8_t address, uint8_t *data, uint8_t n);          // Write data to SRAM               //
-
       /*************************************************************************************************************
       ** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
       ** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
@@ -245,7 +242,6 @@
         } // of for-next each byte to be read                                 //                                  //
         return (i);                                                           // return bytes read                //
       } // of method readRAM()                                                //----------------------------------//
-      
       template<typename T>                                                    // method to write any data type to //
       bool writeRAM(const uint8_t addr, const T &value) {                     // the MCP7940 SRAM                 //
         const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
@@ -257,7 +253,6 @@
         _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
         return (!_TransmissionStatus);                                        // return error status              //
       } // of method writeRAM()                                               //----------------------------------//
-      
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
