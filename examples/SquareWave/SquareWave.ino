@@ -30,6 +30,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.2  2018-09-24 https://github.com/SV-Zanshin Issue #34 Support for ESP32 Type interrupts                    **
 ** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Added support for 64Hz, changed to use interrupts              **
 ** 1.0.0  2017-07-29 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
@@ -49,12 +50,22 @@ enum SquareWaveTypes { Hz1, kHz4, kHz8, kHz32, Hz64 };                        //
 MCP7940_Class     MCP7940;                                                    // Create instance of the MCP7940M  //
 char              inputBuffer[SPRINTF_BUFFER_SIZE];                           // Buffer for sprintf() / sscanf()  //
 volatile uint64_t switches  = 0;                                              // Number of High-Low or Low-High   //
+#if ESP32
+   portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;                           // ESP32 MUX definition             //
+#endif
 
 /*******************************************************************************************************************
 ** Declare interrupt handler for pin changes to the MFP_PIN                                                       **
 *******************************************************************************************************************/
-ISR (PCINT_vect) {                                                            // Called when pin goes from a low  //
+#ifdef ESP32
+   void IRAM_ATTR PCINT_vect() {
+   portENTER_CRITICAL_ISR(&mux);                                              // Enter critical MUX timing        //
   switches++;                                                                 // Increment counter                //
+   portENTER_CRITICAL_ISR(&mux);                                              // Enter critical MUX timing        //
+#else
+   ISR (PCINT_vect) {                                                           // Called when pin goes from a low  //
+  switches++;                                                                 // Increment counter                //
+#endif
 } // of method PCINT_vect                                                     //                                  //
 
 /*******************************************************************************************************************
