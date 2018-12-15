@@ -398,9 +398,9 @@ DateTime MCP7940_Class::getPowerUp() {                                        //
 } // of method getPowerUp()                                                   //                                  //
 
 /*******************************************************************************************************************
-** Method adjust set the current date/time. This is an overloaded function, if called with no parameters then the **
-** RTC is set to the date/time when the program was compiled and uploaded. Otherwise the values are set, but the  **
-** oscillator is stopped during the process and needs to be restarted upon completion.                            **
+** Method adjust() sets the current date/time. This is an overloaded function, if called with no parameters then  **
+** the RTC is set to the date/time when the program was compiled and uploaded. Otherwise the values are set, but  **
+** the oscillator is stopped during the process and needs to be restarted upon completion.                        **
 *******************************************************************************************************************/
 void MCP7940_Class::adjust() {                                                // Set the RTC date and Time        //
   adjust(DateTime(F(__DATE__), F(__TIME__)));                                 // Set to compile time              //
@@ -410,7 +410,7 @@ void MCP7940_Class::adjust(const DateTime& dt) {                              //
   writeByte(MCP7940_RTCSEC,   int2bcd(dt.second()));                          // Write seconds, keep device off   //
   writeByte(MCP7940_RTCMIN,   int2bcd(dt.minute()));                          // Write the minutes value          //
   writeByte(MCP7940_RTCHOUR,  int2bcd(dt.hour()));                            // Also re-sets the 24Hour clock on //
-  writeByte(MCP7940_RTCWKDAY, dt.dayOfTheWeek());                             // Update the weekday               //
+  weekdayWrite(dt.dayOfTheWeek());                                            // Update the weekday               //
   writeByte(MCP7940_RTCDATE,  int2bcd(dt.day()));                             // Write the day of month           //
   writeByte(MCP7940_RTCMTH,   int2bcd(dt.month()));                           // Month, ignore R/O leapyear bit   //
   writeByte(MCP7940_RTCYEAR,  int2bcd(dt.year() - 2000));                     // Write the year                   //
@@ -427,13 +427,14 @@ uint8_t MCP7940_Class::weekdayRead() {                                        //
 } // of method weekdayRead()                                                  //                                  //
 
 /*******************************************************************************************************************
-** Method weekdaywrite will write the weekday (1-7) to the register and return the setting. If the input value is **
-** out of range then nothing will be written and a 0 will be returned.                                            **
+** Method weekdaywrite() will write the weekday (1-7) to the register and return the setting. If the input value  **
+** is out of range then nothing will be written and a 0 will be returned. The unused bits of the register are     **
+** preserved                                                                                                      **
 *******************************************************************************************************************/
 uint8_t MCP7940_Class::weekdayWrite(const uint8_t dow) {                      // Write the DOW to the RTC         //
-  uint8_t retval = 0;                                                         // assume we have an error          //
+  uint8_t retval = (readByte(MCP7940_RTCWKDAY) & B11111000) | dow;            // Read, mask DOW bits & add DOW    //
   if (dow > 0 && dow < 8) {                                                   // If parameter is in range, then   //
-    writeByte(MCP7940_RTCWKDAY, dow);                                         // set the register                 //
+    writeByte(MCP7940_RTCWKDAY, retval);                                      // Write the register               //
     retval = dow;                                                             // set the return value             //
   } // of if-then we have a good DOW                                          //                                  //
   return retval;                                                              // return the value                 //

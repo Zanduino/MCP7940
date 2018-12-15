@@ -25,21 +25,22 @@
 ** Vers.  Date       Developer Github ID Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
 ** 1.1.4  2018-12-15 hexeguitar           Issue #36 - Overflow on I2C_MODES datatype corrected                    **
+** 1.1.4  2018-12-15 huynh213             Issue #35 - MCP7940.adjust() function resets the PWRFAIL and VBATEN     **
 ** 1.1.3  2018-08-08 amgrays              Issue #32 - invalid return on SetMFP corrected                          **
 ** 1.1.3  2018-08-05 HannesJo0139         Issue #31 - incorrect calibration trim on negative numbers              **
 ** 1.1.2  2018-08-04 SV-Zanshin           Issue #28 - added new calibrate() overload for frequency calibration    **
 ** 1.1.2  2018-07-08 logicaprogrammabile  Issue #26 - regarding hour bitmasks                                     **
-** 1.1.1  2018-07-07 SV-Zanshin           Fixed bugs introduced by 14,20 and 21                                   **
+** 1.1.1  2018-07-07 SV-Zanshin           Fixed bugs introduced by 14, 20, and 21                                 **
 ** 1.1.1  2018-07-07 wvmarle              Pull #21  - Additional changes                                          **
 ** 1.1.1  2018-07-06 wvmarle              Pull #20  - Numerous changes and enhancements                           **
 ** 1.1.0  2018-07-05 wvmarle              Pull #14  - bug fixes to alarm state and cleaned up comments            **
 ** 1.0.8  2018-07-02 SV-Zanshin           Added guard code against multiple I2C constant definitions              **
 ** 1.0.8  2018-06-30 SV-Zanshin           Enh #15   - Added I2C Speed selection                                   **
-** 1.0.7  2018-06-21 SV-Zanshin           Bug #13   - DateTime.dayOfTheWeek() is 0-6 instead of 1-7               **
-** 1.0.6  2018-04-29 SV-Zanshin           Issue #7  - Moved setting of param defaults to prototypes               **
+** 1.0.7  2018-06-21 SV-Zanshin           Issue #13 - DateTime.dayOfTheWeek() is 0-6 instead of 1-7               **
+** 1.0.6  2018-04-29 SV-Zanshin           Issue  #7 - Moved setting of param defaults to prototypes               **
 ** 1.0.6  2018-04-29 SV-Zanshin           Issue #10 - incorrect setting of alarm with WKDAY to future date        **
-** 1.0.5b 2017-12-18 SV-Zanshin           Issue #8  - incorrect setting to 24-Hour clock                          **
-** 1.0.5a 2017-10-31 SV-Zanshin           Issue #6  - to remove classification on 2 template functions            **
+** 1.0.5b 2017-12-18 SV-Zanshin           Issue  #8 - incorrect setting to 24-Hour clock                          **
+** 1.0.5a 2017-10-31 SV-Zanshin           Issue  #6 - to remove classification on 2 template functions            **
 ** 1.0.4c 2017-08-13 SV-Zanshin           Enhancement #5 to remove checks after Wire.requestFrom()                **
 ** 1.0.4b 2017-08-08 SV-Zanshin           Replaced readRAM and writeRAM with template functions                   **
 ** 1.0.4a 2017-08-06 SV-Zanshin           Removed unnecessary MCP7940_I2C_Delay and all references                **
