@@ -24,6 +24,7 @@
 **                                                                                                                **
 ** Vers.  Date       Developer Github ID Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.1.4  2018-12-15 hexeguitar           Issue #36 - Overflow on I2C_MODES datatype corrected                    **
 ** 1.1.3  2018-08-08 amgrays              Issue #32 - invalid return on SetMFP corrected                          **
 ** 1.1.3  2018-08-05 HannesJo0139         Issue #31 - incorrect calibration trim on negative numbers              **
 ** 1.1.2  2018-08-04 SV-Zanshin           Issue #28 - added new calibrate() overload for frequency calibration    **
@@ -69,8 +70,8 @@
   *****************************************************************************************************************/
   #ifndef I2C_MODES                                                           // I2C related constants            //
     #define I2C_MODES                                                         // Guard code to prevent multiple   //
-    const uint16_t I2C_STANDARD_MODE      =     100000;                       // Default normal I2C 100KHz speed  //
-    const uint16_t I2C_FAST_MODE          =     400000;                       // Fast mode                        //
+    const uint32_t I2C_STANDARD_MODE      =     100000;                       // Default normal I2C 100KHz speed  //
+    const uint32_t I2C_FAST_MODE          =     400000;                       // Fast mode                        //
   #endif                                                                      //----------------------------------//
   #if defined (ESP32) && (!defined(BUFFER_LENGTH))                            // The ESP32 Wire library doesn't   //
      #define BUFFER_LENGTH 32                                                 // currently define BUFFER_LENGTH   //
@@ -182,7 +183,7 @@
     public:                                                                   // Publicly visible methods         //
       MCP7940_Class();                                                        // Class constructor                //
       ~MCP7940_Class();                                                       // Class destructor                 //
-      bool     begin(const uint16_t i2cSpeed = I2C_STANDARD_MODE);            // Start I2C device communications  //
+      bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE);            // Start I2C device communications  //
       bool     deviceStatus();                                                // return true when MCP7940 is on   //
       bool     deviceStart();                                                 // Start the MCP7940 clock          //
       bool     deviceStop();                                                  // Stop the MCP7940 clock           //
