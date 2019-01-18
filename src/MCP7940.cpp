@@ -494,7 +494,7 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt) {                         //
   return calibrate((const int8_t)trim);                                       //                                  //
 } // of method calibrate()                                                    //----------------------------------//
 int8_t MCP7940_Class::calibrate(const float fMeas) {                          // Calibrate according to frequency //
-  int8_t   trim   = getCalibrationTrim();                                     // Get the current trim             //
+  int16_t  trim   = getCalibrationTrim();                                     // Get the current trim             //
   uint32_t fIdeal = getSQWSpeed();                                            // read the current SQW Speed code  //
   switch (fIdeal) {                                                           // set variable to real SQW speed   //
     case 0: fIdeal =     1;                                                   //                                  //
@@ -509,10 +509,10 @@ int8_t MCP7940_Class::calibrate(const float fMeas) {                          //
     case 4: fIdeal =    64;                                                   //                                  //
     } // of switch SQWSpeed value                                             //                                  //
   trim += ((fMeas-(float)fIdeal) * (32768.0/fIdeal) * 60.0) / 2.0;            // Use formula from datasheet       //
-  if (trim > 130) {                                                           // Force number ppm to be in range  //
-    trim = 130;                                                               //                                  //
-    } else if (trim < -130) {                                                 // check for low out-of-bounds too  //
-    trim = -130;                                                              //                                  //
+  if (trim > 127) {                                                           // Force number ppm to be in range  //
+    trim = 127;                                                               //                                  //
+    } else if (trim < -128) {                                                 // check for low out-of-bounds too  //
+    trim = -128;                                                              //                                  //
   } // of if-then-else trim out of range                                      //                                  //
   trim = calibrate(trim);                                                     // Set the new trim value           //
   return(trim);                                                               //                                  //
