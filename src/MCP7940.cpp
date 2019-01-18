@@ -511,8 +511,8 @@ int8_t MCP7940_Class::calibrate(const float fMeas) {                          //
   trim += ((fMeas-(float)fIdeal) * (32768.0/fIdeal) * 60.0) / 2.0;            // Use formula from datasheet       //
   if (trim > 127) {                                                           // Force number ppm to be in range  //
     trim = 127;                                                               //                                  //
-    } else if (trim < -128) {                                                 // check for low out-of-bounds too  //
-    trim = -128;                                                              //                                  //
+    } else if (trim < -127) {                                                 // check for low out-of-bounds too  //
+    trim = -127;                                                              //                                  //
   } // of if-then-else trim out of range                                      //                                  //
   trim = calibrate(trim);                                                     // Set the new trim value           //
   return(trim);                                                               //                                  //
