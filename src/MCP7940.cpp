@@ -514,8 +514,8 @@ int8_t MCP7940_Class::calibrate(const float fMeas) {                          //
     } else if (trim < -127) {                                                 // check for low out-of-bounds too  //
     trim = -127;                                                              //                                  //
   } // of if-then-else trim out of range                                      //                                  //
-  trim = calibrate(trim);                                                     // Set the new trim value           //
-  return((uint8_t)trim);                                                      //                                  //
+  trim = calibrate((int8_t)trim);                                             // Set the new trim value           //
+  return((int8_t)trim);                                                       //                                  //
 } // of method calibrate()                                                    //----------------------------------//
 
 /*******************************************************************************************************************
@@ -632,7 +632,7 @@ void MCP7940_Class::setAlarmPolarity(const bool polarity) {                   //
 DateTime MCP7940_Class::getAlarm(const uint8_t alarmNumber,                   // Return alarm date/time & type    //
                                  uint8_t &alarmType) {                        //                                  //
   if (alarmNumber > 1) {                                                      // return an error if bad alarm no. //
-    return NULL;                                                              //                                  //
+    return DateTime(0);                                                       //                                  //
   } // of if-then bad alarm number                                            //                                  //
   uint8_t offset = 7 * alarmNumber;                                           // Offset to be applied             //
   alarmType = (readByte(MCP7940_ALM0WKDAY + offset) >> 4) & B111;             // get 3 bits for alarmType         //
