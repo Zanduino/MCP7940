@@ -141,23 +141,74 @@ Version| Date       | Developer           | Comments
   class DateTime 
   {
     public:
-      DateTime (uint32_t t=0);                                          ///< Default constructor
-      DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0, uint8_t min=0,uint8_t sec=0); ///< Overloaded Constructor
-      DateTime (const DateTime& copy);                                  ///< Overloaded Constructor
-      DateTime (const char* date, const char* time);                    ///< Overloaded Constructor
-      DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time); ///< Overloaded Constructor for compile time
-      uint16_t year()         const { return 2000 + yOff; }             ///< Return the year
-      uint8_t  month()        const { return m; }                       ///< Return the month
-      uint8_t  day()          const { return d; }                       ///< Return the day
-      uint8_t  hour()         const { return hh; }                      ///< Return the hour
-      uint8_t  minute()       const { return mm; }                      ///< Return the minute
-      uint8_t  second()       const { return ss; }                      ///< Return the second
-      uint8_t  dayOfTheWeek() const;                                    ///< Return the DOW
-      long     secondstime()  const;                                    ///< times as seconds since 1/1/2000
-      uint32_t unixtime(void) const;                                    ///< times as seconds since 1/1/1970
-      DateTime operator+(const TimeSpan& span);                         ///< class addition
-      DateTime operator-(const TimeSpan& span);                         ///< class subtraction
-      TimeSpan operator-(const DateTime& right);                        ///< class subtraction overload
+/*!
+* Default constructor
+*/
+      DateTime (uint32_t t=0);
+/*!
+* Overloaded constructor with full 
+*/
+      DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0, uint8_t min=0,uint8_t sec=0);
+/*!
+* Overload constructor
+*/
+      DateTime (const DateTime& copy);
+/*!
+* Overloaded constructor
+*/
+      DateTime (const char* date, const char* time);
+/*!
+* Overloaded constructor for use with compiler date and time
+*/
+      DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time);
+/*!
+*  Return the year
+*/
+      uint16_t year()         const { return 2000 + yOff; }
+/*!
+* Return the Month
+*/
+      uint8_t  month()        const { return m; }
+/*!
+* Return the Day
+*/
+      uint8_t  day()          const { return d; }
+/*!
+* Return the Hour
+*/
+      uint8_t  hour()         const { return hh; }
+/*!
+* Return the Minute
+*/
+      uint8_t  minute()       const { return mm; }
+/*!
+* Return the Second
+*/
+      uint8_t  second()       const { return ss; }
+/*!
+* Return the Day-of-Week
+*/
+      uint8_t  dayOfTheWeek() const;
+/*!
+* Return the time as seconds since 2000-01-01
+*/
+      long     secondstime()  const;
+/*!
+* Return the standard unixtime as seconds since 1970-01-01
+*/
+      uint32_t unixtime(void) const;
+/*!
+* Class addition of timespans
+*/
+      DateTime operator+(const TimeSpan& span);
+/*!
+* Class subtraction of timespans
+*/
+      DateTime operator-(const TimeSpan& span);
+/*!
+* Class subtraction of timespans overloaded
+*/
+      TimeSpan operator-(const DateTime& right);
     protected:
       uint8_t yOff; ///< private year offset variable
       uint8_t    m; ///< private months variable
@@ -172,6 +223,7 @@ Version| Date       | Developer           | Comments
   * @details Copied from RTClib. For further information see https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass
   */
   class TimeSpan {
+    /** /cond */
     public:
       TimeSpan (int32_t seconds = 0);                                        ///< Default constructor
       TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds); ///< Overloaded constructor
@@ -185,6 +237,7 @@ Version| Date       | Developer           | Comments
       TimeSpan operator-(const TimeSpan& right);                             ///< redefine "-" operator
     protected:
       int32_t _seconds;                                                      ///< Internal value for total seconds
+    /** /endcond */
   }; // of class TimeSpan definition
     /**
   * @class MCP7940_Class
