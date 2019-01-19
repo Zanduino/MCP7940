@@ -10,7 +10,48 @@ The MCP7940 allows for software trimming and the library has functions which sup
 
 ## Description
 <img src="https://github.com/SV-Zanshin/MCP7940/blob/master/Images/MCP7940_bb.png" width="175px" align="left" /> A detailed library description along with further details are available at the GitHub [MCP7940 Wiki](https://github.com/SV-Zanshin/MCP7940/wiki). This includes wiring information and sample sketches that illustrate the library and it's functionality.
+</br></br></br></br></br></br>
+  
+## Hardware Tested [![Build Status](https://travis-ci.org/SV-Zanshin/MCP7940.svg?branch=master)](https://travis-ci.org/SV-Zanshin/MCP7940)
+The following configurations have been compiled and tested
 
+<table>
+  <th>Board</th>
+  <th>Tested</th>
+  <th>Comments</th>
+  <tr>
+    <td>Arduino UNO</td>
+    <td>Yes</td>
+    <td>ATMega328P</td>
+  <tr>
+  <tr>
+    <td>Arduino Mega</td>
+    <td>Yes</td>
+    <td>ATMega 2560</td>
+  <tr>
+  <tr>
+    <td>Arduino Micro</td>
+    <td>Yes</td>
+    <td>ATMega32U4</td>
+  <tr>
+  <tr>
+    <td>Arduino 1280</td>
+    <td>Yes</td>
+    <td>ATMega1280</td>
+  <tr>
+  <tr>
+    <td>Arduino 328</td>
+    <td>Yes</td>
+    <td>ATMega328</td>
+  <tr>
+  <tr>
+    <td>Arduino 168</td>
+    <td>Yes</td>
+    <td>ATMega168</td>
+  <tr>
+</table>    
+    
 [![DOI](https://www.zenodo.org/badge/98077572.svg)](https://www.zenodo.org/badge/latestdoi/98077572)
 
 ![Zanshin Logo](https://www.sv-zanshin.com/r/images/site/gif/zanshinkanjitiny.gif) <img src="https://www.sv-zanshin.com/r/images/site/gif/zanshintext.gif" width="75"/>
+
