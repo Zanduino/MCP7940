@@ -516,8 +516,8 @@ int8_t MCP7940_Class::calibrate(const float fMeas) {                          //
     } else if (trim < -127) {                                                 // check for low out-of-bounds too  //
     trim = -127;                                                              //                                  //
   } // of if-then-else trim out of range                                      //                                  //
-  trim = calibrate((int8_t)trim);                                             // Set the new trim value           //
-  return((int8_t)trim);                                                       //                                  //
+  int8_t returnTrim = calibrate((int8_t)trim);                                // Set the new trim value           //
+  return(returnTrim);                                                         //                                  //
 } // of method calibrate()                                                    //----------------------------------//
 
 /*******************************************************************************************************************
@@ -674,9 +674,10 @@ bool MCP7940_Class::setAlarmState(const uint8_t alarmNumber,const bool state){//
 ** Method getAlarmState() will return whether an alarm is turned on or off                                        **
 *******************************************************************************************************************/
 bool MCP7940_Class::getAlarmState(const uint8_t alarmNumber) {                //                                  //
-  if (alarmNumber > 1) {                                                      // if not alarm 0 or 1 then error   //
+  if (alarmNumber > 1) 
+  {                                                      // if not alarm 0 or 1 then error   //
     return false;                                                             //                                  //
-} // of if-then a bad alarm number                                            //                                  //
+  } // of if-then a bad alarm number                                            //                                  //
   return readRegisterBit(MCP7940_CONTROL, alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN); // Get state of alarm   //
 } // of getAlarmState()                                                       //                                  //
 

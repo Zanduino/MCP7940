@@ -161,7 +161,12 @@ Version| Date       | Developer           | Comments
       DateTime operator-(const TimeSpan& span);                         ///< subtraction
       TimeSpan operator-(const DateTime& right);                        ///< subtraction
     protected:
-      uint8_t yOff, m, d, hh, mm, ss;                                   ///< private variables
+      uint8_t yOff; ///< private year offset variable
+      uint8_t    m; ///< private months variable
+      uint8_t    d; ///< private days variable
+      uint8_t   hh; ///< private hours variable
+      uint8_t   mm; ///< private minutes variable
+      uint8_t   ss; ///< private seconds variable
   }; // of class DateTime definition
   /**
   * @class TimeSpan
@@ -203,48 +208,61 @@ Version| Date       | Developer           | Comments
       bool     deviceStart();                                                 ///< Start the MCP7940 clock          //
       bool     deviceStop();                                                  ///< Stop the MCP7940 clock           //
       DateTime now();                                                         ///< return time                      //
-      void     adjust();                                                      // Set the date and time to compile //
-      void     adjust(const DateTime& dt);                                    // Set the date and time            //
-      int8_t   calibrate();                                                   // Reset clock calibration offset   //
-      int8_t   calibrate(const int8_t);                                       // Reset clock calibration offset   //
-      int8_t   calibrate(const DateTime& dt);                                 // Calibrate the clock              //
-      int8_t   calibrate(const float MeasuredFrequency);                      // Calibrate according to frequency //
-      int8_t   getCalibrationTrim();                                          // Get the trim register value      //
-      uint8_t  weekdayRead();                                                 // Read weekday from RTC            //
-      uint8_t  weekdayWrite(const uint8_t dow);                               // Write weekday to RTC             //
-      bool     setMFP(const bool value);                                      // Set the MFP pin state            //
-      uint8_t  getMFP();                                                      // Get the MFP pin state            //
-      bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,   // Set an Alarm                     //
-                        const DateTime dt, const bool state = true );         //                                  //
-      void     setAlarmPolarity(const bool polarity);                         // Set the polarity of the alarm    //
-      DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);       // Return alarm date/time & type    //
-      bool     clearAlarm(const uint8_t alarmNumber);                         // Clear an Alarm                   //
-      bool     setAlarmState(const uint8_t alarmNumber, const bool state);    // Return whether alarm is on or off//
-      bool     getAlarmState(const uint8_t alarmNumber);                      // Return whether alarm is on or off//
-      bool     isAlarm(const uint8_t alarmNumber);                            // Return whether alarm is triggered//
-      uint8_t  getSQWSpeed();                                                 // Return the SQW frequency code    //
-      bool     setSQWSpeed(uint8_t frequency, bool state = true);             // Set the SQW frequency to code    //
-      bool     setSQWState(const bool state);                                 // Set the SQW MFP on or off        //
-      bool     getSQWState();                                                 // Return if the SQW is active      //
-      bool     setBattery(const bool state);                                  // Enable or disable battery backup //
-      bool     getBattery();                                                  // Get the battery backup state     //
-      bool     getPowerFail();                                                // Check if power fail has occurred //
-      bool     clearPowerFail();                                              // Clear the power fail flag        //
-      DateTime getPowerDown();                                                // Return date when power failed    //
-      DateTime getPowerUp();                                                  // Return date when power restored  //
-      bool     SRAMread(uint8_t address, uint8_t *data, uint8_t n);           // Read data from SRAM              //
-      bool     SRAMwrite(uint8_t address, uint8_t *data, uint8_t n);          // Write data to SRAM               //
-      /*************************************************************************************************************
-      ** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
-      ** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
-      ** The template functions allow any type of data to be read and written, be it a byte or a character array  **
-      ** or a structure.                                                                                          **
-      **                                                                                                          **
-      ** The MCP7940 supports 64 bytes of general purpose SRAM memory, which can be used to store data. For more  **
-      ** details, see datasheet p.36.                                                                             **
-      ** The data is stored in a block of 64 bytes, reading beyond the end of the block causes the address        **
-      ** pointer to roll over to the start of the block.                                                          **
-      *************************************************************************************************************/
+      void     adjust();                                                      ///< Set the date and time to compile //
+      void     adjust(const DateTime& dt);                                    ///< Set the date and time            //
+      int8_t   calibrate();                                                   ///< Reset clock calibration offset   //
+      int8_t   calibrate(const int8_t);                                       ///< Reset clock calibration offset   //
+      int8_t   calibrate(const DateTime& dt);                                 ///< Calibrate the clock              //
+      int8_t   calibrate(const float MeasuredFrequency);                      ///< Calibrate according to frequency //
+      int8_t   getCalibrationTrim();                                          ///< Get the trim register value      //
+      uint8_t  weekdayRead();                                                 ///< Read weekday from RTC            //
+      uint8_t  weekdayWrite(const uint8_t dow);                               ///< Write weekday to RTC             //
+      bool     setMFP(const bool value);                                      ///< Set the MFP pin state            //
+      uint8_t  getMFP();                                                      ///< Get the MFP pin state            //
+      bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,
+                        const DateTime dt, const bool state = true );         ///< Set an Alarm
+      void     setAlarmPolarity(const bool polarity);                         ///< Set the polarity of the alarm    //
+      DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);       ///< Return alarm date/time & type    //
+      bool     clearAlarm(const uint8_t alarmNumber);                         ///< Clear an Alarm                   //
+      bool     setAlarmState(const uint8_t alarmNumber, const bool state);    ///< Return whether alarm is on or off//
+/**
+    @brief     Method returns state of an alarm
+    @details   
+    @param[in] alarmNumber Alarm number 0 or Alarm number 1
+    @return    true if alarm is on, otherwise false
+*/
+      bool     getAlarmState(const uint8_t alarmNumber);
+      bool     isAlarm(const uint8_t alarmNumber);                            ///< Return whether alarm is triggered//
+      uint8_t  getSQWSpeed();                                                 ///< Return the SQW frequency code    //
+      bool     setSQWSpeed(uint8_t frequency, bool state = true);             ///< Set the SQW frequency to code    //
+      bool     setSQWState(const bool state);                                 ///< Set the SQW MFP on or off        //
+      bool     getSQWState();                                                 ///< Return if the SQW is active      //
+      bool     setBattery(const bool state);                                  ///< Enable or disable battery backup //
+      bool     getBattery();                                                  ///< Get the battery backup state     //
+      bool     getPowerFail();                                                ///< Check if power fail has occurred //
+      bool     clearPowerFail();                                              ///< Clear the power fail flag        //
+      DateTime getPowerDown();                                                ///< Return date when power failed    //
+      DateTime getPowerUp();                                                  ///< Return date when power restored  //
+      bool     SRAMread(uint8_t address, uint8_t *data, uint8_t n);           ///< Read data from SRAM              //
+      bool     SRAMwrite(uint8_t address, uint8_t *data, uint8_t n);          ///< Write data to SRAM               //
+/*************************************************************************************************************
+** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
+** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
+** The template functions allow any type of data to be read and written, be it a byte or a character array  **
+** or a structure.                                                                                          **
+**                                                                                                          **
+** The MCP7940 supports 64 bytes of general purpose SRAM memory, which can be used to store data. For more  **
+** details, see datasheet p.36.                                                                             **
+** The data is stored in a block of 64 bytes, reading beyond the end of the block causes the address        **
+** pointer to roll over to the start of the block.                                                          **
+*************************************************************************************************************/
+/*!
+    @brief     Template for readRAM()
+    @details   As a template it can support compile-time data type definitions
+    @param[in] addr Memory address
+    @param[in] value    Data Type "T" to read
+    @return    Pointer to return data structure
+*/
       template< typename T >                                                  // method to read a structure       //
       uint8_t&  readRAM(const uint8_t addr, T &value) {                       //                                  //
         uint8_t* bytePtr    = (uint8_t*)&value;                               // Pointer to structure beginning   //
@@ -261,6 +279,13 @@ Version| Date       | Developer           | Comments
         } // of for-next each byte to be read                                 //                                  //
         return (i);                                                           // return bytes read                //
       } // of method readRAM()                                                //----------------------------------//
+/*!
+    @brief     Template for writeRAM()
+    @details   As a template it can support compile-time data type definitions
+    @param[in] addr Memory address
+    @param[in] value Data Type "T" to write
+    @return    True if successful, otherwise false
+*/
       template<typename T>                                                    // method to write any data type to //
       bool writeRAM(const uint8_t addr, const T &value) {                     // the MCP7940 SRAM                 //
         const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
