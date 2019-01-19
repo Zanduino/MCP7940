@@ -190,59 +190,61 @@ long DateTime::secondstime(void) const {                                      //
 /*******************************************************************************************************************
 ** Overloaded functions to allow math operations on the date/time                                                 **
 *******************************************************************************************************************/
-DateTime DateTime::operator + (const TimeSpan& span) {                        //                                  //
-  return DateTime(unixtime() + span.totalseconds());                          //                                  //
-} // of overloaded + function                                                 //                                  //
-DateTime DateTime::operator - (const TimeSpan& span) {                        //                                  //
-  return DateTime(unixtime() - span.totalseconds());                          //                                  //
-} // of overloaded - function                                                 //                                  //
-TimeSpan DateTime::operator - (const DateTime& right) {                       //                                  //
-  return TimeSpan(unixtime() - right.unixtime());                             //                                  //
-} // of overloaded - function                                                 //                                  //
+DateTime DateTime::operator + (const TimeSpan& span) 
+{
+  return DateTime(unixtime() + span.totalseconds());
+} // of overloaded + function
+DateTime DateTime::operator - (const TimeSpan& span) 
+{
+  return DateTime(unixtime() - span.totalseconds());
+} // of overloaded - function
+TimeSpan DateTime::operator - (const DateTime& right) 
+{
+  return TimeSpan(unixtime() - right.unixtime());
+} // of overloaded - function
 
 /*******************************************************************************************************************
 ** Implementation of TimeSpan                                                                                     **
 *******************************************************************************************************************/
-TimeSpan::TimeSpan (int32_t seconds): _seconds(seconds) {}                    //                                  //
-TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds): //                               //
-  _seconds((int32_t)days * 86400L + (int32_t)hours * 3600 + (int32_t)minutes * 60 + seconds) {} //                //
-TimeSpan::TimeSpan (const TimeSpan& copy): _seconds(copy._seconds) {}         //                                  //
-TimeSpan TimeSpan::operator + (const TimeSpan& right) {                       //                                  //
-  return TimeSpan(_seconds + right._seconds);                                 //                                  //
-} // of overloaded add                                                        //                                  //
-TimeSpan TimeSpan::operator - (const TimeSpan& right) {                       //                                  //
-  return TimeSpan(_seconds - right._seconds);                                 //                                  //
-} // of overloaded subtract                                                   //                                  //
+TimeSpan::TimeSpan (int32_t seconds): _seconds(seconds) {}
+TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds):
+  _seconds((int32_t)days * 86400L + (int32_t)hours * 3600 + (int32_t)minutes * 60 + seconds) {}
+TimeSpan::TimeSpan (const TimeSpan& copy): _seconds(copy._seconds) {}
+TimeSpan TimeSpan::operator + (const TimeSpan& right) 
+{
+  return TimeSpan(_seconds + right._seconds);
+} // of overloaded add
+TimeSpan TimeSpan::operator - (const TimeSpan& right) 
+{
+  return TimeSpan(_seconds - right._seconds);
+} // of overloaded subtract
 
-/*******************************************************************************************************************
-** Class Constructor instantiates the class                                                                       **
-*******************************************************************************************************************/
-MCP7940_Class::MCP7940_Class()  {} // of class constructor                    //                                  //
-
-/*******************************************************************************************************************
-** Class Destructor currently does nothing and is included for compatibility purposes                             **
-*******************************************************************************************************************/
-MCP7940_Class::~MCP7940_Class() {} // of class destructor                     //                                  //
+MCP7940_Class::MCP7940_Class()  {} ///< class constructor
+MCP7940_Class::~MCP7940_Class() {} ///< class destructor
 
 /*******************************************************************************************************************
 ** Method begin starts I2C communications with the device, using a default address if one is not specified and    **
 ** return true if the device has been detected and false if it was not                                            **
 *******************************************************************************************************************/
-bool MCP7940_Class::begin(const uint32_t i2cSpeed) {                          // Start I2C communications         //
-  Wire.begin();                                                               // Start I2C as master device       //
-  Wire.setClock(i2cSpeed);                                                    // Set the I2C bus speed            //
-  Wire.beginTransmission(MCP7940_ADDRESS);                                    // Address the MCP7940M             //
-  uint8_t errorCode = Wire.endTransmission();                                 // See if there's a device present  //
-  if (errorCode == 0) {                                                       // If we have a MCP7940M            //
-    clearRegisterBit(MCP7940_RTCHOUR, MCP7940_12_24);                         // Use 24 hour clock                //
-    setRegisterBit(MCP7940_CONTROL, MCP7940_ALMPOL);                          // assert alarm low, default high   //
-    _CrystalStatus = readRegisterBit(MCP7940_RTCSEC, MCP7940_ST);             // Status bit from register         //
-    _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN);    // Oscillator state from register   //
-  } else {                                                                    //                                  //
-    return false;                                                             // return error if no device found  //
-  } // of if-then-else device detected                                        //                                  //
-  return true;                                                                // return success                   //
-} // of method begin()                                                        //                                  //
+bool MCP7940_Class::begin(const uint32_t i2cSpeed)
+{
+  Wire.begin();                               // Start I2C as master device
+  Wire.setClock(i2cSpeed);                    // Set the I2C bus speed
+  Wire.beginTransmission(MCP7940_ADDRESS);    // Address the MCP7940M
+  uint8_t errorCode = Wire.endTransmission(); // See if there's a device present
+  if (errorCode == 0)                         // If we have a MCP7940M
+  {
+    clearRegisterBit(MCP7940_RTCHOUR, MCP7940_12_24);                      // Use 24 hour clock
+    setRegisterBit(MCP7940_CONTROL, MCP7940_ALMPOL);                       // assert alarm low, default high
+    _CrystalStatus = readRegisterBit(MCP7940_RTCSEC, MCP7940_ST);          // Status bit from register
+    _OscillatorStatus = readRegisterBit(MCP7940_RTCWKDAY, MCP7940_OSCRUN); // Oscillator state from register
+  } 
+  else
+  {
+    return false; // return error if no device found
+  } // of if-then-else device detected
+  return true;    // return success
+} // of method begin()
 
 /*******************************************************************************************************************
 ** Method readByte reads 1 byte from the specified address                                                        **

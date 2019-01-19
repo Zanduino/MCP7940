@@ -1,197 +1,208 @@
-/*******************************************************************************************************************
-** Class definition header for the MCP7940 from Microchip. Both the MCP7940N (with battery backup pin= and the    **
-** MCP7940M are supported with this library and they both use the same I2C address. This chip is a Real-Time-Clock**
-** with an I2C interface. The data sheet located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf **
-** describes the functionality used in this library                                                               **
-**                                                                                                                **
-** Use is made of portions of Adafruit's RTClib Version 1.2.0 at https://github.com/adafruit/RTClib which is a    **
-** a fork of the original RTClib from Jeelabs. The re-used code encompasses only the classes for time and date.   **
-**                                                                                                                **
-** Although programming for the Arduino and in c/c++ is new to me, I'm a professional programmer and have learned,**
-** over the years, that it is much easier to ignore superfluous comments than it is to decipher non-existent ones;**
-** so both my comments and variable names tend to be verbose. The code is written to fit in the first 80 spaces   **
-** and the comments start after that and go to column 117 - allowing the code to be printed in A4 landscape mode. **
-**                                                                                                                **
-** GNU General Public License v3.0                                                                                **
-** ===============================                                                                                **
-** This program is free software: you can redistribute it and/or modify it under the terms of the GNU General     **
-** Public License as published by the Free Software Foundation, either version 3 of the License, or (at your      **
-** option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY     **
-** WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the   **
-** GNU General Public License for more details. You should have received a copy of the GNU General Public License **
-** along with this program.  If not, see <http://www.gnu.org/licenses/>.                                          **
-**                                                                                                                **
-**                                                                                                                **
-** Vers.  Date       Developer Github ID Comments                                                                 **
-** ====== ========== =================== ======================================================================== **
-** 1.1.5  2019-01-19 INemesisI            Issue #37 - Corrected AlarmPolarity bit clearing on setAlarm()          **
-** 1.1.5  2019-01-19 SV-Zanshin           Issue #39 - Small changes to remove compiler warnings for Travis-CI     **
-** 1.1.5  2019-01-18 INemesisI            Issue #38 - Overflow on setting new TRIM value                          **
-** 1.1.4  2018-12-15 hexeguitar           Issue #36 - Overflow on I2C_MODES datatype corrected                    **
-** 1.1.4  2018-12-15 huynh213             Issue #35 - MCP7940.adjust() function resets the PWRFAIL and VBATEN     **
-** 1.1.3  2018-08-08 amgrays              Issue #32 - invalid return on SetMFP corrected                          **
-** 1.1.3  2018-08-05 HannesJo0139         Issue #31 - incorrect calibration trim on negative numbers              **
-** 1.1.2  2018-08-04 SV-Zanshin           Issue #28 - added new calibrate() overload for frequency calibration    **
-** 1.1.2  2018-07-08 logicaprogrammabile  Issue #26 - regarding hour bitmasks                                     **
-** 1.1.1  2018-07-07 SV-Zanshin           Fixed bugs introduced by 14, 20, and 21                                 **
-** 1.1.1  2018-07-07 wvmarle              Pull #21  - Additional changes                                          **
-** 1.1.1  2018-07-06 wvmarle              Pull #20  - Numerous changes and enhancements                           **
-** 1.1.0  2018-07-05 wvmarle              Pull #14  - bug fixes to alarm state and cleaned up comments            **
-** 1.0.8  2018-07-02 SV-Zanshin           Added guard code against multiple I2C constant definitions              **
-** 1.0.8  2018-06-30 SV-Zanshin           Enh #15   - Added I2C Speed selection                                   **
-** 1.0.7  2018-06-21 SV-Zanshin           Issue #13 - DateTime.dayOfTheWeek() is 0-6 instead of 1-7               **
-** 1.0.6  2018-04-29 SV-Zanshin           Issue  #7 - Moved setting of param defaults to prototypes               **
-** 1.0.6  2018-04-29 SV-Zanshin           Issue #10 - incorrect setting of alarm with WKDAY to future date        **
-** 1.0.5b 2017-12-18 SV-Zanshin           Issue  #8 - incorrect setting to 24-Hour clock                          **
-** 1.0.5a 2017-10-31 SV-Zanshin           Issue  #6 - to remove classification on 2 template functions            **
-** 1.0.4c 2017-08-13 SV-Zanshin           Enhancement #5 to remove checks after Wire.requestFrom()                **
-** 1.0.4b 2017-08-08 SV-Zanshin           Replaced readRAM and writeRAM with template functions                   **
-** 1.0.4a 2017-08-06 SV-Zanshin           Removed unnecessary MCP7940_I2C_Delay and all references                **
-** 1.0.3  2017-08-05 SV-Zanshin           Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery()**
-**                                        Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()    **
-** 1.0.3a 2017-07-29 SV-Zanshin           Cleaned up comments, no code changes                                    **
-** 1.0.3  2017-07-29 SV-Zanshin           Added getSQWSpeed(),setSQWSpeed(),setSQWState() & getSQWState()         **
-** 1.0.2  2017-07-29 SV-Zanshin           Added getAlarm(),setAlarmState(),getAlarmState() functions and added the**
-**                                        optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm**
-**                                        1 indexing.                                                             **
-** 1.0.1  2017-07-25 SV-Zanshin           Added overloaded Calibrate() to manually set the trim factor            **
-** 1.0.0  2017-07-23 SV-Zanshin           Cleaned up code, initial github upload                                  **
-** 1.0.2b 2017-07-20 SV-Zanshin           Added alarm handling                                                    **
-** 1.0.1b 2017-07-19 SV-Zanshin           Added methods                                                           **
-** 1.0.0b 2017-07-17 SV-Zanshin           Initial coding                                                          **
-**                                                                                                                **
-*******************************************************************************************************************/
-#include "Arduino.h"                                                          // Arduino data type definitions    //
-#include <Wire.h>                                                             // Standard I2C "Wire" library      //
-#ifndef MCP7940_h                                                             // Guard code definition            //
-  #define MCP7940_h                                                           // Define the name inside guard code//
+/*! @file MCP7940.h
+
+ @mainpage Arduino Library for the MCP7940M and MCP7940N Real-Time Clock devices
+
+ @section MCP7940_intro_section Description
+
+Class definition header for the MCP7940 from Microchip. Both the MCP7940N (with battery backup pin= and the
+MCP7940M are supported with this library and they both use the same I2C address. This chip is a Real-Time-Clock
+with an I2C interface. The data sheet located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf
+describes the functionality used in this library.\n
+Use is made of portions of Adafruit's RTClib Version 1.2.0 at https://github.com/adafruit/RTClib which is a
+a fork of the original RTClib from Jeelabs. The re-used code encompasses only the classes for time and date.\n
+
+@section license GNU General Public License v3.0
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General
+Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details. You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+@section author Author
+
+Written by Arnd\@SV-Zanshin
+
+@section versions Changelog
+
+Version| Date       | Developer           | Comments
+------ | ---------- | ------------------- | --------
+1.1.5  | 2019-01-19 | SV-Zanshin          | Issue #40 - Change commenting to use doxygen
+1.1.5  | 2019-01-19 | INemesisI           | Issue #37 - Corrected AlarmPolarity bit clearing on setAlarm()
+1.1.5  | 2019-01-19 | SV-Zanshin          | Issue #39 - Small changes to remove compiler warnings for Travis-CI
+1.1.5  | 2019-01-18 | INemesisI           | Issue #38 - Overflow on setting new TRIM value
+1.1.4  | 2018-12-15 | hexeguitar          | Issue #36 - Overflow on I2C_MODES datatype corrected
+1.1.4  | 2018-12-15 | huynh213            | Issue #35 - MCP7940.adjust() function resets the PWRFAIL and VBATEN
+1.1.3  | 2018-08-08 | amgrays             | Issue #32 - invalid return on SetMFP corrected
+1.1.3  | 2018-08-05 | HannesJo0139        | Issue #31 - incorrect calibration trim on negative numbers
+1.1.2  | 2018-08-04 | SV-Zanshin          | Issue #28 - added new calibrate() overload for frequency calibration
+1.1.2  | 2018-07-08 | logicaprogrammabile | Issue #26 - regarding hour bitmasks
+1.1.1  | 2018-07-07 | SV-Zanshin          | Fixed bugs introduced by 14, 20, and 21
+1.1.1  | 2018-07-07 | wvmarle             | Pull #21  - Additional changes
+1.1.1  | 2018-07-06 | wvmarle             | Pull #20  - Numerous changes and enhancements
+1.1.0  | 2018-07-05 | wvmarle             | Pull #14  - bug fixes to alarm state and cleaned up comments
+1.0.8  | 2018-07-02 | SV-Zanshin          | Added guard code against multiple I2C constant definitions
+1.0.8  | 2018-06-30 | SV-Zanshin          | Enh #15   - Added I2C Speed selection
+1.0.7  | 2018-06-21 | SV-Zanshin          | Issue #13 - DateTime.dayOfTheWeek() is 0-6 instead of 1-7
+1.0.6  | 2018-04-29 | SV-Zanshin          | Issue  #7 - Moved setting of param defaults to prototypes
+1.0.6  | 2018-04-29 | SV-Zanshin          | Issue #10 - incorrect setting of alarm with WKDAY to future date
+1.0.5b | 2017-12-18 | SV-Zanshin          | Issue  #8 - incorrect setting to 24-Hour clock
+1.0.5a | 2017-10-31 | SV-Zanshin          | Issue  #6 - to remove classification on 2 template functions
+1.0.4c | 2017-08-13 | SV-Zanshin          | Enhancement #5 to remove checks after Wire.requestFrom()
+1.0.4b | 2017-08-08 | SV-Zanshin          | Replaced readRAM and writeRAM with template functions
+1.0.4a | 2017-08-06 | SV-Zanshin          | Removed unnecessary MCP7940_I2C_Delay and all references
+1.0.3  | 2017-08-05 | SV-Zanshin          | Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()
+1.0.3a | 2017-07-29 | SV-Zanshin          | Cleaned up comments, no code changes
+1.0.3  | 2017-07-29 | SV-Zanshin          | Added getSQWSpeed(),setSQWSpeed(),setSQWState() & getSQWState()
+1.0.2  | 2017-07-29 | SV-Zanshin          | Added getAlarm(),setAlarmState(),getAlarmState() functions and added the optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm 1 indexing.
+1.0.1  | 2017-07-25 | SV-Zanshin          | Added overloaded Calibrate() to manually set the trim factor
+1.0.0  | 2017-07-23 | SV-Zanshin          | Cleaned up code, initial github upload
+1.0.2b | 2017-07-20 | SV-Zanshin          | Added alarm handling
+1.0.1b | 2017-07-19 | SV-Zanshin          | Added methods
+1.0.0b | 2017-07-17 | SV-Zanshin          | Initial coding
+
+*/
+#include "Arduino.h"  // Arduino data type definitions
+#include <Wire.h>     // Standard I2C "Wire" library
+#ifndef MCP7940_h     // Guard code definition
+  #define MCP7940_h   // Define the name inside guard code
   /*****************************************************************************************************************
   ** Declare classes used in within the class                                                                     **
   *****************************************************************************************************************/
-  class TimeSpan;                                                             //                                  //
+  class TimeSpan;
   /*****************************************************************************************************************
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
-  #ifndef I2C_MODES                                                           // I2C related constants            //
-    #define I2C_MODES                                                         // Guard code to prevent multiple   //
-    const uint32_t I2C_STANDARD_MODE      =     100000;                       // Default normal I2C 100KHz speed  //
-    const uint32_t I2C_FAST_MODE          =     400000;                       // Fast mode                        //
-  #endif                                                                      //----------------------------------//
-  #if defined (ESP32) && (!defined(BUFFER_LENGTH))                            // The ESP32 Wire library doesn't   //
-     #define BUFFER_LENGTH 32                                                 // currently define BUFFER_LENGTH   //
-  #endif                                                                      //----------------------------------//
-  const uint8_t  MCP7940_ADDRESS          =       0x6F;                       // Device address, fixed value      //
-  const uint8_t  MCP7940_RTCSEC           =       0x00;                       // Section 1: timekeeping           //
-  const uint8_t  MCP7940_RTCMIN           =       0x01;                       //                                  //
-  const uint8_t  MCP7940_RTCHOUR          =       0x02;                       //                                  //
-  const uint8_t  MCP7940_RTCWKDAY         =       0x03;                       //                                  //
-  const uint8_t  MCP7940_RTCDATE          =       0x04;                       //                                  //
-  const uint8_t  MCP7940_RTCMTH           =       0x05;                       //                                  //
-  const uint8_t  MCP7940_RTCYEAR          =       0x06;                       //                                  //
-  const uint8_t  MCP7940_CONTROL          =       0x07;                       //                                  //
-  const uint8_t  MCP7940_OSCTRIM          =       0x08;                       //                                  //
-  const uint8_t  MCP7940_ALM0SEC          =       0x0A;                       // Section 2.0: alarm 0             //
-  const uint8_t  MCP7940_ALM0MIN          =       0x0B;                       //                                  //
-  const uint8_t  MCP7940_ALM0HOUR         =       0x0C;                       //                                  //
-  const uint8_t  MCP7940_ALM0WKDAY        =       0x0D;                       //                                  //
-  const uint8_t  MCP7940_ALM0DATE         =       0x0E;                       //                                  //
-  const uint8_t  MCP7940_ALM0MTH          =       0x0F;                       //                                  //
-  const uint8_t  MCP7940_ALM1SEC          =       0x11;                       // Section 2.1: alarm 1             //
-  const uint8_t  MCP7940_ALM1MIN          =       0x12;                       //                                  //
-  const uint8_t  MCP7940_ALM1HOUR         =       0x13;                       //                                  //
-  const uint8_t  MCP7940_ALM1WKDAY        =       0x14;                       //                                  //
-  const uint8_t  MCP7940_ALM1DATE         =       0x15;                       //                                  //
-  const uint8_t  MCP7940_ALM1MTH          =       0x16;                       //                                  //
-  const uint8_t  MCP7940_PWRDNMIN         =       0x18;                       // Section 3.0: Power-Fail Timestamp//
-  const uint8_t  MCP7940_PWRDNHOUR        =       0x19;                       //                                  //
-  const uint8_t  MCP7940_PWRDNDATE        =       0x1A;                       //                                  //
-  const uint8_t  MCP7940_PWRDNMTH         =       0x1B;                       //                                  //
-  const uint8_t  MCP7940_PWRUPMIN         =       0x1C;                       // Section 3.1: Power-Fail Timestamp//
-  const uint8_t  MCP7940_PWRUPHOUR        =       0x1D;                       //                                  //
-  const uint8_t  MCP7940_PWRUPDATE        =       0x1E;                       //                                  //
-  const uint8_t  MCP7940_PWRUPMTH         =       0x1F;                       //                                  //
-  const uint8_t  MCP7940_RAM_ADDRESS      =       0x20;                       // NVRAM - Start address for SRAM   //
-  const uint8_t  MCP7940_ST               =          7;                       // MCP7940 register bits. RTCSEC reg//
-  const uint8_t  MCP7940_12_24            =          6;                       // RTCHOUR, PWRDNHOUR & PWRUPHOUR   //
-  const uint8_t  MCP7940_AM_PM            =          5;                       // RTCHOUR, PWRDNHOUR & PWRUPHOUR   //
-  const uint8_t  MCP7940_OSCRUN           =          5;                       // RTCWKDAY register                //
-  const uint8_t  MCP7940_PWRFAIL          =          4;                       // RTCWKDAY register                //
-  const uint8_t  MCP7940_VBATEN           =          3;                       // RTCWKDAY register                //
-  const uint8_t  MCP7940_LPYR             =          5;                       // RTCMTH register                  //
-  const uint8_t  MCP7940_OUT              =          7;                       // CONTROL register                 //
-  const uint8_t  MCP7940_SQWEN            =          6;                       // CONTROL register                 //
-  const uint8_t  MCP7940_ALM1EN           =          5;                       // CONTROL register                 //
-  const uint8_t  MCP7940_ALM0EN           =          4;                       // CONTROL register                 //
-  const uint8_t  MCP7940_EXTOSC           =          3;                       // CONTROL register                 //
-  const uint8_t  MCP7940_CRSTRIM          =          2;                       // CONTROL register                 //
-  const uint8_t  MCP7940_SQWFS1           =          1;                       // CONTROL register                 //
-  const uint8_t  MCP7940_SQWFS0           =          0;                       // CONTROL register                 //
-  const uint8_t  MCP7940_SIGN             =          7;                       // OSCTRIM register                 //
-  const uint8_t  MCP7940_ALMPOL           =          7;                       // ALM0WKDAY register               //
-  const uint8_t  MCP7940_ALM0IF           =          3;                       // ALM0WKDAY register               //
-  const uint8_t  MCP7940_ALM1IF           =          3;                       // ALM1WKDAY register               //
-                                                                              // Other constants                  //
-  const uint32_t SECONDS_PER_DAY          =      86400;                       // 60 secs * 60 mins * 24 hours     //
-  const uint32_t SECONDS_FROM_1970_TO_2000 = 946684800;                       //                                  //
-  /*****************************************************************************************************************
-  ** Simple general-purpose date/time class (no TZ / DST / leap second handling). Copied from RTClib. For further **
-  ** information on this implementation see https://github.com/SV-Zanshin/MCP7940/wiki/DateTimeClass              **
-  *****************************************************************************************************************/
-  class DateTime {                                                            //                                  //
-    public:                                                                   //----------------------------------//
-      DateTime (uint32_t t=0);                                                // Constructor                      //
-      DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0,       // Overloaded Constructors          //
-                uint8_t min=0,uint8_t sec=0);                                 //                                  //
-      DateTime (const DateTime& copy);                                        //                                  //
-      DateTime (const char* date, const char* time);                          //                                  //
-      DateTime (const __FlashStringHelper* date,                              //                                  //
-                const __FlashStringHelper* time);                             //                                  //
-      uint16_t year()         const { return 2000 + yOff; }                   // Return the year                  //
-      uint8_t  month()        const { return m; }                             // Return the month                 //
-      uint8_t  day()          const { return d; }                             // Return the day                   //
-      uint8_t  hour()         const { return hh; }                            // Return the hour                  //
-      uint8_t  minute()       const { return mm; }                            // Return the minute                //
-      uint8_t  second()       const { return ss; }                            // Return the second                //
-      uint8_t  dayOfTheWeek() const;                                          // Return the DOW                   //
-      long     secondstime()  const;                                          // times as seconds since 1/1/2000  //
-      uint32_t unixtime(void) const;                                          // times as seconds since 1/1/1970  //
-      DateTime operator+(const TimeSpan& span);                               // addition                         //
-      DateTime operator-(const TimeSpan& span);                               // subtraction                      //
-      TimeSpan operator-(const DateTime& right);                              // subtraction                      //
-    protected:                                                                //----------------------------------//
-      uint8_t yOff, m, d, hh, mm, ss;                                         // private variables                //
-  }; // of class DateTime definition                                          //                                  //
-  /*****************************************************************************************************************
-  ** Timespan class which can represent changes in time with seconds accuracy. Copied from RTClib. For further    **
-  ** information see ** https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass                                  **
-  *****************************************************************************************************************/
-  class TimeSpan {                                                            //                                  //
-    public:                                                                   //----------------------------------//
-      TimeSpan (int32_t seconds = 0);                                         //                                  //
-      TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds);  //                                  //
-      TimeSpan (const TimeSpan& copy);                                        //                                  //
-      int16_t  days() const         { return _seconds / 86400L; }             //                                  //
-      int8_t   hours() const        { return _seconds / 3600 % 24; }          //                                  //
-      int8_t   minutes() const      { return _seconds / 60 % 60; }            //                                  //
-      int8_t   seconds() const      { return _seconds % 60; }                 //                                  //
-      int32_t  totalseconds() const { return _seconds; }                      //                                  //
-      TimeSpan operator+(const TimeSpan& right);                              //                                  //
-      TimeSpan operator-(const TimeSpan& right);                              //                                  //
-    protected:                                                                //----------------------------------//
-      int32_t _seconds;                                                       // internal seconds variable        //
-  }; // of class TimeSpan definition                                          //                                  //
-  /*****************************************************************************************************************
-  ** Main MCP7940 class for the Real-Time clock                                                                   **
-  *****************************************************************************************************************/
-  class MCP7940_Class {                                                       // Class definition                 //
-    public:                                                                   // Publicly visible methods         //
-      MCP7940_Class();                                                        // Class constructor                //
-      ~MCP7940_Class();                                                       // Class destructor                 //
-      bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE);            // Start I2C device communications  //
-      bool     deviceStatus();                                                // return true when MCP7940 is on   //
-      bool     deviceStart();                                                 // Start the MCP7940 clock          //
-      bool     deviceStop();                                                  // Stop the MCP7940 clock           //
-      DateTime now();                                                         // return time                      //
+  #ifndef I2C_MODES   // I2C related constants
+    #define I2C_MODES // Guard code to prevent multiple definitions
+    const uint32_t I2C_STANDARD_MODE      =     100000; ///< Default normal I2C 100KHz speed
+    const uint32_t I2C_FAST_MODE          =     400000; ///< Fast mode
+  #endif
+  #if defined (ESP32) && (!defined(BUFFER_LENGTH)) // The ESP32 Wire library doesn't currently define BUFFER_LENGTH
+     #define BUFFER_LENGTH 32
+  #endif
+  const uint8_t  MCP7940_ADDRESS          =       0x6F; ///< Device address, fixed value
+  const uint8_t  MCP7940_RTCSEC           =       0x00; ///< Timekeeping, RTCSEC Register address 
+  const uint8_t  MCP7940_RTCMIN           =       0x01; ///< Timekeeping, RTCMIN Register address 
+  const uint8_t  MCP7940_RTCHOUR          =       0x02; ///< Timekeeping, RTCHOUR Register address 
+  const uint8_t  MCP7940_RTCWKDAY         =       0x03; ///< Timekeeping, RTCWKDAY Register address 
+  const uint8_t  MCP7940_RTCDATE          =       0x04; ///< Timekeeping, RTCDATE Register address 
+  const uint8_t  MCP7940_RTCMTH           =       0x05; ///< Timekeeping, RTCMTH Register address 
+  const uint8_t  MCP7940_RTCYEAR          =       0x06; ///< Timekeeping, RTCYEAR Register address 
+  const uint8_t  MCP7940_CONTROL          =       0x07; ///< Timekeeping, RTCCONTROL Register address 
+  const uint8_t  MCP7940_OSCTRIM          =       0x08; ///< Timekeeping, RTCOSCTRIM Register address 
+  const uint8_t  MCP7940_ALM0SEC          =       0x0A; ///< Alarm 0, ALM0SEC Register address
+  const uint8_t  MCP7940_ALM0MIN          =       0x0B; ///< Alarm 0, ALM0MIN Register address
+  const uint8_t  MCP7940_ALM0HOUR         =       0x0C; ///< Alarm 0, ALM0HOUR Register address
+  const uint8_t  MCP7940_ALM0WKDAY        =       0x0D; ///< Alarm 0, ALM0WKDAY Register address
+  const uint8_t  MCP7940_ALM0DATE         =       0x0E; ///< Alarm 0, ALM0DATE Register address
+  const uint8_t  MCP7940_ALM0MTH          =       0x0F; ///< Alarm 0, ALM0MTH Register address
+  const uint8_t  MCP7940_ALM1SEC          =       0x11; ///< Alarm 1, ALM1SEC Register address
+  const uint8_t  MCP7940_ALM1MIN          =       0x12; ///< Alarm 1, ALM1MIN Register address
+  const uint8_t  MCP7940_ALM1HOUR         =       0x13; ///< Alarm 1, ALM1HOUR Register address
+  const uint8_t  MCP7940_ALM1WKDAY        =       0x14; ///< Alarm 1, ALM1WKDAY Register address
+  const uint8_t  MCP7940_ALM1DATE         =       0x15; ///< Alarm 1, ALM1DATE Register address
+  const uint8_t  MCP7940_ALM1MTH          =       0x16; ///< Alarm 1, ALM1MONTH Register address
+  const uint8_t  MCP7940_PWRDNMIN         =       0x18; ///< Power-Fail, PWRDNMIN Register address
+  const uint8_t  MCP7940_PWRDNHOUR        =       0x19; ///< Power-Fail, PWRDNHOUR Register address
+  const uint8_t  MCP7940_PWRDNDATE        =       0x1A; ///< Power-Fail, PWDNDATE Register address
+  const uint8_t  MCP7940_PWRDNMTH         =       0x1B; ///< Power-Fail, PWRDNMTH Register address
+  const uint8_t  MCP7940_PWRUPMIN         =       0x1C; ///< Power-Fail, PWRUPMIN Register address
+  const uint8_t  MCP7940_PWRUPHOUR        =       0x1D; ///< Power-Fail, PWRUPHOUR Register address
+  const uint8_t  MCP7940_PWRUPDATE        =       0x1E; ///< Power-Fail, PWRUPDATE Register address
+  const uint8_t  MCP7940_PWRUPMTH         =       0x1F; ///< Power-Fail, PWRUPMTH Register address
+  const uint8_t  MCP7940_RAM_ADDRESS      =       0x20; ///< NVRAM - Start address for SRAM
+  const uint8_t  MCP7940_ST               =          7; ///< MCP7940 register bits. RTCSEC reg
+  const uint8_t  MCP7940_12_24            =          6; ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
+  const uint8_t  MCP7940_AM_PM            =          5; ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
+  const uint8_t  MCP7940_OSCRUN           =          5; ///< RTCWKDAY register
+  const uint8_t  MCP7940_PWRFAIL          =          4; ///< RTCWKDAY register
+  const uint8_t  MCP7940_VBATEN           =          3; ///< RTCWKDAY register
+  const uint8_t  MCP7940_LPYR             =          5; ///< RTCMTH register
+  const uint8_t  MCP7940_OUT              =          7; ///< CONTROL register
+  const uint8_t  MCP7940_SQWEN            =          6; ///< CONTROL register
+  const uint8_t  MCP7940_ALM1EN           =          5; ///< CONTROL register
+  const uint8_t  MCP7940_ALM0EN           =          4; ///< CONTROL register
+  const uint8_t  MCP7940_EXTOSC           =          3; ///< CONTROL register
+  const uint8_t  MCP7940_CRSTRIM          =          2; ///< CONTROL register
+  const uint8_t  MCP7940_SQWFS1           =          1; ///< CONTROL register
+  const uint8_t  MCP7940_SQWFS0           =          0; ///< CONTROL register
+  const uint8_t  MCP7940_SIGN             =          7; ///< OSCTRIM register
+  const uint8_t  MCP7940_ALMPOL           =          7; ///< ALM0WKDAY register
+  const uint8_t  MCP7940_ALM0IF           =          3; ///< ALM0WKDAY register
+  const uint8_t  MCP7940_ALM1IF           =          3; ///< ALM1WKDAY register
+  const uint32_t SECONDS_PER_DAY          =      86400; ///< 60 secs * 60 mins * 24 hours
+  const uint32_t SECONDS_FROM_1970_TO_2000 = 946684800; ///< Seconds between year 1970 and 2000
+  /**
+  * @class DateTime
+  * @brief Simple general-purpose date/time class
+  * @details Copied from RTClib. For further information on this implementation see https://github.com/SV-Zanshin/MCP7940/wiki/DateTimeClass
+  */
+  class DateTime 
+  {
+    public:
+      DateTime (uint32_t t=0);                                          ///< Default constructor
+      DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0,
+                uint8_t min=0,uint8_t sec=0);                           ///< Overloaded Constructor
+      DateTime (const DateTime& copy);                                  ///< Overloaded Constructor
+      DateTime (const char* date, const char* time);                    ///< Overloaded Constructor
+      DateTime (const __FlashStringHelper* date, 
+                const __FlashStringHelper* time);                       ///< Overloaded Constructor for compile time
+      uint16_t year()         const { return 2000 + yOff; }             ///< Return the year
+      uint8_t  month()        const { return m; }                       ///< Return the month
+      uint8_t  day()          const { return d; }                       ///< Return the day
+      uint8_t  hour()         const { return hh; }                      ///< Return the hour
+      uint8_t  minute()       const { return mm; }                      ///< Return the minute
+      uint8_t  second()       const { return ss; }                      ///< Return the second
+      uint8_t  dayOfTheWeek() const;                                    ///< Return the DOW
+      long     secondstime()  const;                                    ///< times as seconds since 1/1/2000
+      uint32_t unixtime(void) const;                                    ///< times as seconds since 1/1/1970
+      DateTime operator+(const TimeSpan& span);                         ///< addition
+      DateTime operator-(const TimeSpan& span);                         ///< subtraction
+      TimeSpan operator-(const DateTime& right);                        ///< subtraction
+    protected:
+      uint8_t yOff, m, d, hh, mm, ss;                                   ///< private variables
+  }; // of class DateTime definition
+  /**
+  * @class TimeSpan
+  * @brief Timespan class which can represent changes in time with seconds accuracy
+  * @details Copied from RTClib. For further information see https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass
+  */
+  class TimeSpan {
+    public:
+      TimeSpan (int32_t seconds = 0);                                        ///< Default constructor
+      TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds); ///< Overloaded constructor
+      TimeSpan (const TimeSpan& copy);                                       ///< Overloaded constructor
+      int16_t  days() const         { return _seconds / 86400L; }            ///< return the number of days
+      int8_t   hours() const        { return _seconds / 3600 % 24; }         ///< return number of hours
+      int8_t   minutes() const      { return _seconds / 60 % 60; }           ///< return number of minutes
+      int8_t   seconds() const      { return _seconds % 60; }                ///< return number of seconds
+      int32_t  totalseconds() const { return _seconds; }                     ///< return total number of seconds
+      TimeSpan operator+(const TimeSpan& right);                             ///< redefine "+" operator
+      TimeSpan operator-(const TimeSpan& right);                             ///< redefine "-" operator
+    protected:
+      int32_t _seconds;                                                      ///< Internal value for total seconds
+  }; // of class TimeSpan definition
+    /**
+  * @class MCP7940_Class
+  * @brief Main class definition
+  */
+  class MCP7940_Class 
+  {
+    public:
+      MCP7940_Class();                                                        ///< Class constructor                //
+      ~MCP7940_Class();                                                       ///< Class destructor                 //
+/*!
+    @brief     Method starts I2C device communications
+    @details   Starts I2C communications with the device, using a default address if one is not specified
+    @param[in] i2cSpeed defaults to I2C_STANDARD_MODE if not specified, otherwise use speed defined in Herz
+    @return    true if successfully started communication, otherwise false
+*/
+      bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE);            ///< Start I2C device communications  //
+      bool     deviceStatus();                                                ///< return true when MCP7940 is on   //
+      bool     deviceStart();                                                 ///< Start the MCP7940 clock          //
+      bool     deviceStop();                                                  ///< Stop the MCP7940 clock           //
+      DateTime now();                                                         ///< return time                      //
       void     adjust();                                                      // Set the date and time to compile //
       void     adjust(const DateTime& dt);                                    // Set the date and time            //
       int8_t   calibrate();                                                   // Reset clock calibration offset   //
