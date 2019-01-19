@@ -13,9 +13,10 @@ env:
     - PRETTYNAME="SV-Zanshin MCP7940 (M/N) Arduino Library"
 # Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
 #    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
-  matrix:
-    - BOARD="arduino:avr:uno"
-    - BOARD="arduino:avr:mega:cpu=atmega2560"
+#  matrix:
+#    - BOARD="arduino:avr:uno"
+#    - BOARD="arduino:avr:mega:cpu=atmega2560"
+#    - BOARD="arduino:avr:leonardo
 before_install:
   - wget http://downloads.arduino.cc/arduino-cli/arduino-cli-$CLI_VERSION-linux64.tar.bz2
   - tar xf arduino-cli-$CLI_VERSION-linux64.tar.bz2
