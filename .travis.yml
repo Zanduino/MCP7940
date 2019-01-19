@@ -16,7 +16,7 @@ env:
   matrix:
     - BOARD="arduino:avr:uno"
     - BOARD="arduino:avr:mega:cpu=atmega2560"
-    - BOARD="arduino:avr:mega:cpu=atmega32u4"
+    - BOARD="arduino:avr:micro"
     - BOARD=arduino:avr:nano:cpu=atmega168
     - BOARD=arduino:avr:nano:cpu=atmega328
     - BOARD=arduino:avr:mega:cpu=atmega1280
