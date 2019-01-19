@@ -83,76 +83,80 @@ DateTime::DateTime (uint32_t t) {                                             //
   } // of for-next each month                                                 //                                  //
   d = days + 1;                                                               //                                  //
 } // of method DateTime()                                                     //----------------------------------//
-DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour,  // Overloaded Definition            //
-                    uint8_t min, uint8_t sec) {                               //                                  //
-  if (year >= 2000) {                                                         //                                  //
-    year -= 2000;                                                             //                                  //
-  } // of if-then year is greater than 2000 for offset                        //                                  //
-  yOff = year;                                                                //                                  //
-  m    = month;                                                               //                                  //
-  d    = day;                                                                 //                                  //
-  hh   = hour;                                                                //                                  //
-  mm   = min;                                                                 //                                  //
-  ss   = sec;                                                                 //                                  //
-} // of method DateTime()                                                     //----------------------------------//
-DateTime::DateTime (const DateTime& copy):                                    // Overloaded Definition            //
-  yOff(copy.yOff),                                                            //                                  //
-  m(copy.m),                                                                  //                                  //
-  d(copy.d),                                                                  //                                  //
-  hh(copy.hh),                                                                //                                  //
-  mm(copy.mm),                                                                //                                  //
-  ss(copy.ss)                                                                 //                                  //
-{} // of method DateTime()                                                    //                                  //
+/**
+* Overloaded redefinition of class constructor
+*/
+DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec) 
+{
+  if (year >= 2000) 
+  {
+    year -= 2000;
+  } // of if-then year is greater than 2000 for offset
+  yOff = year;
+  m    = month;
+  d    = day;
+  hh   = hour;
+  mm   = min;
+  ss   = sec;
+} // of method DateTime()
+/**
+* Overloaded redefinition of class constructor
+*/
+DateTime::DateTime (const DateTime& copy): yOff(copy.yOff),  m(copy.m),  d(copy.d),  hh(copy.hh),  mm(copy.mm),  ss(copy.ss) {}
 
-/*******************************************************************************************************************
-** Constructor for DateTime getting a string date and a string time formatted as MMM DD YYYY and HH:NN:_SS        **
-** N.B. This only works for English language output.                                                              **
-*******************************************************************************************************************/
-DateTime::DateTime (const char* date, const char* time) {                     // User compiler time to see RTC    //
-  yOff = conv2d(date + 9);                                                    // Compute the year offset          //
-  switch (date[0]) {                                                          // Switch for month detection       //
+/*!
+ Constructor for DateTime getting a string date and a string time formatted as MMM DD YYYY and HH:NN:_SS 
+ N.B. This only works for English language output 
+*/
+DateTime::DateTime (const char* date, const char* time) 
+{
+  yOff = conv2d(date + 9);
+  switch (date[0]) 
+  {
     case 'J': m = (date[1] == 'a') ? 1 : ((date[2] == 'n') ? 6 : 7); break;   // Jan Feb Mar Apr May Jun Jul Aug  //
     case 'F': m = 2; break;                                                   // Sep Oct Nov Dec                  //
-    case 'A': m = date[2] == 'r' ? 4 : 8; break;                              //                                  //
-    case 'M': m = date[2] == 'r' ? 3 : 5; break;                              //                                  //
-    case 'S': m = 9; break;                                                   //                                  //
-    case 'O': m = 10; break;                                                  //                                  //
-    case 'N': m = 11; break;                                                  //                                  //
-    case 'D': m = 12; break;                                                  //                                  //
-  } // of switch for the month                                                //                                  //
-  d  = conv2d(date + 4);                                                      // Compute the day                  //
-  hh = conv2d(time    );                                                      //                                  //
-  mm = conv2d(time + 3);                                                      //                                  //
-  ss = conv2d(time + 6);                                                      //                                  //
-} // of method DateTime()                                                     //                                  //
-/*******************************************************************************************************************
-** Constructor for using "the compiler's time": DateTime now (__DATE__, __TIME__); The compiler date and time     **
-** arrive in string format as follows: date = "Dec 26 2009", time = "12:34:56". N.B. This only works for English  **
-** language output.                                                                                               **
-*******************************************************************************************************************/
-DateTime::DateTime (const __FlashStringHelper* date,                          // Overloaded function call         //
-                    const __FlashStringHelper* time) {                        //                                  //
-  char date_buff[12];                                                         //                                  //
-  memcpy_P(date_buff, date, 12);                                              //                                  //
-  char time_buff[8];                                                          //                                  //
-  memcpy_P(time_buff, time, 8);                                               //                                  //
-  DateTime(date_buff, time_buff);                                             // Call actual DateTime constructor //
-  yOff = conv2d(date_buff + 9);                                               // Compute the year offset          //
-  switch (date_buff[0]) {                                                     // Switch for month detection       //
+    case 'A': m = date[2] == 'r' ? 4 : 8; break;
+    case 'M': m = date[2] == 'r' ? 3 : 5; break;
+    case 'S': m = 9; break;
+    case 'O': m = 10; break;
+    case 'N': m = 11; break;
+    case 'D': m = 12; break;
+  } // of switch for the month
+  d  = conv2d(date + 4); // Compute the day
+  hh = conv2d(time    );
+  mm = conv2d(time + 3);
+  ss = conv2d(time + 6);
+} // of method DateTime()
+
+/*!
+** Constructor for using "the compiler's time": DateTime now (__DATE__, __TIME__); The compiler date and time
+** arrive in string format as follows: date = "Dec 26 2009", time = "12:34:56". N.B. This only works for English
+** language output.
+*/
+DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time) 
+{
+  char date_buff[12];
+  memcpy_P(date_buff, date, 12);
+  char time_buff[8];
+  memcpy_P(time_buff, time, 8);
+  DateTime(date_buff, time_buff); // Call actual DateTime constructor
+  yOff = conv2d(date_buff + 9);   // Compute the year offset
+  switch (date_buff[0]) 
+  {
     case 'J': m =(date_buff[1]=='a')?1:((date_buff[2]=='n')?6:7); break;      // Jan Feb Mar Apr May Jun Jul Aug  //
     case 'F': m = 2; break;                                                   // Sep Oct Nov Dec                  //
-    case 'A': m = date_buff[2] == 'r' ? 4 : 8; break;                         //                                  //
-    case 'M': m = date_buff[2] == 'r' ? 3 : 5; break;                         //                                  //
-    case 'S': m = 9; break;                                                   //                                  //
-    case 'O': m = 10; break;                                                  //                                  //
-    case 'N': m = 11; break;                                                  //                                  //
-    case 'D': m = 12; break;                                                  //                                  //
-  } // of switch for the month                                                //                                  //
-  d  = conv2d(date_buff + 4);                                                 // Compute the day                  //
-  hh = conv2d(time_buff    );                                                 //                                  //
-  mm = conv2d(time_buff + 3);                                                 //                                  //
-  ss = conv2d(time_buff + 6);                                                 //                                  //
-} // of method DateTime()                                                     //                                  //
+    case 'A': m = date_buff[2] == 'r' ? 4 : 8; break;
+    case 'M': m = date_buff[2] == 'r' ? 3 : 5; break;
+    case 'S': m = 9; break;
+    case 'O': m = 10; break;
+    case 'N': m = 11; break;
+    case 'D': m = 12; break;
+  } // of switch for the month
+  d  = conv2d(date_buff + 4); // Compute the day
+  hh = conv2d(time_buff    );
+  mm = conv2d(time_buff + 3);
+  ss = conv2d(time_buff + 6);
+} // of method DateTime()
 
 /*******************************************************************************************************************
 ** Function dayOfTheWeek() to return the day-of-week where Monday is day 1                                        **
