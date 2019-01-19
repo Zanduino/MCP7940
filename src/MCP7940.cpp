@@ -69,7 +69,7 @@ DateTime::DateTime (uint32_t t) {                                             //
   uint8_t leap;                                                               //                                  //
   for (yOff = 0; ; ++yOff) {                                                  //                                  //
     leap = yOff % 4 == 0;                                                     //                                  //
-    if (days < 365 + leap)                                                    //                                  //
+    if (days < (uint16_t)365 + leap)                                          //                                  //
       break;                                                                  //                                  //
     days -= 365 + leap;                                                       //                                  //
   } // of for-next each year                                                  //                                  //
@@ -515,7 +515,7 @@ int8_t MCP7940_Class::calibrate(const float fMeas) {                          //
     trim = -127;                                                              //                                  //
   } // of if-then-else trim out of range                                      //                                  //
   trim = calibrate(trim);                                                     // Set the new trim value           //
-  return(trim);                                                               //                                  //
+  return((uint8_t)trim);                                                      //                                  //
 } // of method calibrate()                                                    //----------------------------------//
 
 /*******************************************************************************************************************
