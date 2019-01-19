@@ -1,28 +1,50 @@
-language: c
-sudo: false
-cache:
-  directories:
-    - ~/arduino_ide
-    - ~/.arduino15/packages/
-git:
-  depth: false
-  quiet: true
+####################################################################################################
+## Travis-CI control file
+##                                                                                                ##
+## Date
+## ========== =================== =============================================================== ##
+## 2019-01-19 Arnd@SV-Zanshin     Initial coding                                                  ##
+##                                                                                                ##
+####################################################################################################
+language: generic
 env:
   global:
-     - ARDUINO_IDE_VERSION="1.8.7"
-     - PRETTYNAME="SV-Zanshin MCP7940 (M/N) Arduino Library"
+    - CLI_VERSION=latest
+    - PRETTYNAME="SV-Zanshin MCP7940 (M/N) Arduino Library"
 # Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
 #    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
-
+  matrix:
+    - BOARD="arduino:avr:uno"
+    - BOARD="arduino:avr:mega:cpu=atmega2560"
 before_install:
-   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
-
+  - wget http://downloads.arduino.cc/arduino-cli/arduino-cli-$CLI_VERSION-linux64.tar.bz2
+  - tar xf arduino-cli-$CLI_VERSION-linux64.tar.bz2
+  - mkdir -p $HOME/bin
+  - mv arduino-cli-*-linux64 $HOME/bin/arduino-cli
+  - export PATH=$PATH:$HOME/bin
+  - arduino-cli core update-index
+  - if [[ "$BOARD" =~ "arduino:avr:" ]]; then
+      arduino-cli core install arduino:avr;
+    fi
+  - if [[ "$BOARD" =~ "arduino:sam:" ]]; then
+      arduino-cli core install arduino:sam;
+    fi
+  - if [[ "$BOARD" =~ "arduino:samd:" ]]; then
+      arduino-cli core install arduino:samd;
+    fi
+  - if [[ "$BOARD" =~ "Intel:arc32" ]]; then
+      arduino-cli core install Intel:arc32;
+    fi
+  - buildExampleSketch() { arduino-cli compile --verbose --warnings all --fqbn $BOARD $PWD/examples/$1; }
 install:
-   - arduino 
-
+  - mkdir -p $HOME/Arduino/libraries
+  - ln -s $PWD $HOME/Arduino/libraries/.
 script:
-   - build_main_platforms
-
+  - buildExampleSketch AccessMemory
+  - buildExampleSketch SetAlarms
+  - buildExampleSketch SetAndCalibrate
+  - buildExampleSketch SquareWave
+  - buildExampleSketch TestBatteryBackup
 notifications:
   email:
     on_success: change
