@@ -11,7 +11,7 @@ env:
   global:
     - CLI_VERSION=latest
     - PRETTYNAME="SV-Zanshin MCP7940 (M/N) Arduino Library"
-    - DOXYFILE: $TRAVIS_BUILD_DIR/doxygen/Doxyfile
+    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
   matrix:
     - BOARD="arduino:avr:uno"
     - BOARD="arduino:avr:mega:cpu=atmega2560"
