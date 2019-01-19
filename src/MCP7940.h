@@ -1,6 +1,6 @@
 /*! @file MCP7940.h
 
- @mainpage Arduino Library for the MCP7940M and MCP7940N Real-Time Clock devices
+ @mainpage Arduino Library Header for the MCP7940M and MCP7940N Real-Time Clock devices
 
  @section MCP7940_intro_section Description
 
@@ -133,7 +133,7 @@ Version| Date       | Developer           | Comments
   const uint8_t  MCP7940_ALM1IF           =          3; ///< ALM1WKDAY register
   const uint32_t SECONDS_PER_DAY          =      86400; ///< 60 secs * 60 mins * 24 hours
   const uint32_t SECONDS_FROM_1970_TO_2000 = 946684800; ///< Seconds between year 1970 and 2000
-  /**
+  /*!
   * @class DateTime
   * @brief Simple general-purpose date/time class
   * @details Copied from RTClib. For further information on this implementation see https://github.com/SV-Zanshin/MCP7940/wiki/DateTimeClass
@@ -141,89 +141,50 @@ Version| Date       | Developer           | Comments
   class DateTime 
   {
     public:
-/*!
-* Default constructor
-*/
       DateTime (uint32_t t=0);
-/*!
-* Overloaded constructor with full 
-*/
       DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0, uint8_t min=0,uint8_t sec=0);
-/*!
-* Overload constructor
-*/
       DateTime (const DateTime& copy);
-/*!
-* Overloaded constructor
-*/
       DateTime (const char* date, const char* time);
-/*!
-* Overloaded constructor for use with compiler date and time
-*/
       DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time);
-/*!
-*  Return the year
-*/
+      /*! return the current year */
       uint16_t year()         const { return 2000 + yOff; }
-/*!
-* Return the Month
-*/
+      /*! return the current month */
       uint8_t  month()        const { return m; }
-/*!
-* Return the Day
-*/
+      /*! return the current day of the month */
       uint8_t  day()          const { return d; }
-/*!
-* Return the Hour
-*/
+      /*! return the current hour */
       uint8_t  hour()         const { return hh; }
-/*!
-* Return the Minute
-*/
+      /*! return the current minute */
       uint8_t  minute()       const { return mm; }
-/*!
-* Return the Second
-*/
+      /*! return the current second */
       uint8_t  second()       const { return ss; }
-/*!
-* Return the Day-of-Week
-*/
+      /*! return the current day of the week starting at 0 */
       uint8_t  dayOfTheWeek() const;
-/*!
-* Return the time as seconds since 2000-01-01
-*/
+      /*! return the current seconds in the year */
       long     secondstime()  const;
-/*!
-* Return the standard unixtime as seconds since 1970-01-01
-*/
+      /*! return the current Unixtime */
       uint32_t unixtime(void) const;
-/*!
-* Class addition of timespans
-*/
+      /*! Overloaded "+" operator to add two timespans */
       DateTime operator+(const TimeSpan& span);
-/*!
-* Class subtraction of timespans
-*/
+      /*! Overloaded "+" operator to add two timespans */
       DateTime operator-(const TimeSpan& span);
-/*!
-* Class subtraction of timespans overloaded
-*/
+      /*! Overloaded "-" operator subtract add two timespans */
       TimeSpan operator-(const DateTime& right);
     protected:
-      uint8_t yOff; ///< private year offset variable
-      uint8_t    m; ///< private months variable
-      uint8_t    d; ///< private days variable
-      uint8_t   hh; ///< private hours variable
-      uint8_t   mm; ///< private minutes variable
-      uint8_t   ss; ///< private seconds variable
+      uint8_t yOff; ///< Internal year offset value
+      uint8_t    m; ///< Internal month value
+      uint8_t    d; ///< Internal day value
+      uint8_t   hh; ///< Internal hour value
+      uint8_t   mm; ///< Internal minute value
+      uint8_t   ss; ///< Internal seconds
   }; // of class DateTime definition
-  /**
+  /*!
   * @class TimeSpan
   * @brief Timespan class which can represent changes in time with seconds accuracy
   * @details Copied from RTClib. For further information see https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass
   */
-  class TimeSpan {
-    /** /cond */
+  class TimeSpan 
+  {
     public:
       TimeSpan (int32_t seconds = 0);                                        ///< Default constructor
       TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds); ///< Overloaded constructor
@@ -237,114 +198,61 @@ Version| Date       | Developer           | Comments
       TimeSpan operator-(const TimeSpan& right);                             ///< redefine "-" operator
     protected:
       int32_t _seconds;                                                      ///< Internal value for total seconds
-    /** /endcond */
   }; // of class TimeSpan definition
-    /**
-  * @class MCP7940_Class
-  * @brief Main class definition
-  */
+
+/**
+* @class MCP7940_Class
+* @brief Main class definition
+*/
   class MCP7940_Class 
   {
     public:
-      MCP7940_Class();                                                        ///< Class constructor                //
-      ~MCP7940_Class();                                                       ///< Class destructor                 //
-/*!
-    @brief     Method starts I2C device communications
-    @details   Starts I2C communications with the device, using a default address if one is not specified
-    @param[in] i2cSpeed defaults to I2C_STANDARD_MODE if not specified, otherwise use speed defined in Herz
-    @return    true if successfully started communication, otherwise false
-*/
+      MCP7940_Class() {};  ///< Unused Class constructor
+      ~MCP7940_Class() {}; ///< Unused Class destructor
       bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE);
-/*!
-    @brief     Return device Status
-    @return    true if device is on
-*/
       bool     deviceStatus();
-/*!
-    @brief     Start the device clock
-    @return    true if device clock was started
-*/
       bool     deviceStart();
-/*!
-    @brief     Stop teh device clock
-    @return    true if device was successfully stopped
-*/
       bool     deviceStop();
-/*!
-    @brief     Return the current time
-    @return    Current time in a DateTime class
-*/
       DateTime now();
-/*!
-    @brief     Set the current date and time to that of program compile
-*/
       void     adjust();
-/*!
-    @brief     Set the current date and time
-    @param[in] dt DateTime class value to set the current date and time
-*/
       void     adjust(const DateTime& dt);
-/*!
-    @brief     Reset the calibration offset
-    @return    Always returns 0
-*/
       int8_t   calibrate();
-/*!
-    @brief     Set the new calibration trim value
-    @param[in] newTrim New OSCTRIM value
-    @return    Always returns the input parameter value
-*/
       int8_t   calibrate(const int8_t newTrim);
-/*!
-    @brief     Set the new calibration trim value using current date/time
-    @details   Use the difference between the input date/time and clock's date time to compute new trim
-    @param[in] dt Current "real" date and time
-    @return    New trim value for OSCTRIM
-*/
       int8_t   calibrate(const DateTime& dt);
-      int8_t   calibrate(const float MeasuredFrequency);                      ///< Calibrate according to frequency //
-      int8_t   getCalibrationTrim();                                          ///< Get the trim register value      //
-      uint8_t  weekdayRead();                                                 ///< Read weekday from RTC            //
-      uint8_t  weekdayWrite(const uint8_t dow);                               ///< Write weekday to RTC             //
-      bool     setMFP(const bool value);                                      ///< Set the MFP pin state            //
-      uint8_t  getMFP();                                                      ///< Get the MFP pin state            //
-      bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType,
-                        const DateTime dt, const bool state = true );         ///< Set an Alarm
-      void     setAlarmPolarity(const bool polarity);                         ///< Set the polarity of the alarm    //
-      DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);       ///< Return alarm date/time & type    //
-      bool     clearAlarm(const uint8_t alarmNumber);                         ///< Clear an Alarm                   //
-      bool     setAlarmState(const uint8_t alarmNumber, const bool state);    ///< Return whether alarm is on or off//
-/**
-    @brief     Method returns state of an alarm
-    @details   
-    @param[in] alarmNumber Alarm number 0 or Alarm number 1
-    @return    true if alarm is on, otherwise false
-*/
+      int8_t   calibrate(const float MeasuredFrequency);
+      int8_t   getCalibrationTrim();
+      uint8_t  weekdayRead();
+      uint8_t  weekdayWrite(const uint8_t dow);
+      bool     setMFP(const bool value);
+      uint8_t  getMFP();
+      bool     setAlarm(const uint8_t alarmNumber, const uint8_t alarmType, const DateTime dt, const bool state = true );
+      void     setAlarmPolarity(const bool polarity);
+      DateTime getAlarm(const uint8_t alarmNumber, uint8_t &alarmType);
+      bool     clearAlarm(const uint8_t alarmNumber);
+      bool     setAlarmState(const uint8_t alarmNumber, const bool state);
       bool     getAlarmState(const uint8_t alarmNumber);
-      bool     isAlarm(const uint8_t alarmNumber);                            ///< Return whether alarm is triggered//
-      uint8_t  getSQWSpeed();                                                 ///< Return the SQW frequency code    //
-      bool     setSQWSpeed(uint8_t frequency, bool state = true);             ///< Set the SQW frequency to code    //
-      bool     setSQWState(const bool state);                                 ///< Set the SQW MFP on or off        //
-      bool     getSQWState();                                                 ///< Return if the SQW is active      //
-      bool     setBattery(const bool state);                                  ///< Enable or disable battery backup //
-      bool     getBattery();                                                  ///< Get the battery backup state     //
-      bool     getPowerFail();                                                ///< Check if power fail has occurred //
-      bool     clearPowerFail();                                              ///< Clear the power fail flag        //
-      DateTime getPowerDown();                                                ///< Return date when power failed    //
-      DateTime getPowerUp();                                                  ///< Return date when power restored  //
-      bool     SRAMread(uint8_t address, uint8_t *data, uint8_t n);           ///< Read data from SRAM              //
-      bool     SRAMwrite(uint8_t address, uint8_t *data, uint8_t n);          ///< Write data to SRAM               //
-/*************************************************************************************************************
-** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The    **
-** code has to be in the main library definition rather than the actual MCP7940.cpp library file.           **
-** The template functions allow any type of data to be read and written, be it a byte or a character array  **
-** or a structure.                                                                                          **
-**                                                                                                          **
-** The MCP7940 supports 64 bytes of general purpose SRAM memory, which can be used to store data. For more  **
-** details, see datasheet p.36.                                                                             **
-** The data is stored in a block of 64 bytes, reading beyond the end of the block causes the address        **
-** pointer to roll over to the start of the block.                                                          **
-*************************************************************************************************************/
+      bool     isAlarm(const uint8_t alarmNumber);
+      uint8_t  getSQWSpeed();
+      bool     setSQWSpeed(uint8_t frequency, bool state = true);
+      bool     setSQWState(const bool state);
+      bool     getSQWState();
+      bool     setBattery(const bool state);
+      bool     getBattery();
+      bool     getPowerFail();
+      bool     clearPowerFail();
+      DateTime getPowerDown();
+      DateTime getPowerUp();
+/*******************************************************************************************************************
+** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The code has **
+** to be in the main library definition rather than the actual MCP7940.cpp library file.The template functions    **
+** allow any type of data to be read and written, be it a byte or a character array or a structure.               **
+**                                                                                                                **
+** The MCP7940 supports 64 bytes of general purpose SRAM memory, which can be used to store data. For more        **
+** details, see datasheet page 36.                                                                                **
+**                                                                                                                **
+** The data is stored in a block of 64 bytes, reading beyond the end of the block causes the address pointer to   **
+** roll over to the start of the block.                                                                           **
+*******************************************************************************************************************/
 /*!
     @brief     Template for readRAM()
     @details   As a template it can support compile-time data type definitions
@@ -352,22 +260,25 @@ Version| Date       | Developer           | Comments
     @param[in] value    Data Type "T" to read
     @return    Pointer to return data structure
 */
-      template< typename T >                                                  // method to read a structure       //
-      uint8_t&  readRAM(const uint8_t addr, T &value) {                       //                                  //
-        uint8_t* bytePtr    = (uint8_t*)&value;                               // Pointer to structure beginning   //
-        uint8_t  structSize = sizeof(T);                                      // Number of bytes in structure     //
-        uint8_t  i         = 0;                                               // loop counter                     //
-        Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
-        Wire.write((addr%64) + MCP7940_RAM_ADDRESS);                          // Send register address to write   //
-        _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
-        for (i=0;i<structSize;i++) {                                          // loop for each byte to be read    //
-          if (i%BUFFER_LENGTH==0) {                                           // Read I2C again on buffer boundary//
-            Wire.requestFrom(MCP7940_ADDRESS, structSize);                    // Request a block of data          //
-          } // of if-then we are at a buffer boundary                         //                                  //
-          *bytePtr++ = Wire.read();                                           //                                  //
-        } // of for-next each byte to be read                                 //                                  //
-        return (i);                                                           // return bytes read                //
-      } // of method readRAM()                                                //----------------------------------//
+      template< typename T >
+      uint8_t&  readRAM(const uint8_t addr, T &value) 
+      {
+        uint8_t* bytePtr    = (uint8_t*)&value;            // Pointer to structure beginning
+        uint8_t  structSize = sizeof(T);                   // Number of bytes in structure
+        uint8_t  i         = 0;                            // loop counter
+        Wire.beginTransmission(MCP7940_ADDRESS);           // Address the I2C device
+        Wire.write((addr%64) + MCP7940_RAM_ADDRESS);       // Send register address to write
+        _TransmissionStatus = Wire.endTransmission();      // Close transmission
+        for (i=0;i<structSize;i++)                         // loop for each byte to be read
+        {
+          if (i%BUFFER_LENGTH==0)                          // loop for each buffer block
+          { 
+            Wire.requestFrom(MCP7940_ADDRESS, structSize); // Request a block of data
+          } // of if-then we are at a buffer boundary
+          *bytePtr++ = Wire.read(); // next byte
+        } // of for-next each byte to be read
+        return (i);
+      } // of method readRAM()
 /*!
     @brief     Template for writeRAM()
     @details   As a template it can support compile-time data type definitions
@@ -375,17 +286,19 @@ Version| Date       | Developer           | Comments
     @param[in] value Data Type "T" to write
     @return    True if successful, otherwise false
 */
-      template<typename T>                                                    // method to write any data type to //
-      bool writeRAM(const uint8_t addr, const T &value) {                     // the MCP7940 SRAM                 //
-        const uint8_t* bytePtr = (const uint8_t*)&value;                      // Pointer to structure beginning   //
-        Wire.beginTransmission(MCP7940_ADDRESS);                              // Address the I2C device           //
-        Wire.write((addr%64) + MCP7940_RAM_ADDRESS);                          // Send register address to write   //
-        for (uint8_t i = 0; i < sizeof(T); i++) {                             // loop for each byte to be written //
-          Wire.write(*bytePtr++);                                             //                                  //
-        }                                                                     //                                  //
-        _TransmissionStatus = Wire.endTransmission();                         // Close transmission               //
-        return (!_TransmissionStatus);                                        // return error status              //
-      } // of method writeRAM()                                               //----------------------------------//
+      template<typename T>
+      bool writeRAM(const uint8_t addr, const T &value) 
+      {
+        const uint8_t* bytePtr = (const uint8_t*)&value; // Pointer to structure beginning
+        Wire.beginTransmission(MCP7940_ADDRESS);         // Address the I2C device
+        Wire.write((addr%64) + MCP7940_RAM_ADDRESS);     // Send register address to write
+        for (uint8_t i = 0; i < sizeof(T); i++)          // loop for each byte to be written
+        {
+          Wire.write(*bytePtr++);
+        } // of for-next each byte
+        _TransmissionStatus = Wire.endTransmission();    // Close transmission
+        return (!_TransmissionStatus);                   // return error status
+      } // of method writeRAM()
     private:                                                                  // Private methods                  //
       uint8_t  readByte(const uint8_t addr);                                  // Read 1 byte from address on I2C  //
       void     writeByte(const uint8_t addr, const uint8_t data);             // Write 1 byte at address to I2C   //
