@@ -13,41 +13,48 @@ The MCP7940 allows for software trimming and the library has functions which sup
 </br></br></br></br></br></br>
   
 ## Hardware Tested [![Build Status](https://travis-ci.org/SV-Zanshin/MCP7940.svg?branch=master)](https://travis-ci.org/SV-Zanshin/MCP7940)
-The following configurations have been compiled and tested
+The following configurations have been compiled and/or tested. [Travis-CI](https://travis-ci.org) is used for automated continuous integration and testing.
 
 <table>
-  <th>Board</th>
+  <th>Name</th>
   <th>Tested</th>
+  <th>CPU</th>
   <th>Comments</th>
   <tr>
     <td>Arduino UNO</td>
     <td>Yes</td>
     <td>ATMega328P</td>
+    <td></td>
   <tr>
   <tr>
     <td>Arduino Mega</td>
     <td>Yes</td>
     <td>ATMega 2560</td>
+    <td></td>
   <tr>
   <tr>
     <td>Arduino Micro</td>
     <td>Yes</td>
     <td>ATMega32U4</td>
+    <td></td>
   <tr>
   <tr>
     <td>Arduino 1280</td>
     <td>Yes</td>
     <td>ATMega1280</td>
+    <td></td>
   <tr>
   <tr>
     <td>Arduino 328</td>
     <td>Yes</td>
     <td>ATMega328</td>
+    <td></td>
   <tr>
   <tr>
     <td>Arduino 168</td>
     <td>Yes</td>
     <td>ATMega168</td>
+    <td></td>
   <tr>
 </table>    
     
