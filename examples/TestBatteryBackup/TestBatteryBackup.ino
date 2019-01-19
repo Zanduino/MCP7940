@@ -92,7 +92,6 @@ void loop() {                                                                 //
     digitalWrite(LED_PIN,!digitalRead(LED_PIN));                              // Toggle the LED                   //
     Serial.println();                                                         //                                  //
   } // of if the seconds have changed                                         //                                  //
-  readCommand();                                                              // See if there's incoming data     //
   if (MCP7940.getPowerFail()) {                                               // Check for a power failure        //
     Serial.println(F("Battery power failure detected!\nWaiting for power.."));//                                  //
     while(MCP7940.now().second()==secs);                                      // Loop until clock runs again      //

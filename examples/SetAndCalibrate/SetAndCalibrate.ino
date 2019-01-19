@@ -103,7 +103,7 @@ void readCommand() {                                                          //
       enum commands { SetDate, CalDate, Unknown_Command };                    // of commands enumerated type      //
       commands command;                                                       // declare enumerated type          //
       char workBuffer[10];                                                    // Buffer to hold string compare    //
-      sscanf(inputBuffer,"%s %*",workBuffer);                                 // Parse the string for first word  //
+      sscanf(inputBuffer,"%s %*s",workBuffer);                                // Parse the string for first word  //
       if      (!strcmp(workBuffer,"SETDATE" )) command = SetDate;             // Set command number when found    //
       else if (!strcmp(workBuffer,"CALDATE" )) command = CalDate;             // Set command number when found    //
       else command = Unknown_Command;                                         // Otherwise set to not found       //
