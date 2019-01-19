@@ -27,7 +27,7 @@ Written by Arnd\@SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
-1.1.5  | 2019-01-19 | SV-Zanshin          | Issue #40 - Change commenting to use doxygen
+1.1.5  | 2019-01-19 | SV-Zanshin          | Issue #40 - Change commenting structure and layout to use doxygen
 1.1.5  | 2019-01-19 | INemesisI           | Issue #37 - Corrected AlarmPolarity bit clearing on setAlarm()
 1.1.5  | 2019-01-19 | SV-Zanshin          | Issue #39 - Small changes to remove compiler warnings for Travis-CI
 1.1.5  | 2019-01-18 | INemesisI           | Issue #38 - Overflow on setting new TRIM value
@@ -142,12 +142,10 @@ Version| Date       | Developer           | Comments
   {
     public:
       DateTime (uint32_t t=0);                                          ///< Default constructor
-      DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0,
-                uint8_t min=0,uint8_t sec=0);                           ///< Overloaded Constructor
+      DateTime (uint16_t year,uint8_t month,uint8_t day,uint8_t hour=0, uint8_t min=0,uint8_t sec=0); ///< Overloaded Constructor
       DateTime (const DateTime& copy);                                  ///< Overloaded Constructor
       DateTime (const char* date, const char* time);                    ///< Overloaded Constructor
-      DateTime (const __FlashStringHelper* date, 
-                const __FlashStringHelper* time);                       ///< Overloaded Constructor for compile time
+      DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time); ///< Overloaded Constructor for compile time
       uint16_t year()         const { return 2000 + yOff; }             ///< Return the year
       uint8_t  month()        const { return m; }                       ///< Return the month
       uint8_t  day()          const { return d; }                       ///< Return the day
@@ -157,9 +155,9 @@ Version| Date       | Developer           | Comments
       uint8_t  dayOfTheWeek() const;                                    ///< Return the DOW
       long     secondstime()  const;                                    ///< times as seconds since 1/1/2000
       uint32_t unixtime(void) const;                                    ///< times as seconds since 1/1/1970
-      DateTime operator+(const TimeSpan& span);                         ///< addition
-      DateTime operator-(const TimeSpan& span);                         ///< subtraction
-      TimeSpan operator-(const DateTime& right);                        ///< subtraction
+      DateTime operator+(const TimeSpan& span);                         ///< class addition
+      DateTime operator-(const TimeSpan& span);                         ///< class subtraction
+      TimeSpan operator-(const DateTime& right);                        ///< class subtraction overload
     protected:
       uint8_t yOff; ///< private year offset variable
       uint8_t    m; ///< private months variable
@@ -203,16 +201,54 @@ Version| Date       | Developer           | Comments
     @param[in] i2cSpeed defaults to I2C_STANDARD_MODE if not specified, otherwise use speed defined in Herz
     @return    true if successfully started communication, otherwise false
 */
-      bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE);            ///< Start I2C device communications  //
-      bool     deviceStatus();                                                ///< return true when MCP7940 is on   //
-      bool     deviceStart();                                                 ///< Start the MCP7940 clock          //
-      bool     deviceStop();                                                  ///< Stop the MCP7940 clock           //
-      DateTime now();                                                         ///< return time                      //
-      void     adjust();                                                      ///< Set the date and time to compile //
-      void     adjust(const DateTime& dt);                                    ///< Set the date and time            //
-      int8_t   calibrate();                                                   ///< Reset clock calibration offset   //
-      int8_t   calibrate(const int8_t);                                       ///< Reset clock calibration offset   //
-      int8_t   calibrate(const DateTime& dt);                                 ///< Calibrate the clock              //
+      bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE);
+/*!
+    @brief     Return device Status
+    @return    true if device is on
+*/
+      bool     deviceStatus();
+/*!
+    @brief     Start the device clock
+    @return    true if device clock was started
+*/
+      bool     deviceStart();
+/*!
+    @brief     Stop teh device clock
+    @return    true if device was successfully stopped
+*/
+      bool     deviceStop();
+/*!
+    @brief     Return the current time
+    @return    Current time in a DateTime class
+*/
+      DateTime now();
+/*!
+    @brief     Set the current date and time to that of program compile
+*/
+      void     adjust();
+/*!
+    @brief     Set the current date and time
+    @param[in] dt DateTime class value to set the current date and time
+*/
+      void     adjust(const DateTime& dt);
+/*!
+    @brief     Reset the calibration offset
+    @return    Always returns 0
+*/
+      int8_t   calibrate();
+/*!
+    @brief     Set the new calibration trim value
+    @param[in] newTrim New OSCTRIM value
+    @return    Always returns the input parameter value
+*/
+      int8_t   calibrate(const int8_t newTrim);
+/*!
+    @brief     Set the new calibration trim value using current date/time
+    @details   Use the difference between the input date/time and clock's date time to compute new trim
+    @param[in] dt Current "real" date and time
+    @return    New trim value for OSCTRIM
+*/
+      int8_t   calibrate(const DateTime& dt);
       int8_t   calibrate(const float MeasuredFrequency);                      ///< Calibrate according to frequency //
       int8_t   getCalibrationTrim();                                          ///< Get the trim register value      //
       uint8_t  weekdayRead();                                                 ///< Read weekday from RTC            //
