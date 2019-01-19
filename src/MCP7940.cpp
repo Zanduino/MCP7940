@@ -589,9 +589,10 @@ bool MCP7940_Class::setAlarm(const uint8_t alarmNumber,                       //
       deviceStart()      ) {                                                  // if parameters and oscillator OK  //
     clearRegisterBit(MCP7940_CONTROL, alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN); // Turn off the alarm       //
     uint8_t offset = 7 * alarmNumber;                                         // Offset to be applied             //
-    uint8_t wkdayRegister = readByte(MCP7940_ALM0WKDAY + offset) & (1 << MCP7940_ALM0IF); // Keep alm int flag bit//
+    uint8_t wkdayRegister = readByte(MCP7940_ALM0WKDAY + offset);             // Load register to memory          //
+    wkdayRegister &= ((1 << MCP7940_ALM0IF) | (1 << MCP7940_ALMPOL));         // Keep ALMPOL and ALMxIF bits      //
     wkdayRegister |= alarmType << 4;                                          // Set 3 bits from alarmType        //
-    wkdayRegister |= dt.dayOfTheWeek();                                       // Set 3 bits for dow from date     //
+    wkdayRegister |= (dt.dayOfTheWeek() & 0x07);                              // Set 3 bits for dow from date     //
     writeByte(MCP7940_ALM0WKDAY + offset, wkdayRegister);                     // Write alarm mask                 //
     writeByte(MCP7940_ALM0SEC + offset, int2bcd(dt.second()));                // Write seconds, keep device off   //
     writeByte(MCP7940_ALM0MIN + offset, int2bcd(dt.minute()));                // Write the minutes value          //

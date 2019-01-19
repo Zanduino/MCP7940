@@ -24,6 +24,8 @@
 **                                                                                                                **
 ** Vers.  Date       Developer Github ID Comments                                                                 **
 ** ====== ========== =================== ======================================================================== **
+** 1.1.5  2019-01-19 INemesisI            Issue #37 - Corrected AlarmPolarity bit clearing on setAlarm()          **
+** 1.1.5  2019-01-19 SV-Zanshin           Issue #39 - Small changes to remove compiler warnings for Travis-CI     **
 ** 1.1.5  2019-01-18 INemesisI            Issue #38 - Overflow on setting new TRIM value                          **
 ** 1.1.4  2018-12-15 hexeguitar           Issue #36 - Overflow on I2C_MODES datatype corrected                    **
 ** 1.1.4  2018-12-15 huynh213             Issue #35 - MCP7940.adjust() function resets the PWRFAIL and VBATEN     **
