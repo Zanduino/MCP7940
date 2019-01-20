@@ -13,7 +13,7 @@ The MCP7940 allows for software trimming and the library has functions which sup
 </br></br></br></br></br></br>
   
 ## Examples
-Several example sketches exist and are documented on the [Wiki pages][https://github.com/SV-Zanshin/MCP7940/wiki]
+Several example sketches exist and are documented on the [Wiki pages](https://github.com/SV-Zanshin/MCP7940/wiki)
 <Table>
   <th>Example Program</th>
   <th>Description</th>
