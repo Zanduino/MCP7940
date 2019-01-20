@@ -65,6 +65,7 @@ Version| Date       | Developer           | Comments
 #include "Arduino.h"  // Arduino data type definitions
 #include <Wire.h>     // Standard I2C "Wire" library
 #ifndef MCP7940_h     // Guard code definition
+  /*! @def MCP7940_h  Guard code definition */
   #define MCP7940_h   // Define the name inside guard code
   /*****************************************************************************************************************
   ** Declare classes used in within the class                                                                     **
@@ -74,12 +75,14 @@ Version| Date       | Developer           | Comments
   ** Declare constants used in the class                                                                          **
   *****************************************************************************************************************/
   #ifndef I2C_MODES   // I2C related constants
+    /*! @def I2C_MODES  Guard code definition */
     #define I2C_MODES // Guard code to prevent multiple definitions
     const uint32_t I2C_STANDARD_MODE      =     100000; ///< Default normal I2C 100KHz speed
     const uint32_t I2C_FAST_MODE          =     400000; ///< Fast mode
   #endif
   #if !defined(BUFFER_LENGTH) // The ESP32 Wire library doesn't currently define BUFFER_LENGTH
-     #define BUFFER_LENGTH 32
+    /*! @def BUFFER_LENGTH If the "Wire.h" library doesn't define the buffer, do so here */
+    #define BUFFER_LENGTH 32
   #endif
   const uint8_t  MCP7940_ADDRESS          =       0x6F; ///< Device address, fixed value
   const uint8_t  MCP7940_RTCSEC           =       0x00; ///< Timekeeping, RTCSEC Register address 
