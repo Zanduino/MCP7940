@@ -18,7 +18,7 @@ Several example sketches exist and are documented on the [Wiki pages](https://gi
   <th>Example Program</th>
   <th>Description</th>
   <tr>
-    <td> [SetAndCalibrate](https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino)</td>
+    <td> [SetAndCalibrate](https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino) </td>
     <td></td>
   </tr>
   <tr>
