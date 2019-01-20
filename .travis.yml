@@ -55,4 +55,5 @@ notifications:
     on_failure: change
 # Generate and deploy documentation
 after_success:
-  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
+#  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
+  - source <(curl -SLs  https://raw.githubusercontent.com/SV-Zanshin/MCP7940/doxy_gen.sh)
