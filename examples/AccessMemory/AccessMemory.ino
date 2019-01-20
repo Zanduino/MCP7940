@@ -59,7 +59,7 @@ void setup()
 {
   Serial.begin(SERIAL_SPEED);
   #ifdef  __AVR_ATmega32U4__ // If on a 32U4 processor, then wait 3 seconds for the serial interface to initialize
-    delay(3000)
+    delay(3000);
   #endif
   Serial.print(F("\nStarting AccessMemory program\n"));
   Serial.print(F("- Compiled with c++ version "));

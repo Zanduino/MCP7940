@@ -20,7 +20,7 @@ env:
     - BOARD=arduino:avr:nano:cpu=atmega328
     - BOARD=arduino:avr:mega:cpu=atmega1280
 before_install:
-  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+#  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
   - wget http://downloads.arduino.cc/arduino-cli/arduino-cli-$CLI_VERSION-linux64.tar.bz2
   - tar xf arduino-cli-$CLI_VERSION-linux64.tar.bz2
   - mkdir -p $HOME/bin
@@ -55,4 +55,4 @@ notifications:
     on_failure: change
 # Generate and deploy documentation
 after_success:
-#  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
