@@ -13,11 +13,11 @@
 ** The MCP7940 allows the Multifunction Pin (MFP) to output a square wave based on the 32KHz crystal oscillator.  **
 ** The square wave signal can have the following frequencies:                                                     **
 **                                                                                                                **
-**  1     Hz                                                                                                      **
+**  1.0   Hz                                                                                                      **
 **  4.096kHz                                                                                                      **
 **  8.192kHz                                                                                                      **
 ** 32.768kHz                                                                                                      **
-** 64     Hz                                                                                                      **
+** 64.0   Hz                                                                                                      **
 **                                                                                                                **
 ** If the TRIM value is set this affects the square wave output frequency as well.                                **
 **                                                                                                                **
@@ -30,12 +30,13 @@
 **                                                                                                                **
 ** Vers.  Date       Developer                     Comments                                                       **
 ** ====== ========== ============================= ============================================================== **
+** 1.0.3  2019-01-20 https://github.com/SV-Zanshin Corrected Interrupt vector definition for non-esp32            **
 ** 1.0.2  2018-09-24 https://github.com/SV-Zanshin Issue #34 Support for ESP32 Type interrupts                    **
 ** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Added support for 64Hz, changed to use interrupts              **
 ** 1.0.0  2017-07-29 https://github.com/SV-Zanshin Initial coding                                                 **
 **                                                                                                                **
 *******************************************************************************************************************/
-#include <MCP7940.h>                                                          // Include the MCP7940 RTC library  //
+#include "MCP7940.h"                                                          // Include the MCP7940 RTC library  //
 /*******************************************************************************************************************
 ** Declare all program constants and enumerated types                                                             **
 *******************************************************************************************************************/
@@ -50,23 +51,25 @@ enum SquareWaveTypes { Hz1, kHz4, kHz8, kHz32, Hz64 };                        //
 MCP7940_Class     MCP7940;                                                    // Create instance of the MCP7940M  //
 char              inputBuffer[SPRINTF_BUFFER_SIZE];                           // Buffer for sprintf() / sscanf()  //
 volatile uint64_t switches  = 0;                                              // Number of High-Low or Low-High   //
-#if ESP32
-   portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;                           // ESP32 MUX definition             //
-#endif
 
 /*******************************************************************************************************************
 ** Declare interrupt handler for pin changes to the MFP_PIN                                                       **
 *******************************************************************************************************************/
 #ifdef ESP32
-   void IRAM_ATTR PCINT_vect() {
-   portENTER_CRITICAL_ISR(&mux);                                              // Enter critical MUX timing        //
-  switches++;                                                                 // Increment counter                //
-   portENTER_CRITICAL_ISR(&mux);                                              // Enter critical MUX timing        //
+portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+void IRAM_ATTR PCINT_vect()
 #else
-   ISR (PCINT_vect) {                                                           // Called when pin goes from a low  //
-  switches++;                                                                 // Increment counter                //
+void PCINT_vect()
 #endif
-} // of method PCINT_vect                                                     //                                  //
+{
+#ifdef ESP32
+  portENTER_CRITICAL_ISR(&mux);
+#endif
+  switches++;
+#ifdef ESP32
+  portENTER_CRITICAL_ISR(&mux);
+#endif
+} // of method PCINT_vect
 
 /*******************************************************************************************************************
 ** Method Setup(). This is an Arduino IDE method which is called upon boot or restart. It is only called one time **
@@ -110,7 +113,7 @@ void setup() {                                                                //
   pinMode(LED_PIN,OUTPUT);                                                    // Declare built-in LED as output   //
   Serial.println("Setting SQW to 64Hz and linking to LED");                   //                                  //
   MCP7940.setSQWState(true);                                                  // Turn the SQW on                  //
-  MCP7940.setSQWSpeed(kHz32);                                                  // Set the square wave pin          //
+  MCP7940.setSQWSpeed(kHz32);                                                 // Set the square wave pin          //
 } // of method setup()                                                        //                                  //
 /*******************************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.                   **

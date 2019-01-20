@@ -78,7 +78,7 @@ Version| Date       | Developer           | Comments
     const uint32_t I2C_STANDARD_MODE      =     100000; ///< Default normal I2C 100KHz speed
     const uint32_t I2C_FAST_MODE          =     400000; ///< Fast mode
   #endif
-  #if defined (ESP32) && (!defined(BUFFER_LENGTH)) // The ESP32 Wire library doesn't currently define BUFFER_LENGTH
+  #if !defined(BUFFER_LENGTH) // The ESP32 Wire library doesn't currently define BUFFER_LENGTH
      #define BUFFER_LENGTH 32
   #endif
   const uint8_t  MCP7940_ADDRESS          =       0x6F; ///< Device address, fixed value
