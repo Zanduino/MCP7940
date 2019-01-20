@@ -3,6 +3,7 @@ var _m_c_p7940_8h =
     [ "DateTime", "class_date_time.html", "class_date_time" ],
     [ "TimeSpan", "class_time_span.html", "class_time_span" ],
     [ "MCP7940_Class", "class_m_c_p7940___class.html", "class_m_c_p7940___class" ],
+    [ "BUFFER_LENGTH", "_m_c_p7940_8h.html#af7b7dc9a200cb1404c280bd500fd1551", null ],
     [ "I2C_MODES", "_m_c_p7940_8h.html#ab1ba09cc86d54a24a664eacdd9d30030", null ],
     [ "MCP7940_h", "_m_c_p7940_8h.html#a71cd27e18381c0886611a0d2e0e443ae", null ],
     [ "I2C_FAST_MODE", "_m_c_p7940_8h.html#a575b1d77d752156e2175f705573647b7", null ],

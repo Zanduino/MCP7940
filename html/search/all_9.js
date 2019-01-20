@@ -28,6 +28,7 @@ var searchData=
   ['mcp7940_5fcontrol',['MCP7940_CONTROL',['../_m_c_p7940_8h.html#a1bcc2e2e2e9b03287406ee3d4904524e',1,'MCP7940.h']]],
   ['mcp7940_5fcrstrim',['MCP7940_CRSTRIM',['../_m_c_p7940_8h.html#ab39bcc911d7c88fd4af6c3f5b95275a4',1,'MCP7940.h']]],
   ['mcp7940_5fextosc',['MCP7940_EXTOSC',['../_m_c_p7940_8h.html#a30ac108da650c1591646d9e59a352e4e',1,'MCP7940.h']]],
+  ['mcp7940_5fh',['MCP7940_h',['../_m_c_p7940_8h.html#a71cd27e18381c0886611a0d2e0e443ae',1,'MCP7940.h']]],
   ['mcp7940_5flpyr',['MCP7940_LPYR',['../_m_c_p7940_8h.html#ad33ba577b532c3335fb11752129417f1',1,'MCP7940.h']]],
   ['mcp7940_5fmemory_5fsize',['MCP7940_MEMORY_SIZE',['../_access_memory_8ino.html#a675f5efd8e7da65200bf3c98b8a0adcd',1,'AccessMemory.ino']]],
   ['mcp7940_5foscrun',['MCP7940_OSCRUN',['../_m_c_p7940_8h.html#a0a4665a2a119df185952c62e847c03f2',1,'MCP7940.h']]],
