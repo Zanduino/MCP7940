@@ -14,30 +14,14 @@ The MCP7940 allows for software trimming and the library has functions which sup
   
 ## Examples
 Several example sketches exist and are documented on the [Wiki pages](https://github.com/SV-Zanshin/MCP7940/wiki)
-<Table>
-  <th>Example Program</th>
-  <th>Description</th>
-  <tr>
-    <td> [SetAndCalibrate](https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino) </td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>[SetAlarms](https://github.com/SV-Zanshin/MCP7940/wiki/SetAlarms.ino)</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>[SquareWave](https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino)</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>[TestBatteryBackup](https://github.com/SV-Zanshin/MCP7940/wiki/TestBatteryBackup.ino)</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>[AccessMemory](https://github.com/SV-Zanshin/MCP7940/wiki/AccessMemory.ino)</td>
-    <td></td>
-  </tr>
-</Table>
+
+| Example Program                                                                       | Description |
+|---------------------------------------------------------------------------------------|-------------|
+| [SetAndCalibrate](https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino)     | Set and Calibrate the RTC using various methods |
+| [SetAlarms](https://github.com/SV-Zanshin/MCP7940/wiki/SetAlarms.ino)                 | Set Alarm 0 and Alarm 1                 |
+| [SquareWave](https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino)               | Output a Square Wave                    |
+| [TestBatteryBackup](https://github.com/SV-Zanshin/MCP7940/wiki/TestBatteryBackup.ino) | Show how the battery backup can be used |
+| [AccessMemory](https://github.com/SV-Zanshin/MCP7940/wiki/AccessMemory.ino)           | Read and Write to the MCP7940 memory    |
 
 ## Documentation
 The library and example programs have Doxygen documentation, whose output can be found at [Doxygen Documentation](https://sv-zanshin.github.io/MCP7940/html/index.html)  
