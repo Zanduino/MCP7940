@@ -113,7 +113,7 @@ void readCommand() {                                                          //
         ** Set the device time and date                                                                           **
         ***********************************************************************************************************/
         case SetDate:                                                         // Set the RTC date/time            //
-          tokens = sscanf(inputBuffer,"%*s %u-%u-%u %u:%u:%u;",               // Use sscanf() to parse the date/  //
+          tokens = sscanf(inputBuffer,"%*s %hu-%hu-%hu %hu:%hu:%hu;",               // Use sscanf() to parse the date/  //
                           &year,&month,&day,&hour,&minute,&second);           // time into variables              //
           if (tokens!=6)                                                      // Check to see if it was parsed    //
             Serial.print(F("Unable to parse date/time\n"));                   //                                  //
@@ -126,7 +126,7 @@ void readCommand() {                                                          //
         ** Calibrate the RTC and reset the time                                                                   **
         ***********************************************************************************************************/
         case CalDate:                                                         // Calibrate the RTC                //
-          tokens = sscanf(inputBuffer,"%*s %u-%u-%u %u:%u:%u;",               // Use sscanf() to parse the date/  //
+          tokens = sscanf(inputBuffer,"%*s %hu-%hu-%hu %hu:%hu:%hu;",               // Use sscanf() to parse the date/  //
                           &year,&month,&day,&hour,&minute,&second);           // time into variables              //
           if (tokens!=6)                                                      // Check to see if it was parsed    //
             Serial.print(F("Unable to parse date/time\n"));                   //                                  //
