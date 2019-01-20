@@ -17,11 +17,26 @@ Several example sketches exist and are documented on the [Wiki pages][https://gi
 <Table>
   <th>Example Program</th>
   <th>Description</th>
-  <tr><td>[SetAndCalibrate.ino](https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino)</td><td></td></tr>
-  <tr><td>[SetAlarms.ino](https://github.com/SV-Zanshin/MCP7940/wiki/SetAlarms.ino)</td><td></td></tr>
-  <tr><td>[SquareWave.ino](https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino)</td><td></td></tr>
-  <tr><td>[TestBatteryBackup.ino](https://github.com/SV-Zanshin/MCP7940/wiki/TestBatteryBackup.ino)</td><td></td></tr>
-  <tr><td>[AccessMemory.ino](https://github.com/SV-Zanshin/MCP7940/wiki/AccessMemory.ino)</td><td></td></tr>
+  <tr>
+    <td> [SetAndCalibrate](https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>[SetAlarms](https://github.com/SV-Zanshin/MCP7940/wiki/SetAlarms.ino)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>[SquareWave](https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>[TestBatteryBackup](https://github.com/SV-Zanshin/MCP7940/wiki/TestBatteryBackup.ino)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>[AccessMemory](https://github.com/SV-Zanshin/MCP7940/wiki/AccessMemory.ino)</td>
+    <td></td>
+  </tr>
 </Table>
 
 ## Documentation
