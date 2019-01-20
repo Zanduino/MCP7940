@@ -14,9 +14,6 @@ The MCP7940 allows for software trimming and the library has functions which sup
   
 ## Examples
 Several example sketches exist and are documented on the [Wiki pages][https://github.com/SV-Zanshin/MCP7940/wiki]
-## Documentation
-The library and example programs have Doxygen documentation, whose output can be found at [Doxygen Documentation](https://sv-zanshin.github.io/MCP7940/html/index.html)  
-
 <Table>
 <th>Example Program</th>
 <tr><td>SetAndCalibrate.ino</td></tr>
@@ -26,6 +23,9 @@ The library and example programs have Doxygen documentation, whose output can be
 <tr><td>AccessMemory.ino</td></tr>
 <tr><td></td></tr>
 </Table>
+
+## Documentation
+The library and example programs have Doxygen documentation, whose output can be found at [Doxygen Documentation](https://sv-zanshin.github.io/MCP7940/html/index.html)  
 
 ## Supported Hardware [![Build Status](https://travis-ci.org/SV-Zanshin/MCP7940.svg?branch=master)](https://travis-ci.org/SV-Zanshin/MCP7940)
 The following configurations have been compiled and/or tested. [Travis-CI](https://travis-ci.org) is used for automated continuous integration and testing.
