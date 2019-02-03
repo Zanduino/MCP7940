@@ -1,4 +1,4 @@
-# MCP7940 library [![Build Status](https://travis-ci.org/SV-Zanshin/MCP7940.svg?branch=master)](https://travis-ci.org/SV-Zanshin/MCP7940) [![DOI](https://www.zenodo.org/badge/98077572.svg)](https://www.zenodo.org/badge/latestdoi/98077572)
+# MCP7940 library<br>[![Build Status](https://travis-ci.org/SV-Zanshin/MCP7940.svg?branch=master)](https://travis-ci.org/SV-Zanshin/MCP7940) [![DOI](https://www.zenodo.org/badge/98077572.svg)](https://www.zenodo.org/badge/latestdoi/98077572) [![arduino-library-badge](https://www.ardu-badge.com/badge/MCP7940.svg?)](https://www.ardu-badge.com/MCP7940)
 <img src="https://github.com/SV-Zanshin/MCP7940/blob/master/Images/MCP7940M-PDIP-8.png" width="175" align="right"/> *Arduino* library for accessing the Microchip MCP7940 real time clock. There are two versions of the RTC, MCP7940M and MCP7940N, which differ only in that the MCP7940N has a battery backup supply pin and keeps the clock running on power failure. The MCP7940N also has additional registers which store the timepoint of power failure and point in time when power was restored.
 
 ## Overview
