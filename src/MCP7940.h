@@ -251,6 +251,7 @@
       bool     clearPowerFail();
       DateTime getPowerDown();
       DateTime getPowerUp();
+      void   calibrateOrAdjust(const DateTime& dt);
 /*******************************************************************************************************************
 ** Declare the readRAM() and writeRAM() methods as template functions to use for all I2C device I/O. The code has **
 ** to be in the main library definition rather than the actual MCP7940.cpp library file.The template functions    **
@@ -329,5 +330,6 @@
       void     writeRegisterBit(const uint8_t reg, const uint8_t b,  // Clear a bit, values 0-7
                                 bool bitvalue);                      //                                  //
       uint8_t  readRegisterBit (const uint8_t reg, const uint8_t b); // Read  a bit, values 0-7
+      int32_t  getPPMDeviation(const DateTime& dt);
   }; // of MCP7940 class definition
 #endif

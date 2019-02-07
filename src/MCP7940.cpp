@@ -550,20 +550,49 @@ int8_t MCP7940_Class::calibrate(const int8_t newTrim)
 */
 int8_t MCP7940_Class::calibrate(const DateTime& dt) 
 {
-  int32_t SecDeviation = dt.unixtime() - now().unixtime();     // Get difference in seconds
-  int32_t ExpectedSec  = now().unixtime() - _SetUnixTime;      // Get number of seconds since set
-  int32_t          ppm = 1000000 * SecDeviation / ExpectedSec; // Multiply first to avoid truncation
+  int32_t ppm = getPPMDeviation(dt);
+  adjust(dt);								// set the new Date-Time value
   ppm = constrain(ppm, -130, 130);
-  int8_t trim = readByte(MCP7940_OSCTRIM); // Read current trim register value
+  int16_t trim = readByte(MCP7940_OSCTRIM); // Read current trim register value
   if (trim >> 7)                           // use negative value if necessary
   {                     
     trim = (~0x80 & trim) * -1;
   } // of if-then trim is set
   trim += ppm * 32768 * 60 / 2000000;      // compute the new trim value
-  trim = constrain(trim, -130, 130);       // Clamp to value range
-  adjust(dt);                              // set the new Date-Time value
+  trim = constrain(trim, -127, 127);       // Clamp to value range                            
   return calibrate((const int8_t)trim);
 } // of method calibrate()
+/*!
+    @brief   Calibrate the MCP7940 if the ppm deviation is < 130 and > -130 else Adjust the datetime.
+    @details If the time had changed significantly (like happens during daylight savings time) then just
+			 adjust the time to be the new time and leave the trim value alone.  One hour deviation in 6 months
+			 is 225 ppm.  If the ppm deviation is within -130 to 130 then assume we are just calibrating
+			 the clock.  
+    @param[in] dt Actual Date/time
+    @return  Returns Void
+*/
+void MCP7940_Class::calibrateOrAdjust(const DateTime& dt){
+  int32_t ppm = getPPMDeviation(dt);
+  if ((ppm > 130) || (ppm < -130)){  // calibration is out of range so just set the time  DML 2/5/2019
+	  adjust(dt);
+  }else{
+	  calibrate(dt);
+  }
+}
+/*!
+    @brief   Calculate the ppm deviation since the last time the clock was  the MCP7940 if the ppm deviation is < 130 and > -130 else Adjust the datetime.
+    @details If the time had changed significantly (like happens during daylight savings time) then just
+			 adjust the time to be the new time and leave the trim value alone.  One hour deviation in 6 months
+			 is 225 ppm.  If the ppm deviation is within -130 to 130 then assume we are just calibrating
+			 the clock.  
+    @param[in] dt Actual Date/time
+    @return  Returns Void
+*/int32_t MCP7940_Class::getPPMDeviation(const DateTime& dt){
+  int32_t SecDeviation = dt.unixtime() - now().unixtime();     // Get difference in seconds
+  int32_t ExpectedSec  = dt.unixtime() - _SetUnixTime;      // Get number of seconds since set
+  int32_t          ppm = 1000000 * SecDeviation / ExpectedSec; // Multiply first to avoid truncation
+  return ppm;
+}
 /*!
     @brief   Calibrate the MCP7940 (overloaded)
     @details When called with one floating point value then that is used as the measured frequency
