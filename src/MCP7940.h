@@ -28,6 +28,7 @@
 * 
 * Version| Date       | Developer           | Comments
 * ------ | ---------- | ------------------- | --------
+* 1.1.7  | 2019-02-07 | davidlehrian        | Issue #43 - Calibration might cause overflow of "trim" variable
 * 1.1.7  | 2019-02-07 | davidlehrian        | Issue #42 - calibrate(DateTime) should correct the current date/time
 * 1.1.6  | 2019-01-27 | davidlehrian        | Issue #36 - Reopened, changed assignment statements to avoid warning
 * 1.1.5  | 2019-01-19 | SV-Zanshin          | Issue #40 - Change commenting structure and layout to use doxygen
