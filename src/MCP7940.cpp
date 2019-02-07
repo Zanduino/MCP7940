@@ -553,21 +553,14 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt)
   int32_t SecDeviation = dt.unixtime() - now().unixtime();     // Get difference in seconds
   int32_t ExpectedSec  = now().unixtime() - _SetUnixTime;      // Get number of seconds since set
   int32_t          ppm = 1000000 * SecDeviation / ExpectedSec; // Multiply first to avoid truncation
-  if (ppm > 130)                                               // Force number ppm to be in range
-  {
-    ppm = 130;
-  }
-  else 
-    if (ppm < -130) // check for low out-of-bounds too
-    {
-       ppm = -130;
-    } // of if-then-else ppm out of range
+  ppm = constrain(ppm, -130, 130);
   int8_t trim = readByte(MCP7940_OSCTRIM); // Read current trim register value
   if (trim >> 7)                           // use negative value if necessary
   {                     
     trim = (~0x80 & trim) * -1;
   } // of if-then trim is set
   trim += ppm * 32768 * 60 / 2000000;      // compute the new trim value
+  trim = constrain(trim, -130, 130);       // Clamp to value range
   adjust(dt);                              // set the new Date-Time value
   return calibrate((const int8_t)trim);
 } // of method calibrate()
