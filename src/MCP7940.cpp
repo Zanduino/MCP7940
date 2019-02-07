@@ -568,6 +568,7 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt)
     trim = (~0x80 & trim) * -1;
   } // of if-then trim is set
   trim += ppm * 32768 * 60 / 2000000;      // compute the new trim value
+  adjust(dt);                              // set the new Date-Time value
   return calibrate((const int8_t)trim);
 } // of method calibrate()
 /*!
@@ -582,12 +583,12 @@ int8_t MCP7940_Class::calibrate(const float fMeas)
   uint32_t fIdeal = getSQWSpeed();      // read the current SQW Speed code
   switch (fIdeal)                       // set variable to real SQW speed
   {
-  case 0: fIdeal =    1; break;
-  case 1: fIdeal = 4096; break;
-  case 2: fIdeal = 8192; break;
-  case 4: fIdeal = 64; break;
+  case 0: fIdeal =     1; break;
+  case 1: fIdeal =  4096; break;
+  case 2: fIdeal =  8192; break;
+  case 4: fIdeal =    64; break;
   case 3: fIdeal = 32768;
-          trim   = 0; // Trim is ignored on 32KHz signal
+          trim   =     0; // Trim is ignored on 32KHz signal
           break;
   } // of switch SQWSpeed value
   trim += ((fMeas - (float)fIdeal) * (32768.0 / fIdeal) * 60.0) / 2.0; // Use formula from datasheet
