@@ -569,14 +569,15 @@ int8_t MCP7940_Class::calibrate(const DateTime& dt)
 			 is 225 ppm.  If the ppm deviation is within -130 to 130 then assume we are just calibrating
 			 the clock.  
     @param[in] dt Actual Date/time
-    @return  Returns Void
+    @return  Returns the trim value
 */
-void MCP7940_Class::calibrateOrAdjust(const DateTime& dt){
+int8_t MCP7940_Class::calibrateOrAdjust(const DateTime& dt){
   int32_t ppm = getPPMDeviation(dt);
   if ((ppm > 130) || (ppm < -130)){  // calibration is out of range so just set the time  DML 2/5/2019
 	  adjust(dt);
+	  return readByte(MCP7940_OSCTRIM);
   }else{
-	  calibrate(dt);
+	  return calibrate(dt);
   }
 }
 /*!
@@ -587,12 +588,21 @@ void MCP7940_Class::calibrateOrAdjust(const DateTime& dt){
 			 the clock.  
     @param[in] dt Actual Date/time
     @return  Returns Void
-*/int32_t MCP7940_Class::getPPMDeviation(const DateTime& dt){
+*/
+int32_t MCP7940_Class::getPPMDeviation(const DateTime& dt){
   int32_t SecDeviation = dt.unixtime() - now().unixtime();     // Get difference in seconds
   int32_t ExpectedSec  = dt.unixtime() - _SetUnixTime;      // Get number of seconds since set
   int32_t          ppm = 1000000 * SecDeviation / ExpectedSec; // Multiply first to avoid truncation
   return ppm;
 }
+
+void MCP7940_Class::setSetUnixTime(uint32_t aTime){
+	_SetUnixTime = aTime;
+}
+uint32_t MCP7940_Class::getSetUnixTime(){
+	return _SetUnixTime;
+}
+
 /*!
     @brief   Calibrate the MCP7940 (overloaded)
     @details When called with one floating point value then that is used as the measured frequency
