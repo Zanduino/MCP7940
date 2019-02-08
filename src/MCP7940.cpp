@@ -596,9 +596,20 @@ int32_t MCP7940_Class::getPPMDeviation(const DateTime& dt){
   return ppm;
 }
 
+/*!
+    @brief   Set the time the clock was last calibrated or adjusted.
+    @details Set the internal variable _SetUnixTime.  This is the time the clock was last calibrated or adjusted.  This should only used to testing.  
+    @param[in] aTime is the Unix time to set the time the clock was last calibrated or adjusted to.
+    @return  void
+*/
 void MCP7940_Class::setSetUnixTime(uint32_t aTime){
 	_SetUnixTime = aTime;
 }
+/*!
+    @brief   Get the time the clock was last calibrated or adjusted.
+    @details Returns the internal variable _SetUnixTime.  This is the time the clock was last calibrated or adjusted.  This should only used to testing.  
+    @return  Returns the internal variable _SetUnixTime.
+*/
 uint32_t MCP7940_Class::getSetUnixTime(){
 	return _SetUnixTime;
 }
