@@ -199,6 +199,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4db17db27e5cceb4b18e8e163900298b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a4db17db27e5cceb4b18e8e163900298b">getPowerUp</a> ()</td></tr>
 <tr class="memdesc:a4db17db27e5cceb4b18e8e163900298b"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the date/time that the power went back on  <a href="#a4db17db27e5cceb4b18e8e163900298b">More...</a><br /></td></tr>
 <tr class="separator:a4db17db27e5cceb4b18e8e163900298b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29ed313c7e0c20d70f06eb3dc49a5752"><td class="memItemLeft" align="right" valign="top">int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a29ed313c7e0c20d70f06eb3dc49a5752">calibrateOrAdjust</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;dt)</td></tr>
+<tr class="memdesc:a29ed313c7e0c20d70f06eb3dc49a5752"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibrate the MCP7940 if the ppm deviation is &lt; 130 and &gt; -130 else Adjust the datetime.  <a href="#a29ed313c7e0c20d70f06eb3dc49a5752">More...</a><br /></td></tr>
+<tr class="separator:a29ed313c7e0c20d70f06eb3dc49a5752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48c0bb3021886d6045c237eb5882fe1f"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a48c0bb3021886d6045c237eb5882fe1f">getPPMDeviation</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;dt)</td></tr>
+<tr class="memdesc:a48c0bb3021886d6045c237eb5882fe1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the ppm deviation since the last time the clock was the MCP7940 if the ppm deviation is &lt; 130 and &gt; -130 else Adjust the datetime.  <a href="#a48c0bb3021886d6045c237eb5882fe1f">More...</a><br /></td></tr>
+<tr class="separator:a48c0bb3021886d6045c237eb5882fe1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a021dab49f0ed4b86ba48f1af330cdedb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a021dab49f0ed4b86ba48f1af330cdedb">setSetUnixTime</a> (uint32_t aTime)</td></tr>
+<tr class="memdesc:a021dab49f0ed4b86ba48f1af330cdedb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the time the clock was last calibrated or adjusted.  <a href="#a021dab49f0ed4b86ba48f1af330cdedb">More...</a><br /></td></tr>
+<tr class="separator:a021dab49f0ed4b86ba48f1af330cdedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2a131b2f8902fd7d93c573fa38b7441"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#aa2a131b2f8902fd7d93c573fa38b7441">getSetUnixTime</a> ()</td></tr>
+<tr class="memdesc:aa2a131b2f8902fd7d93c573fa38b7441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time the clock was last calibrated or adjusted.  <a href="#aa2a131b2f8902fd7d93c573fa38b7441">More...</a><br /></td></tr>
+<tr class="separator:aa2a131b2f8902fd7d93c573fa38b7441"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28170365ce10a72f353ea0f6a31f70d4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a28170365ce10a72f353ea0f6a31f70d4"><td class="memTemplItemLeft" align="right" valign="top">uint8_t &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a28170365ce10a72f353ea0f6a31f70d4">readRAM</a> (const uint8_t addr, T &amp;value)</td></tr>
 <tr class="memdesc:a28170365ce10a72f353ea0f6a31f70d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template for <a class="el" href="class_m_c_p7940___class.html#a28170365ce10a72f353ea0f6a31f70d4" title="Template for readRAM() ">readRAM()</a>  <a href="#a28170365ce10a72f353ea0f6a31f70d4">More...</a><br /></td></tr>
@@ -378,6 +390,33 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the new trim value </dd></dl>
+
+</div>
+</div>
+<a id="a29ed313c7e0c20d70f06eb3dc49a5752"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29ed313c7e0c20d70f06eb3dc49a5752">&#9670;&nbsp;</a></span>calibrateOrAdjust()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int8_t MCP7940_Class::calibrateOrAdjust </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_date_time.html">DateTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>dt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calibrate the MCP7940 if the ppm deviation is &lt; 130 and &gt; -130 else Adjust the datetime. </p>
+<p>If the time had changed significantly (like happens during daylight savings time) then just adjust the time to be the new time and leave the trim value alone. One hour deviation in 6 months is 225 ppm. If the ppm deviation is within -130 to 130 then assume we are just calibrating the clock. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dt</td><td>Actual Date/time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the trim value </dd></dl>
 
 </div>
 </div>
@@ -675,6 +714,53 @@ Public Member Functions</h2></td></tr>
 
 <p>returns the date/time that the power went back on </p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class. ">DateTime</a> class value for the power-on Date/Time </dd></dl>
+
+</div>
+</div>
+<a id="a48c0bb3021886d6045c237eb5882fe1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48c0bb3021886d6045c237eb5882fe1f">&#9670;&nbsp;</a></span>getPPMDeviation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t MCP7940_Class::getPPMDeviation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_date_time.html">DateTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>dt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the ppm deviation since the last time the clock was the MCP7940 if the ppm deviation is &lt; 130 and &gt; -130 else Adjust the datetime. </p>
+<p>If the time had changed significantly (like happens during daylight savings time) then just adjust the time to be the new time and leave the trim value alone. One hour deviation in 6 months is 225 ppm. If the ppm deviation is within -130 to 130 then assume we are just calibrating the clock. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dt</td><td>Actual Date/time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns Void </dd></dl>
+
+</div>
+</div>
+<a id="aa2a131b2f8902fd7d93c573fa38b7441"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2a131b2f8902fd7d93c573fa38b7441">&#9670;&nbsp;</a></span>getSetUnixTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t MCP7940_Class::getSetUnixTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the time the clock was last calibrated or adjusted. </p>
+<p>Returns the internal variable _SetUnixTime. This is the time the clock was last calibrated or adjusted. This should only used to testing. </p><dl class="section return"><dt>Returns</dt><dd>Returns the internal variable _SetUnixTime. </dd></dl>
 
 </div>
 </div>
@@ -1003,6 +1089,33 @@ template&lt;typename T &gt; </div>
 
 <p>Sets the MFP (Multifunction Pin) to the requested state. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns true on success otherwise false </dd></dl>
+
+</div>
+</div>
+<a id="a021dab49f0ed4b86ba48f1af330cdedb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a021dab49f0ed4b86ba48f1af330cdedb">&#9670;&nbsp;</a></span>setSetUnixTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MCP7940_Class::setSetUnixTime </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>aTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the time the clock was last calibrated or adjusted. </p>
+<p>Set the internal variable _SetUnixTime. This is the time the clock was last calibrated or adjusted. This should only used to testing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">aTime</td><td>is the Unix time to set the time the clock was last calibrated or adjusted to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
