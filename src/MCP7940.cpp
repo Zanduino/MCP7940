@@ -453,11 +453,16 @@ DateTime MCP7940_Class::getPowerUp()
 /*!
     @brief   sets the current date/time (overloaded)
     @details This is an overloaded function. With no parameters then the RTC is set to the date/time 
-             when the program was compiled.
+             when the program was compiled. Since different core version handle these compiler variables
+             differently, the values are copied to temporary strings and then passed to the adjust() function
 */
 void MCP7940_Class::adjust()
 {
-  adjust(DateTime(F(__DATE__), F(__TIME__))); // Set to compile time
+  char tempDate[13], tempTime[13];               // define temporary character arrays to hold values
+  strcpy_P(tempDate, PSTR(__DATE__));            // Copy values to buffer
+  strcpy_P(tempTime, PSTR(__TIME__));            // Copy values to buffer
+  DateTime tempDt = DateTime(tempDate,tempTime); // Create a datetime
+  adjust(tempDt);                                // Set to library compile Date/Time //
 } // of method "adjust()"
 /*!
     @brief   sets the current date/time (overloaded)
