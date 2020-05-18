@@ -8,7 +8,7 @@ See main library header file for details
 /*!
 Define the number of days in each month
 */
-const uint8_t daysInMonth[] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+const uint8_t daysInMonth[] PROGMEM = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 /*!
 * @brief   returns the number of days from a given Y M D value
