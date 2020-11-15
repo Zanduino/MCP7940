@@ -163,7 +163,9 @@ class DateTime {
   DateTime(const DateTime& copy);
   DateTime(const char* date, const char* time);
   DateTime(const __FlashStringHelper* date, const __FlashStringHelper* time);
-  uint16_t year() const { return 2000 + yOff; } /*! return the current year */
+  uint16_t year() const { /*! return the current year */
+    return 2000 + yOff;
+  }
   uint8_t  month() const { return m; }          /*! return the current month */
   uint8_t  day() const { return d; }            /*! return the current day of the month */
   uint8_t  hour() const { return hh; }          /*! return the current hour */
@@ -224,7 +226,7 @@ class MCP7940_Class {
   int8_t   calibrate();
   int8_t   calibrate(const int8_t newTrim);
   int8_t   calibrate(const DateTime& dt);
-  int8_t   calibrate(const float MeasuredFrequency);
+  int8_t   calibrate(const float fMeas);
   int8_t   getCalibrationTrim();
   uint8_t  weekdayRead();
   uint8_t  weekdayWrite(const uint8_t dow);
