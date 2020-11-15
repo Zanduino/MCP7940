@@ -8,7 +8,7 @@ var class_m_c_p7940___class =
     [ "calibrate", "class_m_c_p7940___class.html#a56eb4ca918632f02109029f1f9d7185d", null ],
     [ "calibrate", "class_m_c_p7940___class.html#ae303b6ae71dee49ff01aff295e0b210c", null ],
     [ "calibrate", "class_m_c_p7940___class.html#a16c4323de9e9bfdeaf00bc2a9675ea8c", null ],
-    [ "calibrate", "class_m_c_p7940___class.html#a93d12bde1fd4c4ae5fd7aba3a8a90be3", null ],
+    [ "calibrate", "class_m_c_p7940___class.html#ab1ef1d9ffceeb3cfd4654169c8e0e121", null ],
     [ "calibrateOrAdjust", "class_m_c_p7940___class.html#a29ed313c7e0c20d70f06eb3dc49a5752", null ],
     [ "clearAlarm", "class_m_c_p7940___class.html#a1a17d1694edd739bf7c21cd525bdbcc8", null ],
     [ "clearPowerFail", "class_m_c_p7940___class.html#ab83d2aef03bcebc217f0bf545f0c04e1", null ],

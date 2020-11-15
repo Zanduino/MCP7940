@@ -87,8 +87,8 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="MCP7940_intro_section"></a>
 Description</h1>
-<p>Class definition header for the MCP7940 from Microchip. Both the MCP7940N (with battery backup pin= and the MCP7940M are supported with this library and they both use the same I2C address. This chip is a Real-Time-Clock with an I2C interface. The data sheet located at <a href="http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf">http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf</a> describes the functionality used in this library.<br />
-Use is made of portions of Adafruit's RTClib Version 1.2.0 at <a href="https://github.com/adafruit/RTClib">https://github.com/adafruit/RTClib</a> which is a a fork of the original RTClib from Jeelabs. The re-used code encompasses only the classes for time and date.<br />
+<p>Class definition header for the MCP7940 from Microchip. Both the MCP7940N (with battery backup pin and the MCP7940M are supported with this library and they both use the same I2C address. This chip is a Real-Time-Clock with an I2C interface. The data sheet located at <a href="http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf">http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf</a> describes the functionality used in this library.<br />
+se is made of portions of Adafruit's RTClib Version 1.2.0 at <a href="https://github.com/adafruit/RTClib">https://github.com/adafruit/RTClib</a> which is a fork of the original RTClib from Jeelabs. The re-used code encompasses only the classes for time and date.<br />
  </p>
 <h1><a class="anchor" id="license"></a>
 GNU General Public License v3.0</h1>
@@ -102,31 +102,35 @@ Changelog</h1>
 <tr>
 <th>Version</th><th>Date </th><th>Developer </th><th>Comments  </th></tr>
 <tr>
+<td>1.1.8 </td><td>2020-11-15 </td><td>SV-Zanshin </td><td>Issue #50 - Reformat with "clang-format" </td></tr>
+<tr>
+<td>1.1.8 </td><td>2020-11-14 </td><td>SV-Zanshin </td><td>Issue #49 - corrections for Battery Backup mode </td></tr>
+<tr>
 <td>1.1.7 </td><td>2020-05-18 </td><td>wvmarle </td><td>Issue #47 - adjust() method with compiler variables fix </td></tr>
 <tr>
-<td>1.1.7 </td><td>2019-02-07 </td><td>davidlehrian </td><td>Issue #43 - Calibration might cause overflow of "trim" variable </td></tr>
+<td>1.1.7 </td><td>2019-02-07 </td><td>davidlehrian </td><td>Issue #43 - Calib. may cause overflow of "trim" variable </td></tr>
 <tr>
-<td>1.1.7 </td><td>2019-02-07 </td><td>davidlehrian </td><td>Issue #42 - calibrate(DateTime) should correct the current date/time </td></tr>
+<td>1.1.7 </td><td>2019-02-07 </td><td>davidlehrian </td><td>Issue #42 - calibrate(DateTime) to correct current dt/tm </td></tr>
 <tr>
-<td>1.1.6 </td><td>2019-01-27 </td><td>davidlehrian </td><td>Issue #36 - Reopened, changed assignment statements to avoid warning </td></tr>
+<td>1.1.6 </td><td>2019-01-27 </td><td>davidlehrian </td><td>Issue #36 - Reopened, changed statements to avoid warn. </td></tr>
 <tr>
-<td>1.1.5 </td><td>2019-01-19 </td><td>SV-Zanshin </td><td>Issue #40 - Change commenting structure and layout to use doxygen </td></tr>
+<td>1.1.5 </td><td>2019-01-19 </td><td>SV-Zanshin </td><td>Issue #40 - Change structure and layout to use doxygen </td></tr>
 <tr>
-<td>1.1.5 </td><td>2019-01-19 </td><td>INemesisI </td><td>Issue #37 - Corrected AlarmPolarity bit clearing on setAlarm() </td></tr>
+<td>1.1.5 </td><td>2019-01-19 </td><td>INemesisI </td><td>Issue #37 - AlarmPolarity bit clearing on setAlarm() </td></tr>
 <tr>
-<td>1.1.5 </td><td>2019-01-19 </td><td>SV-Zanshin </td><td>Issue #39 - Small changes to remove compiler warnings for Travis-CI </td></tr>
+<td>1.1.5 </td><td>2019-01-19 </td><td>SV-Zanshin </td><td>Issue #39 - Changes to avoid Travis-CI warnings </td></tr>
 <tr>
 <td>1.1.5 </td><td>2019-01-18 </td><td>INemesisI </td><td>Issue #38 - Overflow on setting new TRIM value </td></tr>
 <tr>
 <td>1.1.4 </td><td>2018-12-15 </td><td>hexeguitar </td><td>Issue #36 - Overflow on I2C_MODES datatype corrected </td></tr>
 <tr>
-<td>1.1.4 </td><td>2018-12-15 </td><td>huynh213 </td><td>Issue #35 - MCP7940.adjust() function resets the PWRFAIL and VBATEN </td></tr>
+<td>1.1.4 </td><td>2018-12-15 </td><td>huynh213 </td><td>Issue #35 - MCP7940.adjust() resets the PWRFAIL/VBATEN </td></tr>
 <tr>
 <td>1.1.3 </td><td>2018-08-08 </td><td>amgrays </td><td>Issue #32 - invalid return on SetMFP corrected </td></tr>
 <tr>
-<td>1.1.3 </td><td>2018-08-05 </td><td>HannesJo0139 </td><td>Issue #31 - incorrect calibration trim on negative numbers </td></tr>
+<td>1.1.3 </td><td>2018-08-05 </td><td>HannesJo0139 </td><td>Issue #31 - Calibration trim on negative numbers </td></tr>
 <tr>
-<td>1.1.2 </td><td>2018-08-04 </td><td>SV-Zanshin </td><td>Issue #28 - added new calibrate() overload for frequency calibration </td></tr>
+<td>1.1.2 </td><td>2018-08-04 </td><td>SV-Zanshin </td><td>Issue #28 - added calibrate() ovld for freq. calibration </td></tr>
 <tr>
 <td>1.1.2 </td><td>2018-07-08 </td><td>logicaprogrammabile </td><td>Issue #26 - regarding hour bitmasks </td></tr>
 <tr>
@@ -136,46 +140,31 @@ Changelog</h1>
 <tr>
 <td>1.1.1 </td><td>2018-07-06 </td><td>wvmarle </td><td>Pull #20 - Numerous changes and enhancements </td></tr>
 <tr>
-<td>1.1.0 </td><td>2018-07-05 </td><td>wvmarle </td><td>Pull #14 - bug fixes to alarm state and cleaned up comments </td></tr>
+<td>1.1.0 </td><td>2018-07-05 </td><td>wvmarle </td><td>Pull #14 - bug fixes to alarm state and comment cleanup </td></tr>
 <tr>
-<td>1.0.8 </td><td>2018-07-02 </td><td>SV-Zanshin </td><td>Added guard code against multiple I2C constant definitions </td></tr>
+<td>1.0.8 </td><td>2018-07-02 </td><td>SV-Zanshin </td><td>Added guard code for multiple I2C constant definitions </td></tr>
 <tr>
 <td>1.0.8 </td><td>2018-06-30 </td><td>SV-Zanshin </td><td>Enh #15 - Added I2C Speed selection </td></tr>
 <tr>
-<td>1.0.7 </td><td>2018-06-21 </td><td>SV-Zanshin </td><td>Issue #13 - <a class="el" href="class_date_time.html#a958229f0d6a46d092658028d25a9e65c" title="return the current day-of-week where Monday is day 1, Sunday is 7 ">DateTime.dayOfTheWeek()</a> is 0-6 instead of 1-7 </td></tr>
+<td>1.0.7 </td><td>2018-06-21 </td><td>SV-Zanshin </td><td>Issue #13 - <a class="el" href="class_date_time.html#a958229f0d6a46d092658028d25a9e65c">DateTime.dayOfTheWeek()</a> is 0-6 instead 1-7 </td></tr>
 <tr>
-<td>1.0.6 </td><td>2018-04-29 </td><td>SV-Zanshin </td><td>Issue #7 - Moved setting of param defaults to prototypes </td></tr>
+<td>1.0.6 </td><td>2018-04-29 </td><td>SV-Zanshin </td><td>Issue #7 - Moved param defaults to prototypes </td></tr>
 <tr>
-<td>1.0.6 </td><td>2018-04-29 </td><td>SV-Zanshin </td><td>Issue #10 - incorrect setting of alarm with WKDAY to future date </td></tr>
+<td>1.0.6 </td><td>2018-04-29 </td><td>SV-Zanshin </td><td>Issue #10 - Setting of alarm with WKDAY to future date </td></tr>
 <tr>
-<td>1.0.5b </td><td>2017-12-18 </td><td>SV-Zanshin </td><td>Issue #8 - incorrect setting to 24-Hour clock </td></tr>
+<td>1.0.5b </td><td>2017-12-18 </td><td>SV-Zanshin </td><td>Issue #8 - Setting to 24-Hour clock </td></tr>
 <tr>
-<td>1.0.5a </td><td>2017-10-31 </td><td>SV-Zanshin </td><td>Issue #6 - to remove classification on 2 template functions </td></tr>
+<td>1.0.5a </td><td>2017-10-31 </td><td>SV-Zanshin </td><td>Issue #6 - Remove classification on template functions </td></tr>
 <tr>
-<td>1.0.4c </td><td>2017-08-13 </td><td>SV-Zanshin </td><td>Enhancement #5 to remove checks after Wire.requestFrom() </td></tr>
+<td>1.0.4c </td><td>2017-08-13 </td><td>SV-Zanshin </td><td>Issue #5 - Remove checks after Wire.requestFrom() </td></tr>
 <tr>
 <td>1.0.4b </td><td>2017-08-08 </td><td>SV-Zanshin </td><td>Replaced readRAM and writeRAM with template functions </td></tr>
 <tr>
 <td>1.0.4a </td><td>2017-08-06 </td><td>SV-Zanshin </td><td>Removed unnecessary MCP7940_I2C_Delay and all references </td></tr>
 <tr>
-<td>1.0.3 </td><td>2017-08-05 </td><td>SV-Zanshin </td><td>Added calls for MCP7940N. getPowerFail(), clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down() </td></tr>
-<tr>
-<td>1.0.3a </td><td>2017-07-29 </td><td>SV-Zanshin </td><td>Cleaned up comments, no code changes </td></tr>
-<tr>
-<td>1.0.3 </td><td>2017-07-29 </td><td>SV-Zanshin </td><td>Added getSQWSpeed(),setSQWSpeed(),setSQWState() &amp; getSQWState() </td></tr>
-<tr>
-<td>1.0.2 </td><td>2017-07-29 </td><td>SV-Zanshin </td><td>Added getAlarm(),setAlarmState(),getAlarmState() functions and added the optional setting to setAlarm(). Added isAlarm(). Fixed errors with alarm 1 indexing. </td></tr>
-<tr>
-<td>1.0.1 </td><td>2017-07-25 </td><td>SV-Zanshin </td><td>Added overloaded Calibrate() to manually set the trim factor </td></tr>
-<tr>
-<td>1.0.0 </td><td>2017-07-23 </td><td>SV-Zanshin </td><td>Cleaned up code, initial github upload </td></tr>
-<tr>
-<td>1.0.2b </td><td>2017-07-20 </td><td>SV-Zanshin </td><td>Added alarm handling </td></tr>
-<tr>
-<td>1.0.1b </td><td>2017-07-19 </td><td>SV-Zanshin </td><td>Added methods </td></tr>
-<tr>
-<td>1.0.0b </td><td>2017-07-17 </td><td>SV-Zanshin </td><td>Initial coding </td></tr>
+<td>1.0.3 </td><td>2017-08-05 </td><td>SV-Zanshin </td><td>Added calls for MCP7940N. getPowerFail(), </td></tr>
 </table>
+<p>clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down() 1.0.3a | 2017-07-29 | SV-Zanshin | Cleaned up comments, no code changes 1.0.3 | 2017-07-29 | SV-Zanshin | getSQWSpeed(),setSQWSpeed(),setSQWState(),getSQWState() 1.0.2 | 2017-07-29 | SV-Zanshin | getAlarm(),setAlarmState(),getAlarmState(),isAlarm() added optional setting setAlarm(). Fixed alarm 1 index 1.0.1 | 2017-07-25 | SV-Zanshin | Overloaded Calibrate() to manually set trim factor 1.0.0 | 2017-07-23 | SV-Zanshin | Cleaned up code, initial github upload 1.0.2b | 2017-07-20 | SV-Zanshin | Added alarm handling 1.0.1b | 2017-07-19 | SV-Zanshin | Added methods 1.0.0b | 2017-07-17 | SV-Zanshin | Initial coding </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
