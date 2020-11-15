@@ -166,11 +166,21 @@ class DateTime {
   uint16_t year() const { /*! return the current year */
     return 2000 + yOff;
   }
-  uint8_t  month() const { return m; }          /*! return the current month */
-  uint8_t  day() const { return d; }            /*! return the current day of the month */
-  uint8_t  hour() const { return hh; }          /*! return the current hour */
-  uint8_t  minute() const { return mm; }        /*! return the current minute */
-  uint8_t  second() const { return ss; }        /*! return the current second */
+  uint8_t month() const { /*! return the current month */
+    return m;
+  }
+  uint8_t day() const { /*! return the current day of the month */
+    return d;
+  }
+  uint8_t hour() const { /*! return the current hour */
+    return hh;
+  }
+  uint8_t minute() const { /*! return the current minute */
+    return mm;
+  }
+  uint8_t second() const { /*! return the current second */
+    return ss;
+  }
   uint8_t  dayOfTheWeek() const;            /*! return the current day of the week starting at 0 */
   long     secondstime() const;             /*! return the current seconds in the year */
   uint32_t unixtime(void) const;            /*! return the current Unixtime */
