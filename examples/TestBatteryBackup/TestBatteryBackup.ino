@@ -10,11 +10,12 @@ http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N has 
 revolving around battery backup but this library's functionality covers that chip as well. This
 example program shows how the battery backup information can be used on the MCP7940N chip (The "M"
 version doesn't support battery backup). Hook the "VBAT" pin to either a battery or VIN and then
-disconnect the main power to the chip to demonstrate a power failure. On-chip digital trimming can
-be used to adjust for frequency variance caused by crystal tolerance and temperature. Since the chip
-only output full seconds, a calibration cycle won't be effective until there is at least one second
-difference between the RTC time and real time, and this might take a day or more to do, particularly
-if the RTC and crystal is already close to being accurate.
+disconnect the main power to the chip to demonstrate a power failure. Note that the Arduino needs to
+remain powered on and the I2C pull-up resistors should also remain powered. On-chip digital trimming
+can be used to adjust for frequency variance caused by crystal tolerance and temperature. Since the
+chip only output full seconds, a calibration cycle won't be effective until there is at least one
+second difference between the RTC time and real time, and this might take a day or more to do,
+particularly if the RTC and crystal is already close to being accurate.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 3 of the
@@ -26,6 +27,7 @@ have received a copy of the GNU General Public License along with this program. 
 
 Vers.  Date       Developer                     Comments
 ====== ========== ============================= ====================================================
+1.0.5  2020-11-16 https://github.com/SV-Zanshin Added I2C pull-up information in the comments
 1.0.4  2020-11-15 https://github.com/SV-Zanshin Issue #50 Reformat with "clang-format"
 1.0.3  2020-11-14 https://github.com/SV-Zanshin Issue #49 corrections
 1.0.2  2019-01-20 https://github.com/SV-Zanshin sprintf() text change due to warnings from Travis-CI
@@ -54,8 +56,8 @@ char          inputBuffer[SPRINTF_BUFFER_SIZE];  // Buffer for sprintf()/sscanf(
 void setup() {                 // Arduino standard setup method
   Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
 #ifdef __AVR_ATmega32U4__      // If a 32U4 processor, then wait
-  delay(3000);  // 3 seconds for the serial port to
-#endif          // initialize, otherwise continue
+  delay(3000);                 // 3 seconds for the serial port to
+#endif                         // initialize, otherwise continue
   Serial.print(F("\nStarting TestBatteryBackup program\n"));
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));
@@ -117,6 +119,6 @@ void loop() {
             now.month(), now.day(), now.hour(), now.minute());  // date/time with leading zeros
     Serial.println(inputBuffer);
     MCP7940.clearPowerFail();  // Reset the power fail switch,
-  }  // of if-then we have detected a power failure, also resets the down/up dates
+  }            // of if-then we have detected a power failure, also resets the down/up dates
   delay(100);  // Do nothing for 100 milliseconds
 }  // of method loop()

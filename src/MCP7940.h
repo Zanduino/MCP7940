@@ -66,7 +66,7 @@ clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, add
 1.0.3a | 2017-07-29 | SV-Zanshin          | Cleaned up comments, no code changes
 1.0.3  | 2017-07-29 | SV-Zanshin          | getSQWSpeed(),setSQWSpeed(),setSQWState(),getSQWState()
 1.0.2  | 2017-07-29 | SV-Zanshin          | getAlarm(),setAlarmState(),getAlarmState(),isAlarm()
-                                            added optional setting setAlarm(). Fixed alarm 1 index
+added optional setting setAlarm(). Fixed alarm 1 index
 1.0.1  | 2017-07-25 | SV-Zanshin          | Overloaded Calibrate() to manually set trim factor
 1.0.0  | 2017-07-23 | SV-Zanshin          | Cleaned up code, initial github upload
 1.0.2b | 2017-07-20 | SV-Zanshin          | Added alarm handling
