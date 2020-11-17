@@ -29,6 +29,7 @@ received a copy of the GNU General Public License along with this program.  If n
 
  @section versions Changelog
 
+// clang-format off
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
@@ -61,17 +62,16 @@ Version| Date       | Developer           | Comments
 1.0.4c | 2017-08-13 | SV-Zanshin          | Issue  #5 - Remove checks after Wire.requestFrom()
 1.0.4b | 2017-08-08 | SV-Zanshin          | Replaced readRAM and writeRAM with template functions
 1.0.4a | 2017-08-06 | SV-Zanshin          | Removed unnecessary MCP7940_I2C_Delay and all references
-1.0.3  | 2017-08-05 | SV-Zanshin          | Added calls for MCP7940N. getPowerFail(),
-clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()
+1.0.3  | 2017-08-05 | SV-Zanshin          | Added calls for MCP7940N. getPowerFail(),clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()
 1.0.3a | 2017-07-29 | SV-Zanshin          | Cleaned up comments, no code changes
 1.0.3  | 2017-07-29 | SV-Zanshin          | getSQWSpeed(),setSQWSpeed(),setSQWState(),getSQWState()
-1.0.2  | 2017-07-29 | SV-Zanshin          | getAlarm(),setAlarmState(),getAlarmState(),isAlarm()
-added optional setting setAlarm(). Fixed alarm 1 index
+1.0.2  | 2017-07-29 | SV-Zanshin          | getAlarm(),setAlarmState(),getAlarmState(),isAlarm()added optional setting setAlarm(). Fixed alarm 1 index
 1.0.1  | 2017-07-25 | SV-Zanshin          | Overloaded Calibrate() to manually set trim factor
 1.0.0  | 2017-07-23 | SV-Zanshin          | Cleaned up code, initial github upload
 1.0.2b | 2017-07-20 | SV-Zanshin          | Added alarm handling
 1.0.1b | 2017-07-19 | SV-Zanshin          | Added methods
 1.0.0b | 2017-07-17 | SV-Zanshin          | Initial coding
+// clang-format on
 */
 
 #include "Arduino.h"  // Arduino data type definitions
