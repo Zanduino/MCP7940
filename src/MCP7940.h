@@ -76,7 +76,7 @@ added optional setting setAlarm(). Fixed alarm 1 index
 
 #include "Arduino.h"  // Arduino data type definitions
 #include "Wire.h"     // Standard I2C "Wire" library
-#ifndef MCP7940_h     // Guard code definition
+#ifndef MCP7940_h
 /** @brief  Guard code definition */
 #define MCP7940_h  // Define the name inside guard code
 /***************************************************************************************************
