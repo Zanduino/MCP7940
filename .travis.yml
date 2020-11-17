@@ -12,15 +12,21 @@
 language: c
 sudo: false
 
-# Blacklist
+#########################################################
+# Keep the gh-pages from being included in the CI runs ##
+#########################################################
 branches:
   except:
     - gh-pages
     
+##cache:
+##  directories:
+##    - ~/arduino_ide
+##    - ~/.arduino15/packages/
+    
 git:
   depth: false
   quiet: true
-  
 addons:
   apt:
     sources:
@@ -30,7 +36,7 @@ addons:
       - python3-pip
       - python3-wheel
       - clang-format-5.0
-  
+
 env:
   global:
     - PRETTYNAME="SV-Zanshin MCP7940 Arduino Library"
