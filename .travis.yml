@@ -3,6 +3,7 @@
 ##                                                                                                  ##
 ## Date       Developer           Comments                                                          ##
 ## ========== =================== ================================================================= ##
+## 2020-11-17 Arnd@SV-Zanshin     Issue #50 - added call to clang-format                            ##
 ## 2020-05-11 Arnd@SV-Zanshin     Removed Adafruit libraries which now caused Travis to fail        ##
 ## 2019-01-20 Arnd@SV-Zanshin     Linked to Adafruit script rather than manually defining all tests ##
 ## 2019-01-19 Arnd@SV-Zanshin     Initial coding                                                    ##
@@ -26,10 +27,13 @@ env:
 
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+  - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
+  - curl -SLs https://raw.githubusercontent.com/Zanduino/Common/main/Doxygen/Doxyfile > Doxyfile
 
 install:
 
 script:
+  - python run-clang-format.py -r .
   - build_main_platforms
 
 notifications:
@@ -37,5 +41,8 @@ notifications:
     on_success: change
     on_failure: change
 
+###########################################################
+# Generate the Doxygen documentation upon successful run ##
+###########################################################
 after_success:
   - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
