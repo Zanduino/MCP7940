@@ -20,6 +20,17 @@ branches:
 git:
   depth: false
   quiet: true
+  
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
+      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+    packages:
+      - python3-pip
+      - python3-wheel
+      - clang-format-5.0
+  
 env:
   global:
     - PRETTYNAME="SV-Zanshin MCP7940 Arduino Library"
@@ -28,7 +39,6 @@ env:
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
   - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
-  - curl -SLs https://raw.githubusercontent.com/Zanduino/Common/main/Doxygen/Doxyfile > Doxyfile
 
 install:
 
