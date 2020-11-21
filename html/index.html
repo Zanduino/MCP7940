@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">MCP7940
-   &#160;<span id="projectnumber">Version 1.1.8</span>
+   &#160;<span id="projectnumber">Version 1.1.9</span>
    </div>
    <div id="projectbrief">Arduino Library for MCP7940 Real-Time-Clocks</div>
   </td>
@@ -162,9 +162,24 @@ Changelog</h1>
 <tr>
 <td>1.0.4a </td><td>2017-08-06 </td><td>SV-Zanshin </td><td>Removed unnecessary MCP7940_I2C_Delay and all references </td></tr>
 <tr>
-<td>1.0.3 </td><td>2017-08-05 </td><td>SV-Zanshin </td><td>Added calls for MCP7940N. getPowerFail(), </td></tr>
+<td>1.0.3 </td><td>2017-08-05 </td><td>SV-Zanshin </td><td>Added calls for MCP7940N. getPowerFail(),clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down() </td></tr>
+<tr>
+<td>1.0.3a </td><td>2017-07-29 </td><td>SV-Zanshin </td><td>Cleaned up comments, no code changes </td></tr>
+<tr>
+<td>1.0.3 </td><td>2017-07-29 </td><td>SV-Zanshin </td><td>getSQWSpeed(),setSQWSpeed(),setSQWState(),getSQWState() </td></tr>
+<tr>
+<td>1.0.2 </td><td>2017-07-29 </td><td>SV-Zanshin </td><td>getAlarm(),setAlarmState(),getAlarmState(),isAlarm()added optional setting setAlarm(). Fixed alarm 1 index </td></tr>
+<tr>
+<td>1.0.1 </td><td>2017-07-25 </td><td>SV-Zanshin </td><td>Overloaded Calibrate() to manually set trim factor </td></tr>
+<tr>
+<td>1.0.0 </td><td>2017-07-23 </td><td>SV-Zanshin </td><td>Cleaned up code, initial github upload </td></tr>
+<tr>
+<td>1.0.2b </td><td>2017-07-20 </td><td>SV-Zanshin </td><td>Added alarm handling </td></tr>
+<tr>
+<td>1.0.1b </td><td>2017-07-19 </td><td>SV-Zanshin </td><td>Added methods </td></tr>
+<tr>
+<td>1.0.0b </td><td>2017-07-17 </td><td>SV-Zanshin </td><td>Initial coding </td></tr>
 </table>
-<p>clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down() 1.0.3a | 2017-07-29 | SV-Zanshin | Cleaned up comments, no code changes 1.0.3 | 2017-07-29 | SV-Zanshin | getSQWSpeed(),setSQWSpeed(),setSQWState(),getSQWState() 1.0.2 | 2017-07-29 | SV-Zanshin | getAlarm(),setAlarmState(),getAlarmState(),isAlarm() added optional setting setAlarm(). Fixed alarm 1 index 1.0.1 | 2017-07-25 | SV-Zanshin | Overloaded Calibrate() to manually set trim factor 1.0.0 | 2017-07-23 | SV-Zanshin | Cleaned up code, initial github upload 1.0.2b | 2017-07-20 | SV-Zanshin | Added alarm handling 1.0.1b | 2017-07-19 | SV-Zanshin | Added methods 1.0.0b | 2017-07-17 | SV-Zanshin | Initial coding </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
