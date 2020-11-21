@@ -1,3 +1,4 @@
+// clang-format off
 /*!
 @file MCP7940.h
 
@@ -29,7 +30,6 @@ received a copy of the GNU General Public License along with this program.  If n
 
  @section versions Changelog
 
-// clang-format off
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
@@ -71,8 +71,8 @@ Version| Date       | Developer           | Comments
 1.0.2b | 2017-07-20 | SV-Zanshin          | Added alarm handling
 1.0.1b | 2017-07-19 | SV-Zanshin          | Added methods
 1.0.0b | 2017-07-17 | SV-Zanshin          | Initial coding
-// clang-format on
 */
+// clang-format on
 
 #include "Arduino.h"  // Arduino data type definitions
 #include "Wire.h"     // Standard I2C "Wire" library
