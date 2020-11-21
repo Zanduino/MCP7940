@@ -1,3 +1,4 @@
+// clang-format off
 /*!
 @file MCP7940.h
 
@@ -61,22 +62,21 @@ Version| Date       | Developer           | Comments
 1.0.4c | 2017-08-13 | SV-Zanshin          | Issue  #5 - Remove checks after Wire.requestFrom()
 1.0.4b | 2017-08-08 | SV-Zanshin          | Replaced readRAM and writeRAM with template functions
 1.0.4a | 2017-08-06 | SV-Zanshin          | Removed unnecessary MCP7940_I2C_Delay and all references
-1.0.3  | 2017-08-05 | SV-Zanshin          | Added calls for MCP7940N. getPowerFail(),
-clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()
+1.0.3  | 2017-08-05 | SV-Zanshin          | Added calls for MCP7940N. getPowerFail(),clearPowerFail(), setBattery(). Added I2C_READ_ATTEMPTS to prevent I2C hang, added getPowerUp/Down()
 1.0.3a | 2017-07-29 | SV-Zanshin          | Cleaned up comments, no code changes
 1.0.3  | 2017-07-29 | SV-Zanshin          | getSQWSpeed(),setSQWSpeed(),setSQWState(),getSQWState()
-1.0.2  | 2017-07-29 | SV-Zanshin          | getAlarm(),setAlarmState(),getAlarmState(),isAlarm()
-                                            added optional setting setAlarm(). Fixed alarm 1 index
+1.0.2  | 2017-07-29 | SV-Zanshin          | getAlarm(),setAlarmState(),getAlarmState(),isAlarm()added optional setting setAlarm(). Fixed alarm 1 index
 1.0.1  | 2017-07-25 | SV-Zanshin          | Overloaded Calibrate() to manually set trim factor
 1.0.0  | 2017-07-23 | SV-Zanshin          | Cleaned up code, initial github upload
 1.0.2b | 2017-07-20 | SV-Zanshin          | Added alarm handling
 1.0.1b | 2017-07-19 | SV-Zanshin          | Added methods
 1.0.0b | 2017-07-17 | SV-Zanshin          | Initial coding
 */
+// clang-format on
 
 #include "Arduino.h"  // Arduino data type definitions
 #include "Wire.h"     // Standard I2C "Wire" library
-#ifndef MCP7940_h     // Guard code definition
+#ifndef MCP7940_h
 /** @brief  Guard code definition */
 #define MCP7940_h  // Define the name inside guard code
 /***************************************************************************************************
@@ -88,7 +88,7 @@ class TimeSpan;
 ***************************************************************************************************/
 #ifndef I2C_MODES  // I2C related constants
 /** @brief Guard code definition */
-#define I2C_MODES  // Guard code to prevent multiple definitions
+#define I2C_MODES
 const uint32_t I2C_STANDARD_MODE = 100000;  ///< Default normal I2C 100KHz speed
 const uint32_t I2C_FAST_MODE     = 400000;  ///< Fast mode
 #endif
