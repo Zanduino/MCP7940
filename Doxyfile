@@ -3,6 +3,7 @@
 ##                                                                                                  ##
 ## Date       Developer           Comments                                                          ##
 ## ========== =================== ================================================================= ##
+## 2020-11-29 Arnd@SV-Zanshin     Updated to version v1.1.10                                        ##
 ## 2020-11-17 Arnd@SV-Zanshin     Updated to version v1.1.9                                         ##
 ## 2020-06-04 Arnd@SV-Zanshin     Updated to version v1.1.8                                         ##
 ## 2020-05-11 Arnd@SV-Zanshin     Removed all comments in order to compact this file                ##
@@ -10,7 +11,7 @@
 ######################################################################################################
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = MCP7940
-PROJECT_NUMBER         = "Version 1.1.9"
+PROJECT_NUMBER         = "Version 1.1.10"
 PROJECT_BRIEF          = "Arduino Library for MCP7940 Real-Time-Clocks"
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       =
