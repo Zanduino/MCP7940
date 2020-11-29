@@ -86,6 +86,7 @@ void setup() {                 // Arduino standard setup method
     Serial.println(F("Couldn't set Battery Backup, is this a MCP7940N?"));
   }                          // if-then battery mode couldn't be set
   pinMode(LED_PIN, OUTPUT);  // Declare built-in LED as output
+
 }  // of method setup()
 /***************************************************************************************************
 ** This is the main program for the Arduino IDE, it is an infinite loop and keeps on repeating.   **
