@@ -1,7 +1,7 @@
 var searchData=
 [
   ['m',['m',['../class_date_time.html#a04c79ec05511462bc6a015e5b1088609',1,'DateTime']]],
-  ['mcp7940',['MCP7940',['../_access_memory_8ino.html#a82ae794926bc82ca949420cdf3fbbfa9',1,'MCP7940():&#160;AccessMemory.ino'],['../_set_alarms_8ino.html#a82ae794926bc82ca949420cdf3fbbfa9',1,'MCP7940():&#160;SetAlarms.ino']]],
+  ['mcp7940',['MCP7940',['../_access_memory_8ino.html#a82ae794926bc82ca949420cdf3fbbfa9',1,'MCP7940():&#160;AccessMemory.ino'],['../_regression_tests_8ino.html#a82ae794926bc82ca949420cdf3fbbfa9',1,'MCP7940():&#160;RegressionTests.ino'],['../_set_alarms_8ino.html#a82ae794926bc82ca949420cdf3fbbfa9',1,'MCP7940():&#160;SetAlarms.ino']]],
   ['mcp7940_2ecpp',['MCP7940.cpp',['../_m_c_p7940_8cpp.html',1,'']]],
   ['mcp7940_2eh',['MCP7940.h',['../_m_c_p7940_8h.html',1,'']]],
   ['mcp7940_5f12_5f24',['MCP7940_12_24',['../_m_c_p7940_8h.html#ac0b54c07b24baff5730c167a660684ef',1,'MCP7940.h']]],

@@ -58,6 +58,5 @@ var _m_c_p7940_8h =
     [ "MCP7940_SQWFS1", "_m_c_p7940_8h.html#ab492c2ad401e9621f08c3c64dc306d56", null ],
     [ "MCP7940_ST", "_m_c_p7940_8h.html#a6427d2762f796463c1fb6c3cded86b52", null ],
     [ "MCP7940_VBATEN", "_m_c_p7940_8h.html#ab2fd9e6879d1faa5eb6c864f453e1281", null ],
-    [ "SECONDS_FROM_1970_TO_2000", "_m_c_p7940_8h.html#ac499375617861fbb4adc6ddedf61dcea", null ],
-    [ "SECONDS_PER_DAY", "_m_c_p7940_8h.html#add99b6f76f3ea61361c39c863fdb9e2f", null ]
+    [ "SECS_1970_TO_2000", "_m_c_p7940_8h.html#a24c52205b665ec41d26ed415439abc52", null ]
 ];

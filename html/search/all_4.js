@@ -5,7 +5,7 @@ var searchData=
   ['day',['day',['../class_date_time.html#a6e653eaef31e4956ee9bf67b4874a9a8',1,'DateTime']]],
   ['dayoftheweek',['dayOfTheWeek',['../class_date_time.html#a958229f0d6a46d092658028d25a9e65c',1,'DateTime']]],
   ['days',['days',['../class_time_span.html#a50f71a2e56d605b32b19ca86cce15d39',1,'TimeSpan']]],
-  ['devicestart',['deviceStart',['../class_m_c_p7940___class.html#a5f2a74a78a2ab483302846c5e587ae88',1,'MCP7940_Class']]],
-  ['devicestatus',['deviceStatus',['../class_m_c_p7940___class.html#a405cb51a2a9e6a988268dd17a6ca19f3',1,'MCP7940_Class']]],
-  ['devicestop',['deviceStop',['../class_m_c_p7940___class.html#a40def4d6f517c4bca5a6ba98ee9b45c2',1,'MCP7940_Class']]]
+  ['devicestart',['deviceStart',['../class_m_c_p7940___class.html#a70fea5d000ee1c7dad61a0dc081b1bdc',1,'MCP7940_Class']]],
+  ['devicestatus',['deviceStatus',['../class_m_c_p7940___class.html#abe98f9edca7634140589876471cf9521',1,'MCP7940_Class']]],
+  ['devicestop',['deviceStop',['../class_m_c_p7940___class.html#a7de76ea9461917f8a71632f38d8edcb6',1,'MCP7940_Class']]]
 ];
