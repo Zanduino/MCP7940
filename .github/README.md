@@ -22,6 +22,7 @@ Several example sketches exist and are documented on the [Wiki pages](https://gi
 | [SquareWave](https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino)               | Output a Square Wave                    |
 | [TestBatteryBackup](https://github.com/SV-Zanshin/MCP7940/wiki/TestBatteryBackup.ino) | Show how the battery backup can be used |
 | [AccessMemory](https://github.com/SV-Zanshin/MCP7940/wiki/AccessMemory.ino)           | Read and Write to the MCP7940 memory    |
+| [RegressionTests](https://github.com/SV-Zanshin/MCP7940/wiki/RegressionTests.ino)     | Run regression test after changing library code |
 
 ## Documentation
 The library and example programs have Doxygen documentation, whose output can be found at [Doxygen Documentation](https://sv-zanshin.github.io/MCP7940/html/index.html)  
