@@ -44,10 +44,10 @@ Version| Date       | Developer           | Comments
 /***************************************************************************************************
 ** Declare all program constants and enumerated types                                             **
 ***************************************************************************************************/
-const uint32_t SERIAL_SPEED        = 115200;  ///< Set the baud rate for Serial I/O
-const uint8_t  LED_PIN             = 13;      ///< Arduino built-in LED pin number
-const uint8_t  SPRINTF_BUFFER_SIZE = 32;      ///< Buffer size for sprintf()
-const uint8_t  ALARM1_INTERVAL     = 15;      ///< Interval seconds for alarm
+const uint32_t SERIAL_SPEED{115200};     ///< Set the baud rate for Serial I/O
+const uint8_t  LED_PIN{13};              ///< Arduino built-in LED pin number
+const uint8_t  SPRINTF_BUFFER_SIZE{32};  ///< Buffer size for sprintf()
+const uint8_t  ALARM1_INTERVAL{15};      ///< Interval seconds for alarm
 /*! ///< Enumeration of MCP7940 alarm types */
 enum alarmTypes {
   matchSeconds,
