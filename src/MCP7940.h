@@ -32,6 +32,7 @@ received a copy of the GNU General Public License along with this program.  If n
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
+1.1.10 | 2020-11-26 | SV-Zanshin          | Started new development branch
 1.1.9  | 2020-11-26 | SV-Zanshin          | Issue #54 - Optimize c++ code / resilience. Uniform Initialization. Consolidated I2C calls.
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
 1.1.8  | 2020-11-14 | SV-Zanshin          | Issue #49 - corrections for Battery Backup mode
