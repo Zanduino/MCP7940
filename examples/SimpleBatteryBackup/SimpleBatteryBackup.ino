@@ -45,11 +45,11 @@ char          inputBuffer[SPRINTF_BUFFER_SIZE];  // Buffer for sprintf()/sscanf(
 ** Method Setup(). This is an Arduino IDE method which is called upon boot or restart. It is only **
 ** called one time and then control goes to the main loop, which loop indefinately.               **
 ***************************************************************************************************/
-void setup() {                 // Arduino standard setup method
+void setup() {
   Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
-#ifdef __AVR_ATmega32U4__      // If a 32U4 processor, then wait
-  delay(3000);                 // 3 seconds for the serial port to
-#endif                         // initialize, otherwise continue
+#ifdef __AVR_ATmega32U4__
+  delay(3000);
+#endif
   Serial.print(F("\nStarting SimpleBatteryBackup program\n"));
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));
@@ -59,8 +59,8 @@ void setup() {                 // Arduino standard setup method
   Serial.print(F(__TIME__));
   Serial.print(F("\n"));
   while (!MCP7940.begin()) {  // Initialize RTC communications
-    Serial.println(F("Unable to find MCP7940N. Checking again in 3s."));  // Show error text
-    delay(3000);                                                          // wait three seconds
+    Serial.println(F("Unable to find MCP7940N. Checking again in 3s."));  // Show error and wait
+    delay(3000);
   }  // of loop until device is located
   Serial.println(F("MCP7940N initialized."));
   if (MCP7940.getPowerFail()) {  // Check for a power failure
