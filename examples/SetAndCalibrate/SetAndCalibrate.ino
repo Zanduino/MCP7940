@@ -52,9 +52,9 @@ char          inputBuffer[SPRINTF_BUFFER_SIZE];  // Buffer for sprintf()/sscanf(
 void setup() {                 // Arduino standard setup method
   Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
 #ifdef __AVR_ATmega32U4__      // If this is a 32U4 processor, then
-  delay(3000);  // wait 3 seconds for the serial
-#endif          // interface to initialize
-  Serial.print(F("\nStarting SetAndCalibrate program\n"));  // Show program information
+  delay(3000);                 // wait 3 seconds for the serial
+#endif                         // interface to initialize
+  Serial.print(F("\nStarting SetAndCalibrate program\n"));
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));  // Show compiler information
   Serial.print(F("\n- On "));
