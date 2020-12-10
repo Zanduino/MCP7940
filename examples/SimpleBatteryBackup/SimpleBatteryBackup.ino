@@ -1,15 +1,15 @@
 /**************************************************************************************************
-Example program to demonstrate a battery-backup MCP7940N usage. The library as well as the most 
+Example program to demonstrate a battery-backup MCP7940N usage. The library as well as the most
 current version of this program is available on GitHub at https://github.com/SV-Zanshin/MCP7940 and
 a more detailed description of this program (and the library) can be found at
-https://github.com/SV-Zanshin/MCP7940/wiki/SimpleBatteryBackup.ino The MCP7940 library uses the 
-standard SPI Wire library for communications with the RTC chip and has also used the class 
+https://github.com/SV-Zanshin/MCP7940/wiki/SimpleBatteryBackup.ino The MCP7940 library uses the
+standard SPI Wire library for communications with the RTC chip and has also used the class
 definitions of the standard RTClib library from Adafruit/Jeelabs. The data sheet for the MCP7940M is
-located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N has extra 
-functionality revolving around battery backup but this library's functionality covers that chip as 
-well. 
-This example program shows how the battery backup information can be used on the MCP7940N chip (the 
-"M" version doesn't support battery backup). When power is turned on and the program starts, it 
+located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N has extra
+functionality revolving around battery backup but this library's functionality covers that chip as
+well.
+This example program shows how the battery backup information can be used on the MCP7940N chip (the
+"M" version doesn't support battery backup). When power is turned on and the program starts, it
 checks to see if the MCP7940N has detected a power failure and displays the relevant information.
 If the MCP7940N shows no power failure, then the program sets the time (using the sketch compilation
 date and time) and loops.
@@ -32,9 +32,9 @@ Vers.  Date       Developer                     Comments
 /***************************************************************************************************
 ** Declare all program constants                                                                  **
 ***************************************************************************************************/
-const uint32_t SERIAL_SPEED        = 115200;  // Set the baud rate for Serial I/O
-const uint8_t  LED_PIN             = 13;      // Arduino built-in LED pin number
-const uint8_t  SPRINTF_BUFFER_SIZE = 32;      // Buffer size for sprintf()
+const uint32_t SERIAL_SPEED{115200};     // Set the baud rate for Serial I/O
+const uint8_t  LED_PIN{13};              // Arduino built-in LED pin number
+const uint8_t  SPRINTF_BUFFER_SIZE{32};  // Buffer size for sprintf()
 
 /***************************************************************************************************
 ** Declare global variables and instantiate classes                                               **
@@ -48,8 +48,8 @@ char          inputBuffer[SPRINTF_BUFFER_SIZE];  // Buffer for sprintf()/sscanf(
 void setup() {                 // Arduino standard setup method
   Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
 #ifdef __AVR_ATmega32U4__      // If a 32U4 processor, then wait
-  delay(3000);                 // 3 seconds for the serial port to
-#endif                         // initialize, otherwise continue
+  delay(3000);  // 3 seconds for the serial port to
+#endif          // initialize, otherwise continue
   Serial.print(F("\nStarting SimpleBatteryBackup program\n"));
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));
@@ -76,8 +76,7 @@ void setup() {                 // Arduino standard setup method
             now.month(), now.day(), now.hour(), now.minute());  // date/time with leading zeros
     Serial.println(inputBuffer);
     MCP7940.clearPowerFail();  // Reset the power fail switch
-  }
-  else {
+  } else {
     while (!MCP7940.deviceStatus()) {  // Turn oscillator on if necessary
       Serial.println(F("Oscillator is off, turning it on."));
       bool deviceStatus = MCP7940.deviceStart();  // Start oscillator and return state
@@ -110,6 +109,6 @@ void loop() {
     secs = now.second();                           // Set the counter variable
     digitalWrite(LED_PIN, !digitalRead(LED_PIN));  // Toggle the LED
     Serial.println();
-  }                              // of if the seconds have changed
+  }            // of if the seconds have changed
   delay(100);  // Do nothing for 100 milliseconds
 }  // of method loop()
