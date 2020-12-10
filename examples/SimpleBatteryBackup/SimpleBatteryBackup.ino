@@ -48,8 +48,8 @@ char          inputBuffer[SPRINTF_BUFFER_SIZE];  // Buffer for sprintf()/sscanf(
 void setup() {                 // Arduino standard setup method
   Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
 #ifdef __AVR_ATmega32U4__      // If a 32U4 processor, then wait
-  delay(3000);  // 3 seconds for the serial port to
-#endif          // initialize, otherwise continue
+  delay(3000);                 // 3 seconds for the serial port to
+#endif                         // initialize, otherwise continue
   Serial.print(F("\nStarting SimpleBatteryBackup program\n"));
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));

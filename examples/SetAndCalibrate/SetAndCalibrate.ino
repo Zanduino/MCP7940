@@ -125,14 +125,14 @@ void readCommand() {
         *******************************************************************************************/
         case SetDate:  // Set the RTC date/time
           tokens = sscanf(inputBuffer,
-                          "%*s %hu-%hu-%hu %hu:%hu:%hu;",  // Use sscanf() to parse the date/
+                          "%*s %hu-%hu-%hu %hu:%hu:%hu;",  // Use sscanf() to parse the date
                           &year, &month, &day, &hour, &minute, &second);  // time into variables
-          if (tokens != 6)                                   // Check to see if it was parsed
-            Serial.print(F("Unable to parse date/time\n"));  
-          else {                                             
+          if (tokens != 6)  // Check to see if it was parsed
+            Serial.print(F("Unable to parse date/time\n"));
+          else {
             MCP7940.adjust(
                 DateTime(year, month, day, hour, minute, second));  // Adjust the RTC date/time
-            Serial.print(F("Date has been set."));               
+            Serial.print(F("Date has been set."));
           }       // of if-then-else the date could be parsed
           break;  //
         /*******************************************************************************************
