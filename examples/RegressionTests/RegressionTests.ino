@@ -60,8 +60,8 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);    // Declare built-in LED as output
   Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
 #ifdef __AVR_ATmega32U4__      // If a 32U4 processor, then wait
-  delay(3000);  // 3 seconds for the serial port to
-#endif          // initialize, otherwise continue
+  delay(3000);                 // 3 seconds for the serial port to
+#endif                         // initialize, otherwise continue
   Serial.print(F("\nStarting RegressionTests program\n"));
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));  // Show compiler information

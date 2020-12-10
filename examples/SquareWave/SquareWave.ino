@@ -79,11 +79,11 @@ void PCINT_vect()
 ** Method Setup(). This is an Arduino IDE method which is called upon boot or restart. It is only **
 ** called one time and then control goes to the main loop, which loop indefinately.               **
 ***************************************************************************************************/
-void setup() {                 // Arduino standard setup method
-  Serial.begin(SERIAL_SPEED);  // Start serial port at Baud rate
-#ifdef __AVR_ATmega32U4__      // If this is a 32U4 processor, then
-  delay(3000);  // wait 3 seconds for the serial
-#endif  // interface to initialize
+void setup() {                                        // Arduino standard setup method
+  Serial.begin(SERIAL_SPEED);                         // Start serial port at Baud rate
+#ifdef __AVR_ATmega32U4__                             // If this is a 32U4 processor, then
+  delay(3000);                                        // wait 3 seconds for the serial
+#endif                                                // interface to initialize
   Serial.print(F("\nStarting SetAlarms program\n"));  // Show program information
   Serial.print(F("- Compiled with c++ version "));
   Serial.print(F(__VERSION__));  // Show compiler information
