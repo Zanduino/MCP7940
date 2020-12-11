@@ -155,7 +155,7 @@ class DateTime {
     @class   DateTime
     @brief   Simple general-purpose date/time class
     @details Copied from RTClib. For further information on this implementation see
-             https://github.com/SV-Zanshin/MCP7940/wiki/DateTimeClass
+             https://github.com/Zanduino/MCP7940/wiki/DateTimeClass
   */
  public:
   DateTime(uint32_t t = 0);
@@ -202,7 +202,7 @@ class TimeSpan {
    @class   TimeSpan
    @brief   Timespan class which can represent changes in time with seconds accuracy
    @details Copied from RTClib. For further information see
-            https://github.com/SV-Zanshin/MCP7940/wiki/TimeSpanClass for additional details
+            https://github.com/Zanduino/MCP7940/wiki/TimeSpanClass for additional details
   */
  public:
   TimeSpan(int32_t seconds = 0);                                         ///< Default constructor
