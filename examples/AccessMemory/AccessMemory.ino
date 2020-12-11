@@ -7,8 +7,8 @@ bytes of RAM available to the user on the chip. The readRAM() and writeRAM() fun
 data type and this example will accept characters typed in on the serial port and write them
 byte-by-bytte to RAM. Then the whole character array is read and displayed with one readRAM()
 function call.\n\n The library as well as the most current version of this program is available on
-GitHub at https://github.com/SV-Zanshin/MCP7940 and a more detailed description of this program (and
-the library) can be found at https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino \n\n The
+GitHub at https://github.com/Zanduino/MCP7940 and a more detailed description of this program (and
+the library) can be found at https://github.com/Zanduino/MCP7940/wiki/SetAndCalibrate.ino \n\n The
 MCP7940 library uses the standard SPI Wire library for communications with the RTC chip and has also
 used the class definitions of the standard RTClib library from Adafruit/Jeelabs. The data sheet for
 the MCP7940M is located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The

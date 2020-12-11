@@ -1,9 +1,9 @@
 /***************************************************************************************************
 ** Example program for using the MCP7940 library which allows access to the MCP7940N/M real-time- **
 ** clock chip. The library as well as the most current version of this program is available at    **
-** GitHub using the address https://github.com/SV-Zanshin/MCP7940 and a more detailed description **
+** GitHub using the address https://github.com/Zanduino/MCP7940 and a more detailed description   **
 ** of this program (and the library) can be found at                                              **
-** https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino                                 **
+** https://github.com/Zanduino/MCP7940/wiki/SetAndCalibrate.ino                                   **
 **                                                                                                **
 ** The MCP7940 library uses the standard SPI Wire library for communications with the RTC chip and**
 ** has also used the class definitions of the standard RTClib library from Adafruit/Jeelabs. The  **
@@ -26,11 +26,11 @@
 ** more details. You should have received a copy of the GNU General Public License along with     **
 ** this program.  If not, see <http://www.gnu.org/licenses/>.                                     **
 **                                                                                                **
-** Vers.  Date       Developer                     Comments                                       **
-** ====== ========== ============================= ============================================== **
-** 1.0.2  2020-11-16 https://github.com/SV-Zanshin Issue #50 - clang-format                       **
-** 1.0.1  2017-07-29 https://github.com/SV-Zanshin Cleaned up comments and code                   **
-** 1.0.0  2017-07-23 https://github.com/SV-Zanshin Initial coding                                 **
+** Vers.  Date       Developer  Comments                                                          **
+** ====== ========== ========== ================================================================= **
+** 1.0.2  2020-11-16 SV-Zanshin Issue #50 - clang-format                                          **
+** 1.0.1  2017-07-29 SV-Zanshin Cleaned up comments and code                                      **
+** 1.0.0  2017-07-23 SV-Zanshin Initial coding                                                    **
 **                                                                                                **
 ***************************************************************************************************/
 #include <MCP7940.h>  // Include the MCP7940 RTC library

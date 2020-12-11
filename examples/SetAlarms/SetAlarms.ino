@@ -4,8 +4,8 @@
 
 Example program for using the MCP7940 library which demonstrate the use of alarms on the MCP7940N/M
 real time clock chip. The library as well as the most current version of this program is available
-at GitHub using the address https://github.com/SV-Zanshin/MCP7940 and a more detailed description of
-this program can be found at https://github.com/SV-Zanshin/MCP7940/wiki/SetAlarms.ino \n\n The
+at GitHub using the address https://github.com/Zanduino/MCP7940 and a more detailed description of
+this program can be found at https://github.com/Zanduino/MCP7940/wiki/SetAlarms.ino \n\n The
 MCP7940 library uses the standard SPI Wire library for communications with the RTC chip and has also
 used the class definitions of the standard RTClib library from Adafruit/Jeelabs.\n\n The data sheet
 for the MCP7940M is located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The

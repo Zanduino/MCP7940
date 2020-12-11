@@ -1,8 +1,8 @@
 /**************************************************************************************************
 Example program to demonstrate a battery-backup MCP7940N usage. The library as well as the most
-current version of this program is available on GitHub at https://github.com/SV-Zanshin/MCP7940 and
+current version of this program is available on GitHub at https://github.com/Zanduino/MCP7940 and
 a more detailed description of this program (and the library) can be found at
-https://github.com/SV-Zanshin/MCP7940/wiki/SimpleBatteryBackup.ino The MCP7940 library uses the
+https://github.com/Zanduino/MCP7940/wiki/SimpleBatteryBackup.ino The MCP7940 library uses the
 standard SPI Wire library for communications with the RTC chip and has also used the class
 definitions of the standard RTClib library from Adafruit/Jeelabs. The data sheet for the MCP7940M is
 located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N has extra
@@ -22,9 +22,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 have received a copy of the GNU General Public License along with this program.  If not, see
 <http://www.gnu.org/licenses/>.
 
-Vers.  Date       Developer                     Comments
-====== ========== ============================= ====================================================
-1.0.0  2020-11-21 https://github.com/SV-Zanshin Issue #52 - Cloned from TestBatteryBackup.ino
+Vers.  Date       Developer  Comments
+====== ========== ========== ====================================================
+1.0.0  2020-11-21 SV-Zanshin Issue #52 - Cloned from TestBatteryBackup.ino
 
 */
 #include <MCP7940.h>  // Include the MCP7940 RTC library

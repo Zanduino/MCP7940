@@ -1,8 +1,8 @@
 /***************************************************************************************************
 ** Example program for using the MCP7940 library and the Square Wave output on the MFP pin. The   **
 ** library as well as the current version of this program is on GitHub at the URL                 **
-** https://github.com/SV-Zanshin/MCP7940 and a detailed description of this program can be found  **
-** at https://github.com/SV-Zanshin/MCP7940/wiki/SquareWave.ino                                   **
+** https://github.com/Zanduino/MCP7940 and a detailed description of this program can be found  **
+** at https://github.com/Zanduino/MCP7940/wiki/SquareWave.ino                                   **
 **                                                                                                **
 ** The MCP7940 library uses the standard SPI Wire library for communications with the RTC chip    **
 ** and has also used the class definitions of the standard RTClib library from Adafruit/Jeelabs.  **
@@ -31,13 +31,14 @@
 ** more details. You should have received a copy of the GNU General Public License along with     **
 ** this program.  If not, see <http://www.gnu.org/licenses/>.                                     **
 **                                                                                                **
-** Vers.  Date       Developer                     Comments                                       **
-** ====== ========== ============================= ============================================== **
-** 1.0.4  2020-11-16 https://github.com/SV-Zanshin Issue #50 - clang-formatted source code        **
-** 1.0.3  2019-01-20 https://github.com/SV-Zanshin Corrected Interrupt vector def. for non-esp32  **
-** 1.0.2  2018-09-24 https://github.com/SV-Zanshin Issue #34 Support for ESP32 Type interrupts    **
-** 1.0.1  2018-07-07 https://github.com/SV-Zanshin Added 64Hz support , changed to use interrupts **
-** 1.0.0  2017-07-29 https://github.com/SV-Zanshin Initial coding                                 **
+** Written by Arnd <Zanshin_Github@sv-zanshin.com> / https://www.github.com/SV-Zanshin            **
+** Vers.  Date       Developer  Comments                                                          **
+** ====== ========== ========== ================================================================= **
+** 1.0.4  2020-11-16 SV-Zanshin Issue #50 - clang-formatted source code                           **
+** 1.0.3  2019-01-20 SV-Zanshin Corrected Interrupt vector def. for non-esp32                     **
+** 1.0.2  2018-09-24 SV-Zanshin Issue #34 Support for ESP32 Type interrupts                       **
+** 1.0.1  2018-07-07 SV-Zanshin Added 64Hz support , changed to use interrupts                    **
+** 1.0.0  2017-07-29 SV-Zanshin Initial coding                                                    **
 **                                                                                                **
 ***************************************************************************************************/
 #include "MCP7940.h"  // Include the MCP7940 RTC library

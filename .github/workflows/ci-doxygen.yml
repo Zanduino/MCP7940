@@ -13,7 +13,7 @@ name: 'Doxygen'
 ####################################################################################################
 ## Action runs when committing (push), doing a pull request, or a workflow_dispatch               ##
 ####################################################################################################
-on: 
+on:
   push:
   pull_request:
   workflow_dispatch:
@@ -37,7 +37,7 @@ jobs:
           ##########################################################################################
           PRETTYNAME:     "MCP7940 Arduino Library"
           PROJECT_NAME:   "MCP7940"
-          PROJECT_NUMBER: "v1.0.4"
+          PROJECT_NUMBER: "v1.2.0"
           PROJECT_BRIEF:  "Arduino Library for the MCP7940N and MCP7940M Real-time clocks"
-          PROJECT_LOGO:   ""  
+          PROJECT_LOGO:   ""
          run: bash ${GITHUB_WORKSPACE}/Common/Scripts/doxy_gen_and_deploy.sh

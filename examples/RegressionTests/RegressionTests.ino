@@ -6,8 +6,8 @@ This program is used to execute all public functions in the MCP7940 library and 
 possible, whether they functions as expected. This is used during a development cycle to see if any
 changes or enhancements may have broken previously working functionality.\n The MCP7940 library as
 well as the most current version of this program is available at GitHub using the address
-https://github.com/SV-Zanshin/MCP7940 and a more detailed description of this program can be found
-at https://github.com/SV-Zanshin/MCP7940/wiki/RegressionTests.ino \n\n The MCP7940 library uses the
+https://github.com/Zanduino/MCP7940 and a more detailed description of this program can be found
+at https://github.com/Zanduino/MCP7940/wiki/RegressionTests.ino \n\n The MCP7940 library uses the
 standard SPI Wire library for communications with the RTC chip and has also used the class
 definitions of the standard RTClib library from Adafruit/Jeelabs.\n\n The data sheet for the
 MCP7940M is located at http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N

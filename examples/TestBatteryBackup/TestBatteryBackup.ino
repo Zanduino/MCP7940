@@ -1,9 +1,9 @@
 /**************************************************************************************************
 Example program for using the MCP7940 library which allows access to the MCP7940N/M real-time-
 clock chip. The library as well as the most current version of this program is available at GitHub
-using the address https://github.com/SV-Zanshin/MCP7940 and a more detailed description of this
+using the address https://github.com/Zanduino/MCP7940 and a more detailed description of this
 program (and the library) can be found at
-https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino The MCP7940 library uses the standard
+https://github.com/Zanduino/MCP7940/wiki/SetAndCalibrate.ino The MCP7940 library uses the standard
 SPI Wire library for communications with the RTC chip and has also used the class definitions of the
 standard RTClib library from Adafruit/Jeelabs. The data sheet for the MCP7940M is located at
 http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf. The MCP7940N has extra functionality
@@ -25,14 +25,14 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 have received a copy of the GNU General Public License along with this program.  If not, see
 <http://www.gnu.org/licenses/>.
 
-Vers.  Date       Developer                     Comments
-====== ========== ============================= ====================================================
-1.0.5  2020-11-16 https://github.com/SV-Zanshin Added I2C pull-up information in the comments
-1.0.4  2020-11-15 https://github.com/SV-Zanshin Issue #50 Reformat with "clang-format"
-1.0.3  2020-11-14 https://github.com/SV-Zanshin Issue #49 corrections
-1.0.2  2019-01-20 https://github.com/SV-Zanshin sprintf() text change due to warnings from Travis-CI
-1.0.1  2017-08-09 https://github.com/SV-Zanshin Cosmetic changes **
-1.0.0  2017-08-05 https://github.com/SV-Zanshin Cloned from SetAndCalibrate **
+Vers.  Date       Developer  Comments
+====== ========== ========== ====================================================
+1.0.5  2020-11-16 SV-Zanshin Added I2C pull-up information in the comments
+1.0.4  2020-11-15 SV-Zanshin Issue #50 Reformat with "clang-format"
+1.0.3  2020-11-14 SV-Zanshin Issue #49 corrections
+1.0.2  2019-01-20 SV-Zanshin sprintf() text change due to warnings from Travis-CI
+1.0.1  2017-08-09 SV-Zanshi Cosmetic changes
+1.0.0  2017-08-05 SV-Zanshin Cloned from SetAndCalibrate
 
 */
 #include <MCP7940.h>  // Include the MCP7940 RTC library
