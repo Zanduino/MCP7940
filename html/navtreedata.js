@@ -3,6 +3,8 @@ var NAVTREE =
   [ "MCP7940", "index.html", [
     [ "Arduino Library Header for the MCP7940M and MCP7940N Real-Time Clock devices", "index.html", [
       [ "Description", "index.html#MCP7940_intro_section", null ],
+      [ "configuration", "index.html#doxygen", null ],
+      [ "clang-format", "index.html#clang-format", null ],
       [ "GNU General Public License v3.0", "index.html#license", null ],
       [ "Author", "index.html#author", null ],
       [ "Changelog", "index.html#versions", null ]

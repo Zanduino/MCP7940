@@ -29,9 +29,9 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">MCP7940
-   &#160;<span id="projectnumber">Version 1.1.10</span>
+   &#160;<span id="projectnumber">v1.2.0</span>
    </div>
-   <div id="projectbrief">Arduino Library for MCP7940 Real-Time-Clocks</div>
+   <div id="projectbrief">Arduino Library for the MCP7940N and MCP7940M Real-time clocks</div>
   </td>
  </tr>
  </tbody>
@@ -129,7 +129,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_acc
 Description</h1>
 <p>Example program for using the MCP7940 library which demonstrates writing to and reading from the 64 bytes of RAM available to the user on the chip. The readRAM() and writeRAM() functions accept any data type and this example will accept characters typed in on the serial port and write them byte-by-bytte to RAM. Then the whole character array is read and displayed with one readRAM() function call.<br />
 <br />
- The library as well as the most current version of this program is available on GitHub at <a href="https://github.com/SV-Zanshin/MCP7940">https://github.com/SV-Zanshin/MCP7940</a> and a more detailed description of this program (and the library) can be found at <a href="https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino">https://github.com/SV-Zanshin/MCP7940/wiki/SetAndCalibrate.ino</a> <br />
+ The library as well as the most current version of this program is available on GitHub at <a href="https://github.com/Zanduino/MCP7940">https://github.com/Zanduino/MCP7940</a> and a more detailed description of this program (and the library) can be found at <a href="https://github.com/Zanduino/MCP7940/wiki/SetAndCalibrate.ino">https://github.com/Zanduino/MCP7940/wiki/SetAndCalibrate.ino</a> <br />
 <br />
  The MCP7940 library uses the standard SPI Wire library for communications with the RTC chip and has also used the class definitions of the standard RTClib library from Adafruit/Jeelabs. The data sheet for the MCP7940M is located at <a href="http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf">http://ww1.microchip.com/downloads/en/DeviceDoc/20002292B.pdf</a>. The MCP7940N has extra functionality revolving around battery backup but this library's functionality covers that chip as well.<br />
 <br />
