@@ -11,4 +11,4 @@ Various example programs illustrating the use of the *Arduino* MCP79400 library 
 | SimpleBatteryBackup | [SimpleBatteryBackup.ino](https://github.com/Zanduino/MCP7940/wiki/SimpleBatteryBackup.ino) | Demonstrate power fail on Arduino with MCP7940N Battery backup |
 | RegressionTests     | [RegressionTests.ino](https://github.com/Zanduino/MCP7940/wiki/RegressionTests.ino)         | Test as many library functions as possible to detect potential regression errors |
 
-[![Zanshin Logo](https://zanduino.github.io/Images/zanshinkanjitiny.gif) <img src="https://zanduino.github.io/Images/zanshintext.gif" width="75"/>](https://www.sv-zanshin.com)
+[![Zanshin Logo](https://zanduino.github.io/Images/zanshinkanjitiny.gif) <img src="https://zanduino.github.io/Images/zanshintext.gif" width="75"/>](https://zanduino.github.io)

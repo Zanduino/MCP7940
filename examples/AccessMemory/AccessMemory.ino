@@ -30,7 +30,7 @@ received a copy of the GNU General Public License along with this program.  If n
 
 @section AccessMemory_author Author
 
-Written by Arnd\@SV-Zanshin
+Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 @section AccessMemory_Versions Changelog
 

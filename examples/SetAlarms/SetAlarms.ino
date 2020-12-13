@@ -28,7 +28,7 @@ received a copy of the GNU General Public License along with this program.  If n
 
 @section SetAlarms_author Author
 
-Written by Arnd\@SV-Zanshin
+Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 @section SetAlarms_Versions Changelog
 

@@ -31,7 +31,7 @@
 ** more details. You should have received a copy of the GNU General Public License along with     **
 ** this program.  If not, see <http://www.gnu.org/licenses/>.                                     **
 **                                                                                                **
-** Written by Arnd <Zanshin_Github@sv-zanshin.com> / https://www.github.com/SV-Zanshin            **
+** Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin                        **
 ** Vers.  Date       Developer  Comments                                                          **
 ** ====== ========== ========== ================================================================= **
 ** 1.0.4  2020-11-16 SV-Zanshin Issue #50 - clang-formatted source code                           **
