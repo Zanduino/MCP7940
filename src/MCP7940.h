@@ -117,6 +117,7 @@ const uint32_t I2C_FAST_MODE{400000};      ///< Fast mode
 #endif
 
 const uint8_t  MCP7940_ADDRESS{0x6F};         ///< Device address, fixed value
+const uint8_t  MCP7940_EEPROM_DEV_ADDRESS{0x57};  ///< Device EEPROM address, fixed value
 const uint8_t  MCP7940_RTCSEC{0x00};          ///< Timekeeping, RTCSEC Register address
 const uint8_t  MCP7940_RTCMIN{0x01};          ///< Timekeeping, RTCMIN Register address
 const uint8_t  MCP7940_RTCHOUR{0x02};         ///< Timekeeping, RTCHOUR Register address
@@ -147,6 +148,7 @@ const uint8_t  MCP7940_PWRUPHOUR{0x1D};       ///< Power-Fail, PWRUPHOUR Registe
 const uint8_t  MCP7940_PWRUPDATE{0x1E};       ///< Power-Fail, PWRUPDATE Register address
 const uint8_t  MCP7940_PWRUPMTH{0x1F};        ///< Power-Fail, PWRUPMTH Register address
 const uint8_t  MCP7940_RAM_ADDRESS{0x20};     ///< NVRAM - Start address for SRAM
+const uint8_t  MCP7940_EEPROM_ADDRESS{0xF0};  ///< EEPROM - Start address for EEPROM
 const uint8_t  MCP7940_ST{7};                 ///< MCP7940 register bits. RTCSEC reg
 const uint8_t  MCP7940_12_24{6};              ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
 const uint8_t  MCP7940_AM_PM{5};              ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
@@ -314,6 +316,25 @@ class MCP7940_Class {
     uint8_t i = I2C_write((addr % 64) + MCP7940_RAM_ADDRESS, value);
     return i;
   }  // of method writeRAM()
+
+/*************************************************************************************************
+  ** Template functions definitions are done in the header file                                   **
+  ** ============================================================================================ **
+  ** 8 bytes of EEPROM area on 74902 and 6 bytes on 74901, no EEPROM on 7490                      **
+  ** readEEPROM   read any number of bytes from the MCP7940 EEPROM area                           **
+  *************************************************************************************************/
+  template <typename T>
+  uint8_t& readEEPROM(const uint8_t& addr, T& value) const {
+    /*!
+     @brief     Template for readEEPROM()
+     @details   As a template it can support compile-time data type definitions
+     @param[in] addr Memory address
+     @param[in] value    Data Type "T" to read
+     @return    Pointer to return data structure
+    */
+    uint8_t i = I2C_read(MCP7940_EEPROM_ADDRESS + addr, value, true);
+    return (i);
+  }  // of method readEEPROM()
  private:
   uint32_t _SetUnixTime{0};  ///< UNIX time when clock last set
   /*************************************************************************************************
@@ -324,7 +345,7 @@ class MCP7940_Class {
   ** I2C_write write any number of bytes to the MCP7940                                           **
   *************************************************************************************************/
   template <typename T>
-  uint8_t I2C_read(const uint8_t address, T& value) const {
+  uint8_t I2C_read(const uint8_t address, T& value, bool EEPROMAccess = false) const {
     /*!
     @brief     Template for I2C_read() generic read function
     @details   The template supports reading any number of bytes from a structure. The size of the
@@ -336,10 +357,10 @@ class MCP7940_Class {
     @return    number of bytes read
    */
     uint8_t i{0};                                    // return number of bytes read
-    Wire.beginTransmission(MCP7940_ADDRESS);         // Address the I2C device
+    Wire.beginTransmission((!EEPROMAccess) ? MCP7940_ADDRESS : MCP7940_EEPROM_DEV_ADDRESS);         // Address the I2C device
     Wire.write(address);                             // Send register address to read from
     if (Wire.endTransmission() == 0) {               // Close transmission and check error code
-      Wire.requestFrom(MCP7940_ADDRESS, sizeof(T));  // Request a block of data
+      Wire.requestFrom((!EEPROMAccess) ? MCP7940_ADDRESS : MCP7940_EEPROM_DEV_ADDRESS, sizeof(T));  // Request a block of data
       uint8_t* bytePtr = (uint8_t*)&value;           // Declare pointer to start of structure
       for (i = 0; i < sizeof(T); i++) {              // Loop for each byte to be read
         *bytePtr++ = Wire.read();                    // Read a byte
