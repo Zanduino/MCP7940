@@ -50,6 +50,7 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
+1.2.0  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
 1.1.9  | 2020-11-26 | SV-Zanshin          | Issue #54 - Optimize c++ code / resilience. Uniform Initialization. Consolidated I2C calls.
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
 1.1.8  | 2020-11-14 | SV-Zanshin          | Issue #49 - corrections for Battery Backup mode
@@ -116,57 +117,59 @@ const uint32_t I2C_FAST_MODE{400000};      ///< Fast mode
 #define BUFFER_LENGTH 32
 #endif
 
-const uint8_t  MCP7940_ADDRESS{0x6F};         ///< Device address, fixed value
-const uint8_t  MCP7940_RTCSEC{0x00};          ///< Timekeeping, RTCSEC Register address
-const uint8_t  MCP7940_RTCMIN{0x01};          ///< Timekeeping, RTCMIN Register address
-const uint8_t  MCP7940_RTCHOUR{0x02};         ///< Timekeeping, RTCHOUR Register address
-const uint8_t  MCP7940_RTCWKDAY{0x03};        ///< Timekeeping, RTCWKDAY Register address
-const uint8_t  MCP7940_RTCDATE{0x04};         ///< Timekeeping, RTCDATE Register address
-const uint8_t  MCP7940_RTCMTH{0x05};          ///< Timekeeping, RTCMTH Register address
-const uint8_t  MCP7940_RTCYEAR{0x06};         ///< Timekeeping, RTCYEAR Register address
-const uint8_t  MCP7940_CONTROL{0x07};         ///< Timekeeping, RTCCONTROL Register address
-const uint8_t  MCP7940_OSCTRIM{0x08};         ///< Timekeeping, RTCOSCTRIM Register address
-const uint8_t  MCP7940_ALM0SEC{0x0A};         ///< Alarm 0, ALM0SEC Register address
-const uint8_t  MCP7940_ALM0MIN{0x0B};         ///< Alarm 0, ALM0MIN Register address
-const uint8_t  MCP7940_ALM0HOUR{0x0C};        ///< Alarm 0, ALM0HOUR Register address
-const uint8_t  MCP7940_ALM0WKDAY{0x0D};       ///< Alarm 0, ALM0WKDAY Register address
-const uint8_t  MCP7940_ALM0DATE{0x0E};        ///< Alarm 0, ALM0DATE Register address
-const uint8_t  MCP7940_ALM0MTH{0x0F};         ///< Alarm 0, ALM0MTH Register address
-const uint8_t  MCP7940_ALM1SEC{0x11};         ///< Alarm 1, ALM1SEC Register address
-const uint8_t  MCP7940_ALM1MIN{0x12};         ///< Alarm 1, ALM1MIN Register address
-const uint8_t  MCP7940_ALM1HOUR{0x13};        ///< Alarm 1, ALM1HOUR Register address
-const uint8_t  MCP7940_ALM1WKDAY{0x14};       ///< Alarm 1, ALM1WKDAY Register address
-const uint8_t  MCP7940_ALM1DATE{0x15};        ///< Alarm 1, ALM1DATE Register address
-const uint8_t  MCP7940_ALM1MTH{0x16};         ///< Alarm 1, ALM1MONTH Register address
-const uint8_t  MCP7940_PWRDNMIN{0x18};        ///< Power-Fail, PWRDNMIN Register address
-const uint8_t  MCP7940_PWRDNHOUR{0x19};       ///< Power-Fail, PWRDNHOUR Register address
-const uint8_t  MCP7940_PWRDNDATE{0x1A};       ///< Power-Fail, PWDNDATE Register address
-const uint8_t  MCP7940_PWRDNMTH{0x1B};        ///< Power-Fail, PWRDNMTH Register address
-const uint8_t  MCP7940_PWRUPMIN{0x1C};        ///< Power-Fail, PWRUPMIN Register address
-const uint8_t  MCP7940_PWRUPHOUR{0x1D};       ///< Power-Fail, PWRUPHOUR Register address
-const uint8_t  MCP7940_PWRUPDATE{0x1E};       ///< Power-Fail, PWRUPDATE Register address
-const uint8_t  MCP7940_PWRUPMTH{0x1F};        ///< Power-Fail, PWRUPMTH Register address
-const uint8_t  MCP7940_RAM_ADDRESS{0x20};     ///< NVRAM - Start address for SRAM
-const uint8_t  MCP7940_ST{7};                 ///< MCP7940 register bits. RTCSEC reg
-const uint8_t  MCP7940_12_24{6};              ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
-const uint8_t  MCP7940_AM_PM{5};              ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
-const uint8_t  MCP7940_OSCRUN{5};             ///< RTCWKDAY register
-const uint8_t  MCP7940_PWRFAIL{4};            ///< RTCWKDAY register
-const uint8_t  MCP7940_VBATEN{3};             ///< RTCWKDAY register
-const uint8_t  MCP7940_LPYR{5};               ///< RTCMTH register
-const uint8_t  MCP7940_OUT{7};                ///< CONTROL register
-const uint8_t  MCP7940_SQWEN{6};              ///< CONTROL register
-const uint8_t  MCP7940_ALM1EN{5};             ///< CONTROL register
-const uint8_t  MCP7940_ALM0EN{4};             ///< CONTROL register
-const uint8_t  MCP7940_EXTOSC{3};             ///< CONTROL register
-const uint8_t  MCP7940_CRSTRIM{2};            ///< CONTROL register
-const uint8_t  MCP7940_SQWFS1{1};             ///< CONTROL register
-const uint8_t  MCP7940_SQWFS0{0};             ///< CONTROL register
-const uint8_t  MCP7940_SIGN{7};               ///< OSCTRIM register
-const uint8_t  MCP7940_ALMPOL{7};             ///< ALM0WKDAY register
-const uint8_t  MCP7940_ALM0IF{3};             ///< ALM0WKDAY register
-const uint8_t  MCP7940_ALM1IF{3};             ///< ALM1WKDAY register
-const uint32_t SECS_1970_TO_2000{946684800};  ///< Seconds between year 1970 and 2000
+const uint8_t  MCP7940_ADDRESS{0x6F};          ///< Fixed I2C address, fixed
+const uint8_t  MCP7940_EUI_ADDRESS{0x57};      ///< Fixed I2C address for accessing protected ROM
+const uint8_t  MCP7940_RTCSEC{0x00};           ///< Timekeeping, RTCSEC Register address
+const uint8_t  MCP7940_RTCMIN{0x01};           ///< Timekeeping, RTCMIN Register address
+const uint8_t  MCP7940_RTCHOUR{0x02};          ///< Timekeeping, RTCHOUR Register address
+const uint8_t  MCP7940_RTCWKDAY{0x03};         ///< Timekeeping, RTCWKDAY Register address
+const uint8_t  MCP7940_RTCDATE{0x04};          ///< Timekeeping, RTCDATE Register address
+const uint8_t  MCP7940_RTCMTH{0x05};           ///< Timekeeping, RTCMTH Register address
+const uint8_t  MCP7940_RTCYEAR{0x06};          ///< Timekeeping, RTCYEAR Register address
+const uint8_t  MCP7940_CONTROL{0x07};          ///< Timekeeping, RTCCONTROL Register address
+const uint8_t  MCP7940_OSCTRIM{0x08};          ///< Timekeeping, RTCOSCTRIM Register address
+const uint8_t  MCP7940_ALM0SEC{0x0A};          ///< Alarm 0, ALM0SEC Register address
+const uint8_t  MCP7940_ALM0MIN{0x0B};          ///< Alarm 0, ALM0MIN Register address
+const uint8_t  MCP7940_ALM0HOUR{0x0C};         ///< Alarm 0, ALM0HOUR Register address
+const uint8_t  MCP7940_ALM0WKDAY{0x0D};        ///< Alarm 0, ALM0WKDAY Register address
+const uint8_t  MCP7940_ALM0DATE{0x0E};         ///< Alarm 0, ALM0DATE Register address
+const uint8_t  MCP7940_ALM0MTH{0x0F};          ///< Alarm 0, ALM0MTH Register address
+const uint8_t  MCP7940_ALM1SEC{0x11};          ///< Alarm 1, ALM1SEC Register address
+const uint8_t  MCP7940_ALM1MIN{0x12};          ///< Alarm 1, ALM1MIN Register address
+const uint8_t  MCP7940_ALM1HOUR{0x13};         ///< Alarm 1, ALM1HOUR Register address
+const uint8_t  MCP7940_ALM1WKDAY{0x14};        ///< Alarm 1, ALM1WKDAY Register address
+const uint8_t  MCP7940_ALM1DATE{0x15};         ///< Alarm 1, ALM1DATE Register address
+const uint8_t  MCP7940_ALM1MTH{0x16};          ///< Alarm 1, ALM1MONTH Register address
+const uint8_t  MCP7940_PWRDNMIN{0x18};         ///< Power-Fail, PWRDNMIN Register address
+const uint8_t  MCP7940_PWRDNHOUR{0x19};        ///< Power-Fail, PWRDNHOUR Register address
+const uint8_t  MCP7940_PWRDNDATE{0x1A};        ///< Power-Fail, PWDNDATE Register address
+const uint8_t  MCP7940_PWRDNMTH{0x1B};         ///< Power-Fail, PWRDNMTH Register address
+const uint8_t  MCP7940_PWRUPMIN{0x1C};         ///< Power-Fail, PWRUPMIN Register address
+const uint8_t  MCP7940_PWRUPHOUR{0x1D};        ///< Power-Fail, PWRUPHOUR Register address
+const uint8_t  MCP7940_PWRUPDATE{0x1E};        ///< Power-Fail, PWRUPDATE Register address
+const uint8_t  MCP7940_PWRUPMTH{0x1F};         ///< Power-Fail, PWRUPMTH Register address
+const uint8_t  MCP7940_RAM_ADDRESS{0x20};      ///< NVRAM - Start address for SRAM
+const uint8_t  MCP7940_EUI_RAM_ADDRESS{0xF0};  ///< EUI - Start address for protected EEPROM
+const uint8_t  MCP7940_ST{7};                  ///< MCP7940 register bits. RTCSEC reg
+const uint8_t  MCP7940_12_24{6};               ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
+const uint8_t  MCP7940_AM_PM{5};               ///< RTCHOUR, PWRDNHOUR & PWRUPHOUR
+const uint8_t  MCP7940_OSCRUN{5};              ///< RTCWKDAY register
+const uint8_t  MCP7940_PWRFAIL{4};             ///< RTCWKDAY register
+const uint8_t  MCP7940_VBATEN{3};              ///< RTCWKDAY register
+const uint8_t  MCP7940_LPYR{5};                ///< RTCMTH register
+const uint8_t  MCP7940_OUT{7};                 ///< CONTROL register
+const uint8_t  MCP7940_SQWEN{6};               ///< CONTROL register
+const uint8_t  MCP7940_ALM1EN{5};              ///< CONTROL register
+const uint8_t  MCP7940_ALM0EN{4};              ///< CONTROL register
+const uint8_t  MCP7940_EXTOSC{3};              ///< CONTROL register
+const uint8_t  MCP7940_CRSTRIM{2};             ///< CONTROL register
+const uint8_t  MCP7940_SQWFS1{1};              ///< CONTROL register
+const uint8_t  MCP7940_SQWFS0{0};              ///< CONTROL register
+const uint8_t  MCP7940_SIGN{7};                ///< OSCTRIM register
+const uint8_t  MCP7940_ALMPOL{7};              ///< ALM0WKDAY register
+const uint8_t  MCP7940_ALM0IF{3};              ///< ALM0WKDAY register
+const uint8_t  MCP7940_ALM1IF{3};              ///< ALM1WKDAY register
+const uint32_t SECS_1970_TO_2000{946684800};   ///< Seconds between year 1970 and 2000
 
 class DateTime {
   /*!
@@ -314,6 +317,29 @@ class MCP7940_Class {
     uint8_t i = I2C_write((addr % 64) + MCP7940_RAM_ADDRESS, value);
     return i;
   }  // of method writeRAM()
+
+  template <typename T>
+  uint8_t& readEUI(const uint8_t& addr, T& value) const {
+    /*!
+     @brief     Template for readEUI()
+     @details   As a template it can support compile-time data type definitions. This is a special
+                call as it access a different I2C address and a different memory block
+     @param[in] addr     Memory address
+     @param[in] value    Data Type "T" to read
+     @return             Pointer to return data structure
+    */
+    uint8_t i{0};                                        // return number of bytes read
+    Wire.beginTransmission(MCP7940_EUI_ADDRESS);         // Address the special I2C address
+    Wire.write((addr %8) + MCP7940_EUI_RAM_ADDRESS);     // Send register address to read from
+    if (Wire.endTransmission() == 0) {                   // Close transmission and check error code
+      Wire.requestFrom(MCP7940_EUI_ADDRESS, sizeof(T));  // Request a block of data, max 61 bits
+      uint8_t* bytePtr = (uint8_t*)&value;               // Declare pointer to start of structure
+      for (i = 0; i < sizeof(T); i++) {                  // Loop for each byte to be read
+        *bytePtr++ = Wire.read();                        // Read a byte
+      }                                                  // of for-next each byte
+    }                                                    // if-then success
+    return i;                                            // return number of bytes read
+  }                                                      // of method readEUI()
  private:
   uint32_t _SetUnixTime{0};  ///< UNIX time when clock last set
   /*************************************************************************************************
