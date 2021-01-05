@@ -179,6 +179,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8d56942641e6719925d0cc23be2d20fc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8d56942641e6719925d0cc23be2d20fc"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a8d56942641e6719925d0cc23be2d20fc">writeRAM</a> (const uint8_t &amp;addr, const T &amp;value) const</td></tr>
 <tr class="separator:a8d56942641e6719925d0cc23be2d20fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac849135f4a176380955d500f7d6832bf"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac849135f4a176380955d500f7d6832bf"><td class="memTemplItemLeft" align="right" valign="top">uint8_t &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#ac849135f4a176380955d500f7d6832bf">readEUI</a> (const uint8_t &amp;addr, T &amp;value) const</td></tr>
+<tr class="separator:ac849135f4a176380955d500f7d6832bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main class definition with forward declarations. </p>
@@ -778,6 +781,53 @@ If square wave is not turned on then a 0 is returned</dd></dl>
 </div><div class="memdoc">
 <p>returns the current date/time</p>
 <p>If the device is stopped then the stop time is returned </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class. ">DateTime</a> class value for the current Date/Time</dd></dl>
+
+</div>
+</div>
+<a id="ac849135f4a176380955d500f7d6832bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac849135f4a176380955d500f7d6832bf">&#9670;&nbsp;</a></span>readEUI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t&amp; MCP7940_Class::readEUI </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t &amp;&#160;</td>
+          <td class="paramname"><em>addr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Template for <a class="el" href="class_m_c_p7940___class.html#ac849135f4a176380955d500f7d6832bf">readEUI()</a></p>
+<p>As a template it can support compile-time data type definitions. This is a special call as it access a different I2C address and a different memory block </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Memory address </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>Data Type "T" to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to return data structure</dd></dl>
 
 </div>
 </div>

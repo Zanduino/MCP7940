@@ -30,6 +30,8 @@ var _m_c_p7940_8h =
     [ "MCP7940_AM_PM", "_m_c_p7940_8h.html#a191b790b884a54da37d093a51b6822b7", null ],
     [ "MCP7940_CONTROL", "_m_c_p7940_8h.html#a1bcc2e2e2e9b03287406ee3d4904524e", null ],
     [ "MCP7940_CRSTRIM", "_m_c_p7940_8h.html#ab39bcc911d7c88fd4af6c3f5b95275a4", null ],
+    [ "MCP7940_EUI_ADDRESS", "_m_c_p7940_8h.html#a164b74f8ee3de34ec08be47761f9e65d", null ],
+    [ "MCP7940_EUI_RAM_ADDRESS", "_m_c_p7940_8h.html#a38f5a09cfeddbe8eba7b27e54532d516", null ],
     [ "MCP7940_EXTOSC", "_m_c_p7940_8h.html#a30ac108da650c1591646d9e59a352e4e", null ],
     [ "MCP7940_LPYR", "_m_c_p7940_8h.html#ad33ba577b532c3335fb11752129417f1", null ],
     [ "MCP7940_OSCRUN", "_m_c_p7940_8h.html#a0a4665a2a119df185952c62e847c03f2", null ],
