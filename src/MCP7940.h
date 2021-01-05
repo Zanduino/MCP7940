@@ -330,7 +330,7 @@ class MCP7940_Class {
     */
     uint8_t i{0};                                        // return number of bytes read
     Wire.beginTransmission(MCP7940_EUI_ADDRESS);         // Address the special I2C address
-    Wire.write((addr %8) + MCP7940_EUI_RAM_ADDRESS);     // Send register address to read from
+    Wire.write((addr % 8) + MCP7940_EUI_RAM_ADDRESS);    // Send register address to read from
     if (Wire.endTransmission() == 0) {                   // Close transmission and check error code
       Wire.requestFrom(MCP7940_EUI_ADDRESS, sizeof(T));  // Request a block of data, max 61 bits
       uint8_t* bytePtr = (uint8_t*)&value;               // Declare pointer to start of structure
