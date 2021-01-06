@@ -50,7 +50,7 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
-1.2.0  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI
+1.2.0  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI and added writeEUI
 1.2.0  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
 1.1.9  | 2020-11-26 | SV-Zanshin          | Issue #54 - Optimize c++ code / resilience. Uniform Initialization. Consolidated I2C calls.
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
@@ -129,6 +129,7 @@ const uint8_t  MCP7940_RTCMTH{0x05};           ///< Timekeeping, RTCMTH Register
 const uint8_t  MCP7940_RTCYEAR{0x06};          ///< Timekeeping, RTCYEAR Register address
 const uint8_t  MCP7940_CONTROL{0x07};          ///< Timekeeping, RTCCONTROL Register address
 const uint8_t  MCP7940_OSCTRIM{0x08};          ///< Timekeeping, RTCOSCTRIM Register address
+const uint8_t  MCP7940_EEUNLOCK{0x09};         ///< Virtual unlock register on MCP7940x series
 const uint8_t  MCP7940_ALM0SEC{0x0A};          ///< Alarm 0, ALM0SEC Register address
 const uint8_t  MCP7940_ALM0MIN{0x0B};          ///< Alarm 0, ALM0MIN Register address
 const uint8_t  MCP7940_ALM0HOUR{0x0C};         ///< Alarm 0, ALM0HOUR Register address
@@ -308,7 +309,7 @@ class MCP7940_Class {
     return (i);
   }  // of method readRAM()
   template <typename T>
-  bool writeRAM(const uint8_t& addr, const T& value) const {
+  uint8_t writeRAM(const uint8_t& addr, const T& value) const {
     /*!
      @brief     Template for writeRAM()
      @details   As a template it can support compile-time data type definitions
@@ -341,6 +342,34 @@ class MCP7940_Class {
     }                                                    // if-then success
     return i;                                            // return number of bytes read
   }                                                      // of method readEUI()
+  template <typename T>
+  uint8_t writeEUI(const uint8_t& addr, T& value) const {
+    /*!
+     @brief     Template for writeEUI()
+     @details   As a template it can support compile-time data type definitions. This is a special
+                call as it access a different I2C address and a different memory block and also has
+                to unlock the area prior to writing
+     @param[in] addr     Memory address
+     @param[in] value    Data Type "T" to read
+     @return             Pointer to  data structure to write
+    */
+    uint8_t i{0};                                      // return number of bytes read
+    Wire.beginTransmission(MCP7940_EUI_ADDRESS);       // Address the special I2C address
+    Wire.write(MCP7940_EEUNLOCK);                      // Send special register address to write to
+    Wire.write(0x55);                                  // Special write value to start unlock
+    i = Wire.endTransmission();                        // close transmission of first byte
+    Wire.beginTransmission(MCP7940_EUI_ADDRESS);       // Address the special I2C address
+    Wire.write(MCP7940_EEUNLOCK);                      // Send special register address to write to
+    Wire.write(0x55);                                  // Special write value to complete unlock
+    i = Wire.endTransmission();                        // close transmission of second byte
+    Wire.beginTransmission(MCP7940_EUI_ADDRESS);       // Address the special I2C address
+    Wire.write((addr % 8) + MCP7940_EUI_RAM_ADDRESS);  // Send register address to read from
+    Wire.write((uint8_t*)&value, sizeof(T));           // write the data
+    i = Wire.endTransmission();                        // close transmission of actual write
+    if (i == 0) i = sizeof(T);                         // return number of bytes on success
+    return i;                                          // return number of bytes read
+  }                                                    // of method writeEUI()
+
  private:
   uint32_t _SetUnixTime{0};  ///< UNIX time when clock last set
   /*************************************************************************************************
