@@ -50,6 +50,7 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
+1.2.0  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI
 1.2.0  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
 1.1.9  | 2020-11-26 | SV-Zanshin          | Issue #54 - Optimize c++ code / resilience. Uniform Initialization. Consolidated I2C calls.
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
@@ -292,9 +293,10 @@ class MCP7940_Class {
   ** ============================================================================================ **
   ** readRAM   read any number of bytes from the MCP7940 SRAM area                                **
   ** writRAM   write any number of bytes to the MCP7940 SRAM area                                 **
+  ** readEUI   read any number of bytes from the special protected SRAM area for 79400/401/402    **
   *************************************************************************************************/
   template <typename T>
-  uint8_t& readRAM(const uint8_t& addr, T& value) const {
+  uint8_t readRAM(const uint8_t& addr, T& value) const {
     /*!
      @brief     Template for readRAM()
      @details   As a template it can support compile-time data type definitions
@@ -317,9 +319,8 @@ class MCP7940_Class {
     uint8_t i = I2C_write((addr % 64) + MCP7940_RAM_ADDRESS, value);
     return i;
   }  // of method writeRAM()
-
   template <typename T>
-  uint8_t& readEUI(const uint8_t& addr, T& value) const {
+  uint8_t readEUI(const uint8_t& addr, T& value) const {
     /*!
      @brief     Template for readEUI()
      @details   As a template it can support compile-time data type definitions. This is a special
