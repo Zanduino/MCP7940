@@ -176,12 +176,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0f654a01abf22fcce5c627b6411122f3"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a0f654a01abf22fcce5c627b6411122f3"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a0f654a01abf22fcce5c627b6411122f3">readRAM</a> (const uint8_t &amp;addr, T &amp;value) const</td></tr>
 <tr class="separator:a0f654a01abf22fcce5c627b6411122f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d56942641e6719925d0cc23be2d20fc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8d56942641e6719925d0cc23be2d20fc"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a8d56942641e6719925d0cc23be2d20fc">writeRAM</a> (const uint8_t &amp;addr, const T &amp;value) const</td></tr>
-<tr class="separator:a8d56942641e6719925d0cc23be2d20fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a649ee0ea6a9ec50b40043f286dd9b1ea"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a649ee0ea6a9ec50b40043f286dd9b1ea"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a649ee0ea6a9ec50b40043f286dd9b1ea">writeRAM</a> (const uint8_t &amp;addr, const T &amp;value) const</td></tr>
+<tr class="separator:a649ee0ea6a9ec50b40043f286dd9b1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a8456e992fadc7eb1bab62c29c13293"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4a8456e992fadc7eb1bab62c29c13293"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a4a8456e992fadc7eb1bab62c29c13293">readEUI</a> (const uint8_t &amp;addr, T &amp;value) const</td></tr>
 <tr class="separator:a4a8456e992fadc7eb1bab62c29c13293"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbe5d0d05beb598e6cb40cbc87f2e29f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:adbe5d0d05beb598e6cb40cbc87f2e29f"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#adbe5d0d05beb598e6cb40cbc87f2e29f">writeEUI</a> (const uint8_t &amp;addr, T &amp;value) const</td></tr>
+<tr class="separator:adbe5d0d05beb598e6cb40cbc87f2e29f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main class definition with forward declarations. </p>
@@ -1197,8 +1200,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a8d56942641e6719925d0cc23be2d20fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d56942641e6719925d0cc23be2d20fc">&#9670;&nbsp;</a></span>writeRAM()</h2>
+<a id="adbe5d0d05beb598e6cb40cbc87f2e29f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbe5d0d05beb598e6cb40cbc87f2e29f">&#9670;&nbsp;</a></span>writeEUI()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1209,7 +1212,54 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool MCP7940_Class::writeRAM </td>
+          <td class="memname">uint8_t MCP7940_Class::writeEUI </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t &amp;&#160;</td>
+          <td class="paramname"><em>addr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Template for <a class="el" href="class_m_c_p7940___class.html#adbe5d0d05beb598e6cb40cbc87f2e29f">writeEUI()</a></p>
+<p>As a template it can support compile-time data type definitions. This is a special call as it access a different I2C address and a different memory block and also has to unlock the area prior to writing </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Memory address </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>Data Type "T" to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to data structure to write</dd></dl>
+
+</div>
+</div>
+<a id="a649ee0ea6a9ec50b40043f286dd9b1ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a649ee0ea6a9ec50b40043f286dd9b1ea">&#9670;&nbsp;</a></span>writeRAM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t MCP7940_Class::writeRAM </td>
           <td>(</td>
           <td class="paramtype">const uint8_t &amp;&#160;</td>
           <td class="paramname"><em>addr</em>, </td>
@@ -1232,7 +1282,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Template for <a class="el" href="class_m_c_p7940___class.html#a8d56942641e6719925d0cc23be2d20fc">writeRAM()</a></p>
+<p>Template for <a class="el" href="class_m_c_p7940___class.html#a649ee0ea6a9ec50b40043f286dd9b1ea">writeRAM()</a></p>
 <p>As a template it can support compile-time data type definitions </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">addr</td><td>Memory address </td></tr>

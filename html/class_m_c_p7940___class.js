@@ -41,5 +41,6 @@ var class_m_c_p7940___class =
     [ "setSQWState", "class_m_c_p7940___class.html#aaf1eecca212f5d44735b948d1f6f34ae", null ],
     [ "weekdayRead", "class_m_c_p7940___class.html#adec456bff383306c42d6f999e019fcef", null ],
     [ "weekdayWrite", "class_m_c_p7940___class.html#a1fad2f586a5b93d2b5f39a67dba8586a", null ],
-    [ "writeRAM", "class_m_c_p7940___class.html#a8d56942641e6719925d0cc23be2d20fc", null ]
+    [ "writeEUI", "class_m_c_p7940___class.html#adbe5d0d05beb598e6cb40cbc87f2e29f", null ],
+    [ "writeRAM", "class_m_c_p7940___class.html#a649ee0ea6a9ec50b40043f286dd9b1ea", null ]
 ];
