@@ -50,8 +50,8 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
-1.2.0  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI and added writeEUI
-1.2.0  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
+1.2.1  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI and added writeEUI
+1.2.1  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
 1.1.9  | 2020-11-26 | SV-Zanshin          | Issue #54 - Optimize c++ code / resilience. Uniform Initialization. Consolidated I2C calls.
 1.1.8  | 2020-11-15 | SV-Zanshin          | Issue #50 - Reformat with "clang-format"
 1.1.8  | 2020-11-14 | SV-Zanshin          | Issue #49 - corrections for Battery Backup mode
