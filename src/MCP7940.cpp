@@ -63,7 +63,11 @@ DateTime::DateTime(uint32_t t) {
    constructor so there are multiple definitions. This implementation ignores time zones and DST
    changes. It also ignores leap seconds, see http://en.wikipedia.org/wiki/Leap_second
    @param[in] t seconds since the year 1970 (UNIX timet) */
-  t -= SECS_1970_TO_2000;  // bring to 2000 timestamp from 1970
+  if (t < SECS_1970_TO_2000) {
+    t = 0;  // set to lowest possible date 2000-01-01
+  } else {
+    t -= SECS_1970_TO_2000;  // bring to 2000 timestamp from 1970
+  }
   ss = t % 60;
   t /= 60;
   mm = t % 60;
@@ -191,7 +195,7 @@ uint32_t DateTime::unixtime(void) const {
   */
   uint16_t days = date2days(yOff, m, d);        // Compute days
   uint32_t t    = time2long(days, hh, mm, ss);  // Compute seconds
-  t += SECS_1970_TO_2000;                       // Add time form 1970 to 2000
+  t += SECS_1970_TO_2000;                       // Add time from 1970 to 2000
   return t;
 }  // of method unixtime()
 long DateTime::secondstime(void) const {

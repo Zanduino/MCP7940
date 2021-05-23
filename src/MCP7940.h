@@ -50,6 +50,7 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
+1.2.1  | 2021-05-23 | SV-Zanshin          | Issue #60 - Correct handling of dates < 2000-01-01
 1.2.1  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI and added writeEUI
 1.2.1  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
 1.1.9  | 2020-11-26 | SV-Zanshin          | Issue #54 - Optimize c++ code / resilience. Uniform Initialization. Consolidated I2C calls.
@@ -181,14 +182,14 @@ class DateTime {
              https://github.com/Zanduino/MCP7940/wiki/DateTimeClass
   */
  public:
-  DateTime(uint32_t t = 0);
+  DateTime(uint32_t t = SECS_1970_TO_2000);
   DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour = 0, uint8_t min = 0,
            uint8_t sec = 0);
   DateTime(const DateTime& copy);
   DateTime(const char* date, const char* time);
   DateTime(const __FlashStringHelper* date, const __FlashStringHelper* time);
   uint16_t year() const { /*! return the current year */
-    return 2000 + yOff;
+    return 2000U + yOff;
   }
   uint8_t month() const { /*! return the current month */
     return m;
