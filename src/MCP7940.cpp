@@ -15,9 +15,7 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
    * @param[in] d Day
    * @return    number of days from a given Y M D value
    */
-  if (y >= 2000) {
-    y -= 2000;
-  }  // of if-then year is greater than 2000
+  if (y >= 2000) { y -= 2000; }  // of if-then year is greater than 2000
   uint16_t days = d;
   for (uint8_t i = 1; i < m; ++i)  // Add number of days for each month
   {
@@ -51,9 +49,7 @@ static uint8_t conv2d(const char* p) {
    * @return    decimal value
    */
   uint8_t v = 0;
-  if ('0' <= *p && *p <= '9') {
-    v = *p - '0';
-  }  // of if-then character in range
+  if ('0' <= *p && *p <= '9') { v = *p - '0'; }  // of if-then character in range
   return 10 * v + *++p - '0';
 }  // of method conv2d
 DateTime::DateTime(uint32_t t) {
@@ -101,9 +97,7 @@ DateTime::DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint
    @param[in] hour Hour
    @param[in] min Minute
    @param[in] sec Second */
-  if (year >= 2000) {
-    year -= 2000;
-  }  // of if-then year is greater than 2000 for offset
+  if (year >= 2000) { year -= 2000; }  // of if-then year is greater than 2000 for offset
   yOff = year;
   m    = month;
   d    = day;
@@ -130,30 +124,14 @@ DateTime::DateTime(const char* date, const char* time) {
   @param[in] time Pointer to time string */
   yOff = conv2d(date + 9);
   switch (date[0]) {
-    case 'J':
-      m = (date[1] == 'a') ? 1 : ((date[2] == 'n') ? 6 : 7);
-      break;  // Jan June July
-    case 'F':
-      m = 2;
-      break;  // February
-    case 'A':
-      m = date[2] == 'r' ? 4 : 8;
-      break;  // April August
-    case 'M':
-      m = date[2] == 'r' ? 3 : 5;
-      break;  // March May
-    case 'S':
-      m = 9;
-      break;  // September
-    case 'O':
-      m = 10;
-      break;  // October
-    case 'N':
-      m = 11;
-      break;  // November
-    case 'D':
-      m = 12;
-      break;              // December
+    case 'J': m = (date[1] == 'a') ? 1 : ((date[2] == 'n') ? 6 : 7); break;  // Jan June July
+    case 'F': m = 2; break;                                                  // February
+    case 'A': m = date[2] == 'r' ? 4 : 8; break;                             // April August
+    case 'M': m = date[2] == 'r' ? 3 : 5; break;                             // March May
+    case 'S': m = 9; break;                                                  // September
+    case 'O': m = 10; break;                                                 // October
+    case 'N': m = 11; break;                                                 // November
+    case 'D': m = 12; break;                                                 // December
   }                       // of switch for the month
   d  = conv2d(date + 4);  // Compute the day
   hh = conv2d(time);
@@ -529,18 +507,10 @@ int8_t MCP7940_Class::calibrate(const float fMeas) const {
   uint32_t fIdeal = getSQWSpeed();         // read the current SQW Speed code
   switch (fIdeal)                          // set variable to real SQW speed
   {
-    case 0:
-      fIdeal = 1;
-      break;
-    case 1:
-      fIdeal = 4096;
-      break;
-    case 2:
-      fIdeal = 8192;
-      break;
-    case 4:
-      fIdeal = 64;
-      break;
+    case 0: fIdeal = 1; break;
+    case 1: fIdeal = 4096; break;
+    case 2: fIdeal = 8192; break;
+    case 4: fIdeal = 64; break;
     case 3:
       fIdeal = 32768;
       trim   = 0;  // Trim is ignored on 32KHz signal
@@ -746,9 +716,7 @@ bool MCP7940_Class::clearAlarm(const uint8_t alarmNumber) const {
       @param[in] alarmNumber Alarm number 0 or 1
       @return False if the alarmNumber is out of range, otherwise true
   */
-  if (alarmNumber > 1) {
-    return false;
-  }  // of if-then a bad alarm number
+  if (alarmNumber > 1) { return false; }  // of if-then a bad alarm number
   clearRegisterBit(alarmNumber ? MCP7940_ALM1WKDAY : MCP7940_ALM0WKDAY,
                    MCP7940_ALM0IF);  // reset register bit
   return true;
@@ -760,9 +728,7 @@ bool MCP7940_Class::setAlarmState(const uint8_t alarmNumber, const bool state) c
       @param[in] state State to the set the alarm to
       @return False if the alarmNumber is out of range, otherwise true
   */
-  if (alarmNumber > 1) {
-    return false;
-  }  // of if-then a bad alarm number
+  if (alarmNumber > 1) { return false; }  // of if-then a bad alarm number
   writeRegisterBit(MCP7940_CONTROL, alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN,
                    state);  // Overwrite register bit
   return true;
@@ -773,9 +739,7 @@ bool MCP7940_Class::getAlarmState(const uint8_t alarmNumber) const {
       @param[in] alarmNumber Alarm number 0 or 1
       @return False if the alarmNumber is out of range or off, otherwise true
   */
-  if (alarmNumber > 1) {
-    return false;
-  }  // of if-then a bad alarm number
+  if (alarmNumber > 1) { return false; }  // of if-then a bad alarm number
   return readRegisterBit(MCP7940_CONTROL,
                          alarmNumber ? MCP7940_ALM1EN : MCP7940_ALM0EN);  // Get state of alarm
 }  // of getAlarmState()
@@ -785,9 +749,7 @@ bool MCP7940_Class::isAlarm(const uint8_t alarmNumber) const {
       @param[in] alarmNumber Alarm number 0 or 1
       @return False if the alarmNumber is out of range or off, otherwise true
   */
-  if (alarmNumber > 1) {
-    return false;
-  }  // of if-then a bad alarm number
+  if (alarmNumber > 1) { return false; }  // of if-then a bad alarm number
   return readRegisterBit(alarmNumber ? MCP7940_ALM1WKDAY : MCP7940_ALM0WKDAY,
                          MCP7940_ALM0IF);  // Get alarm state
 }  // of method isAlarm()
