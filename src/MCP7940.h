@@ -99,25 +99,25 @@ Version| Date       | Developer           | Comments
 #include "Arduino.h"  // Arduino data type definitions
 #include "Wire.h"     // Standard I2C "Wire" library
 #ifndef MCP7940_h
-/** @brief  Guard code definition */
-#define MCP7940_h  // Define the name inside guard code
+  /** @brief  Guard code definition */
+  #define MCP7940_h  // Define the name inside guard code
 /***************************************************************************************************
 ** Declare classes used in within the class                                                       **
 ***************************************************************************************************/
 class TimeSpan;
-/***************************************************************************************************
-** Declare constants used in the class                                                            **
-***************************************************************************************************/
-#ifndef I2C_MODES  // I2C related constants
-/** @brief Guard code definition */
-#define I2C_MODES
+  /***************************************************************************************************
+  ** Declare constants used in the class **
+  ***************************************************************************************************/
+  #ifndef I2C_MODES  // I2C related constants
+    /** @brief Guard code definition */
+    #define I2C_MODES
 const uint32_t I2C_STANDARD_MODE{100000};  ///< Default normal I2C 100KHz speed
 const uint32_t I2C_FAST_MODE{400000};      ///< Fast mode
-#endif
-#if !defined(BUFFER_LENGTH)  // The ESP32 Wire library doesn't currently define BUFFER_LENGTH
-/** @brief If the "Wire.h" library doesn't define the buffer, do so here */
-#define BUFFER_LENGTH 32
-#endif
+  #endif
+  #if !defined(BUFFER_LENGTH)  // The ESP32 Wire library doesn't currently define BUFFER_LENGTH
+    /** @brief If the "Wire.h" library doesn't define the buffer, do so here */
+    #define BUFFER_LENGTH 32
+  #endif
 
 const uint8_t  MCP7940_ADDRESS{0x6F};          ///< Fixed I2C address, fixed
 const uint8_t  MCP7940_EUI_ADDRESS{0x57};      ///< Fixed I2C address for accessing protected ROM
