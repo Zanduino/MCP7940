@@ -7,6 +7,7 @@ var class_date_time =
     [ "DateTime", "class_date_time.html#a75e22d94bd5ab883ec56e6581e04a2d7", null ],
     [ "day", "class_date_time.html#a6e653eaef31e4956ee9bf67b4874a9a8", null ],
     [ "dayOfTheWeek", "class_date_time.html#a958229f0d6a46d092658028d25a9e65c", null ],
+    [ "equals", "class_date_time.html#a0928647490a874e13e4ce9ba87956bc3", null ],
     [ "hour", "class_date_time.html#ac17441fb0c669bcf3be5de278335e8d0", null ],
     [ "minute", "class_date_time.html#a8dac4d21cf40f1b6f1ec5973024709ed", null ],
     [ "month", "class_date_time.html#a10d35aa20ebb179cdb4b61f90dfcfe74", null ],

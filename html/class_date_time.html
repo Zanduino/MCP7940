@@ -123,6 +123,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adae8d9c0249f99944bcec7701bd2937e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4629e7b2ffeac4a0c8f8c3f9c545990"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ae4629e7b2ffeac4a0c8f8c3f9c545990">unixtime</a> (void) const</td></tr>
 <tr class="separator:ae4629e7b2ffeac4a0c8f8c3f9c545990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0928647490a874e13e4ce9ba87956bc3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a0928647490a874e13e4ce9ba87956bc3">equals</a> (const <a class="el" href="class_date_time.html">DateTime</a> *other)</td></tr>
+<tr class="separator:a0928647490a874e13e4ce9ba87956bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae043350a8bfa362aabbc9f5ee658b4e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ae043350a8bfa362aabbc9f5ee658b4e6">operator+</a> (const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;span)</td></tr>
 <tr class="separator:ae043350a8bfa362aabbc9f5ee658b4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbdcc7a6b55924552e72696d9e5bbb98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#acbdcc7a6b55924552e72696d9e5bbb98">operator-</a> (const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;span)</td></tr>
@@ -391,6 +393,26 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
+<a id="a0928647490a874e13e4ce9ba87956bc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0928647490a874e13e4ce9ba87956bc3">&#9670;&nbsp;</a></span>equals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DateTime::equals </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_date_time.html">DateTime</a> *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>return the current Unixtime </p>
+<p>added equals method for class <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class. ">DateTime</a> </p><dl class="section return"><dt>Returns</dt><dd>true if date and time are equal else return false</dd></dl>
+
+</div>
+</div>
 <a id="ac17441fb0c669bcf3be5de278335e8d0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac17441fb0c669bcf3be5de278335e8d0">&#9670;&nbsp;</a></span>hour()</h2>
 
@@ -484,7 +506,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
         </tr>
       </table>
 </div><div class="memdoc">
-<p>return the current Unixtime </p>
+<p>return true if two datetimes hold the same value </p>
 <p>overloaded "+" operator for class <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class. ">DateTime</a> </p><dl class="section return"><dt>Returns</dt><dd>Sum of two <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class. ">DateTime</a> class instances</dd></dl>
 
 </div>
