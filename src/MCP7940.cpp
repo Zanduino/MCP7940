@@ -187,7 +187,7 @@ long DateTime::secondstime(void) const {
 }  // of method secondstime()
 bool DateTime::equals(const DateTime *other) {
     /*!
-    @brief     overloaded "==" operator for class DateTime
+    @brief     added equals method for class DateTime
     @return    true if date and time are equal else return false
     */
     return (this->yOff == other->yOff && this->m == other->m &&
