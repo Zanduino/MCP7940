@@ -185,6 +185,15 @@ long DateTime::secondstime(void) const {
   long     t    = time2long(days, hh, mm, ss);
   return t;
 }  // of method secondstime()
+bool DateTime::equals(const DateTime *other) {
+    /*!
+    @brief     added equals method for class DateTime
+    @return    true if date and time are equal else return false
+    */
+    return (this->yOff == other->yOff && this->m == other->m &&
+        this->d == other->d && this->hh == other->hh &&
+        this->mm == other->mm && this->ss == other->ss);
+}
 DateTime DateTime::operator+(const TimeSpan& span) {
   /*!
   @brief     overloaded "+" operator for class DateTime

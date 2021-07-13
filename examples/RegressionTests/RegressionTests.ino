@@ -153,6 +153,7 @@ void setup() {
   /*************************************************************************************************
   ** Check the battery backup functionality                                                       **
   *************************************************************************************************/
+  MCP7940.setBattery(true);
   if (!MCP7940.getBattery())
     Serial.println(F("!! Error setting Battery Backup"));
   else
@@ -178,7 +179,7 @@ void setup() {
       if (MCP7940.isAlarm(0))
         Serial.println(F("setAlarm() and isAlarm() successful"));
       else
-        Serial.print(F("!! SetAlarm() failed"));
+        Serial.println(F("!! SetAlarm() failed"));
     }
   } else {
     Serial.print(F("!! Alarm set to "));
@@ -196,7 +197,7 @@ void setup() {
   if (MCP7940.weekdayRead() != 5) Serial.print(F("!! weekdayWrite() or weekdayRead() failed"));
   MCP7940.weekdayWrite(4);
   if (MCP7940.weekdayRead() != 4)
-    Serial.print(F("!! weekdayWrite() or weekdayRead() failed"));
+    Serial.println(F("!! weekdayWrite() or weekdayRead() failed"));
   else
     Serial.println(F("weekdayWrite() and WeekdayRead() successful"));
 
@@ -235,9 +236,9 @@ void setup() {
   uint32_t xxx = now.unixtime() - 42;
   MCP7940.setSetUnixTime(xxx);
   if (xxx == MCP7940.getSetUnixTime())
-    Serial.print(F("setSetUnixTime() and getSetUnixTime() successful"));
+    Serial.println(F("setSetUnixTime() and getSetUnixTime() successful"));
   else
-    Serial.print(F("!! Error in setSetUnixTime() or getSetUnixTime()"));
+    Serial.println(F("!! Error in setSetUnixTime() or getSetUnixTime()"));
 
   b          = MCP7940.getPowerFail();
   b          = MCP7940.clearPowerFail();
@@ -245,6 +246,18 @@ void setup() {
   now        = MCP7940.getPowerUp();
   x          = MCP7940.calibrateOrAdjust(MCP7940.now());
   int32_t bi = MCP7940.getPPMDeviation(MCP7940.now());
+
+  /*************************************************************************************************
+  ** Test equals() functionality                                                          **
+  *************************************************************************************************/
+  DateTime aDateTime = DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("36"));
+  DateTime differentDateTime = DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("37"));
+  DateTime sameDateTime = DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("36"));
+
+  if ((aDateTime.equals(&sameDateTime) == true) && (aDateTime.equals(&differentDateTime) == false))
+    Serial.println(F("equals() successful"));
+  else
+    Serial.println(F("!! Error in equals()"));
 
 }  // of method setup()
 
