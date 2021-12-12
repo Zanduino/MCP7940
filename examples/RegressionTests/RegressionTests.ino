@@ -250,9 +250,12 @@ void setup() {
   /*************************************************************************************************
   ** Test equals() functionality                                                          **
   *************************************************************************************************/
-  DateTime aDateTime = DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("36"));
-  DateTime differentDateTime = DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("37"));
-  DateTime sameDateTime = DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("36"));
+  DateTime aDateTime =
+      DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("36"));
+  DateTime differentDateTime =
+      DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("37"));
+  DateTime sameDateTime =
+      DateTime(atoi("2021"), atoi("07"), atoi("13"), atoi("12"), atoi("15"), atoi("36"));
 
   if ((aDateTime.equals(&sameDateTime) == true) && (aDateTime.equals(&differentDateTime) == false))
     Serial.println(F("equals() successful"));
