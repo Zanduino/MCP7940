@@ -185,7 +185,7 @@ long DateTime::secondstime(void) const {
   long     t    = time2long(days, hh, mm, ss);
   return t;
 }  // of method secondstime()
-bool DateTime::equals(const DateTime *other) {
+bool DateTime::equals(const DateTime* other) {
   /*!
   @brief     added equals method for class DateTime
   @return    true if date and time are equal else return false

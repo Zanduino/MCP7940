@@ -209,7 +209,7 @@ class DateTime {
   uint8_t  dayOfTheWeek() const;            /*! return the current day of the week starting at 0 */
   long     secondstime() const;             /*! return the current seconds in the year */
   uint32_t unixtime(void) const;            /*! return the current Unixtime */
-  bool     equals(const DateTime *other);   /*! return true if two datetimes hold the same value */
+  bool     equals(const DateTime* other);   /*! return true if two datetimes hold the same value */
   DateTime operator+(const TimeSpan& span); /*! Overloaded "+" operator to add two timespans */
   DateTime operator-(const TimeSpan& span); /*! Overloaded "+" operator to add two timespans */
   TimeSpan operator-(
