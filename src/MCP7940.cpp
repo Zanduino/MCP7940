@@ -234,7 +234,23 @@ bool MCP7940_Class::begin(const uint32_t i2cSpeed) const {
       @param[in] i2cSpeed defaults to I2C_STANDARD_MODE, otherwise use speed in Herz
       @return    true if successfully started communication, otherwise false
   */
-  Wire.begin();                             // Start I2C as master device
+  return begin(PIN_WIRE_SDA, PIN_WIRE_SCL, i2cSpeed);
+}  // of method begin()
+bool MCP7940_Class::begin(const uint8_t sda, const uint8_t scl, const uint32_t i2cSpeed) const {
+  /*!
+      @brief     Start I2C device communications
+      @details   Starts I2C comms with the device, using default SDA and SCL ports as well as speed
+                 if they are not specified
+      @param[in] sda defaults to PIN_WIRE_SDA, otherwise use pin (ignored if not ESP8266)
+      @param[in] scl defaults to PIN_WIRE_SCL, otherwise use pin (ignored if not ESP8266)
+      @param[in] i2cSpeed defaults to I2C_STANDARD_MODE, otherwise use speed in Herz
+      @return    true if successfully started communication, otherwise false
+  */
+#if defined(ESP8266)
+  Wire.begin(sda, scl);  // Start I2C as master device using the specified SDA and SCL
+#elif defined(ESP8266)
+  Wire.begin(); // Start I2C as master device
+#endif
   Wire.setClock(i2cSpeed);                  // Set the I2C bus speed
   Wire.beginTransmission(MCP7940_ADDRESS);  // Address the MCP7940
   if (Wire.endTransmission() == 0)          // If there a device present
@@ -246,6 +262,8 @@ bool MCP7940_Class::begin(const uint32_t i2cSpeed) const {
     return false;  // return error if no device found
   }                // of if-then-else device detected
 }  // of method begin()
+
+
 uint8_t MCP7940_Class::readByte(const uint8_t addr) const {
   /*!
       @brief     Read a single byte from the device address

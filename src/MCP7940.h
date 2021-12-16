@@ -50,6 +50,7 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
+1.2.2  | 2021-12-16 | BrotherV            | Issue #63 - Add ESP8266 support for defining SDA and SCL pins.
 1.2.1  | 2021-05-23 | SV-Zanshin          | Issue #60 - Correct handling of dates < 2000-01-01
 1.2.1  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI and added writeEUI
 1.2.1  | 2021-01-05 | masterx1981         | Issue #58 - Add support for MCP79401 and MCP79402 read EUI data
@@ -252,7 +253,9 @@ class MCP7940_Class {
  public:
   MCP7940_Class(){};   ///< Unused Class constructor
   ~MCP7940_Class(){};  ///< Unused Class destructor
-  bool     begin(const uint32_t i2cSpeed = I2C_STANDARD_MODE) const;
+  bool     begin(const uint32_t i2cSpeed) const;
+  bool     begin(const uint8_t sda = PIN_WIRE_SDA, const uint8_t scl = PIN_WIRE_SCL,
+                 const uint32_t i2cSpeed = I2C_STANDARD_MODE) const; 
   bool     deviceStatus() const;
   bool     deviceStart() const;
   bool     deviceStop() const;
