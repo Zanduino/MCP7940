@@ -98,9 +98,11 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#ad1ed438da5cea24515685acc1e8d67ac">~MCP7940_Class</a> ()</td></tr>
 <tr class="memdesc:ad1ed438da5cea24515685acc1e8d67ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused Class constructor. <br /></td></tr>
 <tr class="separator:ad1ed438da5cea24515685acc1e8d67ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68f44078bd81cb4e381764ce78b8e1cf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a68f44078bd81cb4e381764ce78b8e1cf">begin</a> (const uint32_t i2cSpeed=<a class="el" href="_m_c_p7940_8h.html#a348cbfad3423827f84b19829d91be1a7">I2C_STANDARD_MODE</a>) const</td></tr>
-<tr class="memdesc:a68f44078bd81cb4e381764ce78b8e1cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused Class destructor.  <a href="#a68f44078bd81cb4e381764ce78b8e1cf">More...</a><br /></td></tr>
-<tr class="separator:a68f44078bd81cb4e381764ce78b8e1cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56581c9a709c3af92c600fbe1328eee2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a56581c9a709c3af92c600fbe1328eee2">begin</a> (const uint32_t i2cSpeed) const</td></tr>
+<tr class="memdesc:a56581c9a709c3af92c600fbe1328eee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused Class destructor.  <a href="#a56581c9a709c3af92c600fbe1328eee2">More...</a><br /></td></tr>
+<tr class="separator:a56581c9a709c3af92c600fbe1328eee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b4cdd8ea2343cca4f630a6c953139ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a1b4cdd8ea2343cca4f630a6c953139ef">begin</a> (const uint8_t sda=PIN_WIRE_SDA, const uint8_t scl=PIN_WIRE_SCL, const uint32_t i2cSpeed=<a class="el" href="_m_c_p7940_8h.html#a348cbfad3423827f84b19829d91be1a7">I2C_STANDARD_MODE</a>) const</td></tr>
+<tr class="separator:a1b4cdd8ea2343cca4f630a6c953139ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe98f9edca7634140589876471cf9521"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#abe98f9edca7634140589876471cf9521">deviceStatus</a> () const</td></tr>
 <tr class="separator:abe98f9edca7634140589876471cf9521"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70fea5d000ee1c7dad61a0dc081b1bdc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p7940___class.html#a70fea5d000ee1c7dad61a0dc081b1bdc">deviceStart</a> () const</td></tr>
@@ -228,8 +230,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a68f44078bd81cb4e381764ce78b8e1cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68f44078bd81cb4e381764ce78b8e1cf">&#9670;&nbsp;</a></span>begin()</h2>
+<a id="a56581c9a709c3af92c600fbe1328eee2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56581c9a709c3af92c600fbe1328eee2">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +240,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">bool MCP7940_Class::begin </td>
           <td>(</td>
           <td class="paramtype">const uint32_t&#160;</td>
-          <td class="paramname"><em>i2cSpeed</em> = <code><a class="el" href="_m_c_p7940_8h.html#a348cbfad3423827f84b19829d91be1a7">I2C_STANDARD_MODE</a></code></td><td>)</td>
+          <td class="paramname"><em>i2cSpeed</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -248,6 +250,50 @@ Public Member Functions</h2></td></tr>
 <p>Start I2C device communications</p>
 <p>Starts I2C comms with the device, using a default speed if one is not specified </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">i2cSpeed</td><td>defaults to I2C_STANDARD_MODE, otherwise use speed in Herz </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if successfully started communication, otherwise false</dd></dl>
+
+</div>
+</div>
+<a id="a1b4cdd8ea2343cca4f630a6c953139ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b4cdd8ea2343cca4f630a6c953139ef">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP7940_Class::begin </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t&#160;</td>
+          <td class="paramname"><em>sda</em> = <code>PIN_WIRE_SDA</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t&#160;</td>
+          <td class="paramname"><em>scl</em> = <code>PIN_WIRE_SCL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>i2cSpeed</em> = <code><a class="el" href="_m_c_p7940_8h.html#a348cbfad3423827f84b19829d91be1a7">I2C_STANDARD_MODE</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Start I2C device communications</p>
+<p>Starts I2C comms with the device, using default SDA and SCL ports as well as speed if they are not specified </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sda</td><td>defaults to PIN_WIRE_SDA, otherwise use pin (ignored if not ESP8266) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">scl</td><td>defaults to PIN_WIRE_SCL, otherwise use pin (ignored if not ESP8266) </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">i2cSpeed</td><td>defaults to I2C_STANDARD_MODE, otherwise use speed in Herz </td></tr>
   </table>
   </dd>
