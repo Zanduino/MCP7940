@@ -256,7 +256,7 @@ class MCP7940_Class {
   ~MCP7940_Class(){};  ///< Unused Class destructor
   bool     begin(const uint32_t i2cSpeed) const;
   bool     begin(const uint8_t sda = SDA, const uint8_t scl = SCL,
-                 const uint32_t i2cSpeed = I2C_STANDARD_MODE) const; 
+                 const uint32_t i2cSpeed = I2C_STANDARD_MODE) const;
   bool     deviceStatus() const;
   bool     deviceStart() const;
   bool     deviceStop() const;

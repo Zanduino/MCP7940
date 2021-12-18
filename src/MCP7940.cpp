@@ -263,7 +263,6 @@ bool MCP7940_Class::begin(const uint8_t sda, const uint8_t scl, const uint32_t i
   }                // of if-then-else device detected
 }  // of method begin()
 
-
 uint8_t MCP7940_Class::readByte(const uint8_t addr) const {
   /*!
       @brief     Read a single byte from the device address
