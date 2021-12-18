@@ -234,7 +234,7 @@ bool MCP7940_Class::begin(const uint32_t i2cSpeed) const {
       @param[in] i2cSpeed defaults to I2C_STANDARD_MODE, otherwise use speed in Herz
       @return    true if successfully started communication, otherwise false
   */
-  return begin(PIN_WIRE_SDA, PIN_WIRE_SCL, i2cSpeed);
+  return begin(SDA, SCL, i2cSpeed);
 }  // of method begin()
 bool MCP7940_Class::begin(const uint8_t sda, const uint8_t scl, const uint32_t i2cSpeed) const {
   /*!
