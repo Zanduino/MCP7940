@@ -5,7 +5,7 @@ var class_m_c_p7940___class =
     [ "adjust", "class_m_c_p7940___class.html#aa57c1324216c4dddc3dd44b545978235", null ],
     [ "adjust", "class_m_c_p7940___class.html#aa2ed754a0866f0c2c11ed5da07228383", null ],
     [ "begin", "class_m_c_p7940___class.html#a56581c9a709c3af92c600fbe1328eee2", null ],
-    [ "begin", "class_m_c_p7940___class.html#a1b4cdd8ea2343cca4f630a6c953139ef", null ],
+    [ "begin", "class_m_c_p7940___class.html#a11399745c74621dd7caf2584b267a58e", null ],
     [ "calibrate", "class_m_c_p7940___class.html#a8455323a60a4618ff9c52dd8e1b05086", null ],
     [ "calibrate", "class_m_c_p7940___class.html#ae303b6ae71dee49ff01aff295e0b210c", null ],
     [ "calibrate", "class_m_c_p7940___class.html#a16c4323de9e9bfdeaf00bc2a9675ea8c", null ],
