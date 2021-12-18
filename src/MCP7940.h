@@ -95,6 +95,7 @@ Version| Date       | Developer           | Comments
 1.0.1b | 2017-07-19 | SV-Zanshin          | Added methods
 1.0.0b | 2017-07-17 | SV-Zanshin          | Initial coding
 */
+
 // clang-format on
 
 #include "Arduino.h"  // Arduino data type definitions
@@ -254,8 +255,8 @@ class MCP7940_Class {
   MCP7940_Class(){};   ///< Unused Class constructor
   ~MCP7940_Class(){};  ///< Unused Class destructor
   bool     begin(const uint32_t i2cSpeed) const;
-  bool     begin(const uint8_t sda = PIN_WIRE_SDA, 
-                 const uint8_t scl = PIN_WIRE_SCL,
+  bool     begin(const uint8_t sda = SDA, 
+                 const uint8_t scl = SCL,
                  const uint32_t i2cSpeed = I2C_STANDARD_MODE) const; 
   bool     deviceStatus() const;
   bool     deviceStart() const;
