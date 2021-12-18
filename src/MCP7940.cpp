@@ -5,6 +5,7 @@ Arduino Library for the MCP7940M and MCP7940N Real-Time Clock devices\n\n
 See main library header file for details
 */
 #include "MCP7940.h"
+
 /*! Define the number of days in each month */
 const uint8_t   daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
