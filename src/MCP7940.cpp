@@ -252,8 +252,8 @@ bool MCP7940_Class::begin(const uint8_t sda, const uint8_t scl, const uint32_t i
 #elif defined(ESP8266)
   Wire.begin();  // Start I2C as master device
 #endif
-  (void)sda;  // force compiler to ignore this potentially unused parameter
-  (void)scl;  // force compiler to ignore this potentially unused parameter
+  (void)sda;                  // force compiler to ignore this potentially unused parameter
+  (void)scl;                  // force compiler to ignore this potentially unused parameter
   Wire.setClock(i2cSpeed);    // Set the I2C bus speed
   Wire.beginTransmission(MCP7940_ADDRESS);  // Address the MCP7940
   if (Wire.endTransmission() == 0)          // If there a device present
