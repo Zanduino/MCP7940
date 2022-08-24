@@ -31,4 +31,4 @@ jobs:
        - name: 'Install Arduino CLI package'
          run: bash ${GITHUB_WORKSPACE}/Common/Scripts/install_arduino_cli.sh
        - name: 'Run master compile python program'
-         run: python3 ${GITHUB_WORKSPACE}/Common/Python/build_platform.py zanshin_platforms
+         run: python3 ${GITHUB_WORKSPACE}/Common/Python/build_platform.py --no_warn zanshin_platforms
