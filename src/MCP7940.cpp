@@ -247,13 +247,14 @@ bool MCP7940_Class::begin(const uint8_t sda, const uint8_t scl, const uint32_t i
       @param[in] i2cSpeed defaults to I2C_STANDARD_MODE, otherwise use speed in Herz
       @return    true if successfully started communication, otherwise false
   */
-  uint8_t dummy = sda + scl;
 #if defined(ESP8266)
   Wire.begin(sda, scl);  // Start I2C as master device using the specified SDA and SCL
 #elif defined(ESP8266)
   Wire.begin();  // Start I2C as master device
 #endif
-  Wire.setClock(i2cSpeed);                  // Set the I2C bus speed
+  (void)sda;  // force compiler to ignore this potentially unused parameter
+  (void)scl;  // force compiler to ignore this potentially unused parameter
+  Wire.setClock(i2cSpeed);    // Set the I2C bus speed
   Wire.beginTransmission(MCP7940_ADDRESS);  // Address the MCP7940
   if (Wire.endTransmission() == 0)          // If there a device present
   {
