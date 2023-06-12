@@ -50,6 +50,7 @@ Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
 
 Version| Date       | Developer           | Comments
 ------ | ---------- | ------------------- | --------
+1.2.2  | 2023-06-12 | Mark-Wills          | Issue #65 - Corrected return value
 1.2.2  | 2021-12-16 | BrotherV            | Issue #63 - Add ESP8266 support for defining SDA and SCL pins.
 1.2.1  | 2021-05-23 | SV-Zanshin          | Issue #60 - Correct handling of dates < 2000-01-01
 1.2.1  | 2021-01-06 | SV-Zanshin          | Issue #58 - Corrected return reference values in readRAM and readEUI and added writeEUI
@@ -311,8 +312,7 @@ class MCP7940_Class {
      @param[in] value    Data Type "T" to read
      @return    Pointer to return data structure
     */
-    uint8_t i = I2C_read((addr % 64) + MCP7940_RAM_ADDRESS, value);
-    return (i);
+    return I2C_read((addr % 64) + MCP7940_RAM_ADDRESS, value);
   }  // of method readRAM()
   template <typename T>
   uint8_t writeRAM(const uint8_t& addr, const T& value) const {
