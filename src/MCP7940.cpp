@@ -69,7 +69,7 @@ DateTime::DateTime(uint32_t t) {
   t /= 60;
   mm = t % 60;
   t /= 60;
-  hh            = t % 24;
+  hh = t % 24;
   uint16_t days = t / 24;
   uint8_t  leap;
   for (yOff = 0;; ++yOff) {
@@ -437,10 +437,11 @@ void MCP7940_Class::adjust(const DateTime& dt) {
   I2C_write(MCP7940_RTCMIN, int2bcd(dt.minute()));
   I2C_write(MCP7940_RTCHOUR, int2bcd(dt.hour()));
   weekdayWrite(dt.dayOfTheWeek());                        // Update the weekday
-  I2C_write(MCP7940_RTCDATE, int2bcd(dt.day()));          // Write the day of month
   I2C_write(MCP7940_RTCMTH, int2bcd(dt.month()));         // Month, ignore R/O leapyear bit
+  I2C_write(MCP7940_RTCDATE, int2bcd(dt.day()));          // Write the day of month
   I2C_write(MCP7940_RTCYEAR, int2bcd(dt.year() - 2000));  // Write the year
   deviceStart();                                          // Restart the oscillator
+  weekdayWrite(dt.dayOfTheWeek());                        // Silicon errata issue 4
   _SetUnixTime = dt.unixtime();                           // Store time of last change
 }  // of method adjust
 uint8_t MCP7940_Class::weekdayRead() const {
