@@ -20,11 +20,11 @@ Several example sketches exist and are documented on the [Wiki pages](https://gi
 | Example Program                                                                       | Description                                     |
 | ------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | [SetAndCalibrate](https://github.com/Zanduino/MCP7940/wiki/SetAndCalibrate.ino)       | Set and Calibrate the RTC using various methods |
-| [SetAlarms](https://github.com/Zanduinon/MCP7940/wiki/SetAlarms.ino)                  | Set Alarm 0 and Alarm 1                         |
+| [SetAlarms](https://github.com/Zanduino/MCP7940/wiki/SetAlarms.ino)                   | Set Alarm 0 and Alarm 1                         |
 | [SquareWave](https://github.com/Zanduino/MCP7940/wiki/SquareWave.ino)                 | Output a Square Wave                            |
 | [TestBatteryBackup](https://github.com/Zanduino/MCP7940/wiki/TestBatteryBackup.ino)   | Show how the battery backup can be used         |
 | [AccessMemory](https://github.com/Zanduino/MCP7940/wiki/AccessMemory.ino)             | Read and Write to the MCP7940 memory            |
-| [RegressionTests](https://github.com/Zanduino/MCP7940/wiki/RegressionTests.ino)     |   Run regression test after changing library code |
+| [RegressionTests](https://github.com/Zanduino/MCP7940/wiki/RegressionTests.ino)       | Run regression test after changing library code |
 
 ## Documentation
 The library and example programs have Doxygen documentation, whose output can be found at [Doxygen Documentation](https://Zanduino.github.io/MCP7940/html/index.html)  
