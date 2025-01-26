@@ -73,8 +73,8 @@ void setup() {                 // Arduino standard setup method
     if (!deviceStatus) {                        // If it didn't start
       Serial.println(F("Oscillator did not start, trying again."));  // Show error and
       delay(1000);                                                   // wait for a second
-    }                // of if-then oscillator didn't start
-  }                  // of while the oscillator is off
+    }  // of if-then oscillator didn't start
+  }  // of while the oscillator is off
   MCP7940.adjust();  // Set to library compile Date/Time
   Serial.println(F("Enter the following serial commands:"));
   Serial.println(F("SETDATE yyyy-mm-dd hh:mm:ss"));
@@ -87,15 +87,15 @@ void setup() {                 // Arduino standard setup method
 ** and acted upon                                                                                 **
 ***************************************************************************************************/
 void readCommand() {
-  static uint8_t inputBytes = 0;              // Variable for buffer position
-  while (Serial.available()) {                // Loop while incoming serial data
+  static uint8_t inputBytes = 0;  //              Variable for buffer position
+  while (Serial.available()) {  //                Loop while incoming serial data
     inputBuffer[inputBytes] = Serial.read();  // Get the next byte of data
     if (inputBuffer[inputBytes] != '\n' &&
-        inputBytes < SPRINTF_BUFFER_SIZE)  // keep on reading until a newline
-      inputBytes++;                        // shows up or the buffer is full
+        inputBytes < SPRINTF_BUFFER_SIZE)  //    keep on reading until a newline
+      inputBytes++;  //                          shows up or the buffer is full
     else {
       inputBuffer[inputBytes] = 0;                 // Add the termination character
-      for (uint8_t i = 0; i < inputBytes; i++)     // Convert the whole input buffer
+      for (uint8_t i = 0; i < inputBytes; i++)  //    Convert the whole input buffer
         inputBuffer[i] = toupper(inputBuffer[i]);  // to uppercase characters
       Serial.print(F("\nCommand \""));
       Serial.write(inputBuffer);
@@ -132,7 +132,7 @@ void readCommand() {
             MCP7940.adjust(
                 DateTime(year, month, day, hour, minute, second));  // Adjust the RTC date/time
             Serial.print(F("Date has been set."));
-          }       // of if-then-else the date could be parsed
+          }  // of if-then-else the date could be parsed
           break;  //
         /*******************************************************************************************
         ** Calibrate the RTC and reset the time                                                   **
