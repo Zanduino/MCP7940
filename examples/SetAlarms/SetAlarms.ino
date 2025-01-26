@@ -98,7 +98,7 @@ void setup() {
       Serial.println(F("Oscillator did not start, trying again."));
       delay(1000);
     }  // of if-then oscillator didn't start
-  }    // of while the oscillator is of
+  }  // of while the oscillator is off
   Serial.println("Setting MCP7940M to date/time of library compile");
   MCP7940.adjust();  // Use compile date/time to set clock
   Serial.print("Date/Time set to ");
@@ -135,7 +135,7 @@ void loop() {
     {
       Serial.print(" *Alarm0*");
       MCP7940.clearAlarm(0);
-    }                        // of if Alarm 0 has been triggered
+    }  // of if Alarm 0 has been triggered
     if (MCP7940.isAlarm(1))  // When alarm 0 is triggered
     {
       Serial.print(" *Alarm1* resetting to go off next at ");
@@ -144,7 +144,7 @@ void loop() {
               now.hour(), now.minute(), now.second());
       Serial.print(inputBuffer);
       MCP7940.setAlarm(1, matchAll, now, true);  // Set alarm to go off in 10s again
-    }                                            // of if Alarm 0 has been triggered
+    }  // of if Alarm 0 has been triggered
     Serial.println();
   }  // of if the seconds have changed
 }  // of method loop()
